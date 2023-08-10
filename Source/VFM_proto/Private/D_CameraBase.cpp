@@ -2,6 +2,7 @@
 
 
 #include "D_CameraBase.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AD_CameraBase::AD_CameraBase()
@@ -30,5 +31,13 @@ void AD_CameraBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AD_CameraBase::PossessToCamera()
+{
+	APlayerController* pc = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (pc) {
+		pc->Possess(this);
+	}
 }
 
