@@ -10,6 +10,9 @@
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "OSY_PlayerAnimInstance.h"
+#include "PlayerBaseComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AOSY_TESTCharacter::AOSY_TESTCharacter()
@@ -17,14 +20,17 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
-	//mesh 데이터 할당
-	ConstructorHelpers::FObjectFinder<USkeletalMesh>tempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Quinn_Simple.SKM_Quinn_Simple'"));
-	if (tempMesh.Succeeded())
-	{
-		GetMesh()->SetSkeletalMesh(tempMesh.Object);
-		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));
-	}
+	
+	
+	//나의 메시를 루트로 세팅한다
+	// 겟 캡슐을 메시에 상속한다
+	 
+// 	mesh 데이터 할당
+ 	//	ConstructorHelpers::FObjectFinder<USkeletalMesh>tempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/OSY/Model/BasicCharacter.BasicCharacter'"));
+// 		if (tempMesh.Succeeded())
+// 		{
+// 			GetMesh()->SetSkeletalMesh(tempMesh.Object);
+// 		}
 	//스프링암 할당---------------------------------------
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComp"));
 	springArmComp->SetupAttachment(RootComponent);
@@ -35,6 +41,10 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	playerCam = CreateDefaultSubobject<UCameraComponent>(TEXT("playerCam"));
 	playerCam->SetupAttachment(springArmComp);
 	playerCam->FieldOfView = 30.60f;
+
+	
+	
+
 }
 
 // Called when the game starts or when spawned
@@ -49,6 +59,8 @@ void AOSY_TESTCharacter::BeginPlay()
 			Subsystem->AddMappingContext(InputMapping, 0);
 		}
 	}
+
+
 
 }
 
@@ -67,12 +79,7 @@ void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	UEnhancedInputComponent* SYInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	if (SYInput)
 	{
-
-
-
 		SYInput->BindAction(ia_Jump, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::jump);
-		
-
 	}
 
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
