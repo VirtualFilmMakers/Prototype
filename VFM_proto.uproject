@@ -9,7 +9,8 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine",
+				"UMG"
 			]
 		}
 	],
@@ -20,6 +21,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "HairStrands",
+			"Enabled": true
 		},
 		{
 			"Name": "RigLogic",
@@ -41,10 +46,6 @@
 				"Win64",
 				"Mac"
 			]
-		},
-		{
-			"Name": "HairStrands",
-			"Enabled": true
 		}
 	]
 }
