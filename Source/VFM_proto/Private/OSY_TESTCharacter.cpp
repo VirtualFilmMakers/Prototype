@@ -13,6 +13,8 @@
 #include "OSY_PlayerAnimInstance.h"
 #include "PlayerBaseComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AOSY_TESTCharacter::AOSY_TESTCharacter()
@@ -74,6 +76,10 @@ void AOSY_TESTCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
+	LineTraceFire();
+	
+
 }
 
 // Called to bind functionality to input
@@ -85,6 +91,7 @@ void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (SYInput)
 	{
 		SYInput->BindAction(ia_Jump, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::jump);
+		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePosessInput);
 	}
 
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
@@ -114,9 +121,37 @@ void AOSY_TESTCharacter::CameraZoom(float value)
 	springArmComp->TargetArmLength = FMath::Clamp(NewTargetArmLength, MinZoomLength, MaxZoomLength);
 }
 
+void AOSY_TESTCharacter::LineTraceFire()
+{
+	
+}
 
+void AOSY_TESTCharacter::ChangePosessInput()
+{
+	FVector startLocation = playerCam->GetComponentLocation();
+	FVector endLocation = startLocation + playerCam->GetForwardVector() * 5000;
+	FHitResult hitInfo;
+	FCollisionQueryParams param;
+	param.AddIgnoredActor(this);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startLocation, endLocation, ECC_Visibility, param);
+	if (bHit)
+	{
+		//APlayerController* NewController = Cast<APlayerController>(testPawn->GetController());
+		APlayerController* NewController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		//APlayerController* NewController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		if (NewController)
+		{
+			NewController->Possess(testPawn);
+		}
+	}
+}
 
-
-
+void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
+{
+	if (NewPawn)
+	{
+		
+	}
+}
 
 

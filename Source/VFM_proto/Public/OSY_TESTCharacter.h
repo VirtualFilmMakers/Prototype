@@ -81,7 +81,8 @@ public:	//EnhanecedInput
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 		class UInputAction* ia_Jump;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_Posses;
 	
 
 
@@ -92,24 +93,18 @@ public:	//EnhanecedInput
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
 	class USkeletalMeshComponent *compBody;
 
-	
-
-
-	
-
-
-	
-	
-	
-	
-
-	
-
-// ÄÄÆ÷³ÍÆ® ÂÉ°³±â----------------------------------
-// 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component")
-// 	class UPlayerBaserComponent* playerMove;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
+	class ACharacter* testPawn;
 
 // delegate
 	FInputBindingDelegate onInputBindingDelegate;
 
+// LineTrace-----------------------------
+	void LineTraceFire();
+// Posses
+	UFUNCTION()
+	void ChangePosessInput();
+
+	UFUNCTION(BlueprintCallable)
+	void ChangePosses(ACharacter* NewPawn);
 };
