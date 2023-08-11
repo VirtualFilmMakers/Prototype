@@ -36,6 +36,11 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	springArmComp->SetupAttachment(RootComponent);
 	springArmComp->TargetArmLength = DefaultArmLength;
 	springArmComp->SetRelativeLocation(FVector(0, 60, 70));
+	springArmComp->bEnableCameraLag=true;
+	springArmComp->bEnableCameraRotationLag=true;
+	springArmComp->CameraLagSpeed=2.0f;
+	springArmComp->CameraRotationLagSpeed=2.0f;
+
 	//	springArmComp->TargetArmLength=
 		//카메라 할당---------------------------------------
 	playerCam = CreateDefaultSubobject<UCameraComponent>(TEXT("playerCam"));
