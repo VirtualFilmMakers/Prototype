@@ -77,7 +77,7 @@ void AOSY_TESTCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	
-	LineTraceFire();
+	
 	
 
 }
@@ -121,8 +121,16 @@ void AOSY_TESTCharacter::CameraZoom(float value)
 	springArmComp->TargetArmLength = FMath::Clamp(NewTargetArmLength, MinZoomLength, MaxZoomLength);
 }
 
-void AOSY_TESTCharacter::LineTraceFire()
+
+
+void AOSY_TESTCharacter::Build()
 {
+	FVector BstartLocation = playerCam->GetComponentLocation();
+	FVector BendLocation = BstartLocation + playerCam->GetForwardVector() * 5000;
+	FHitResult BHitInfo;
+	FCollisionQueryParams Bparam;
+	Bparam.AddIgnoredActor(this);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(BHitInfo, BstartLocation, BendLocation, ECC_Visibility, Bparam);
 	
 }
 
@@ -136,9 +144,7 @@ void AOSY_TESTCharacter::ChangePosessInput()
 	bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startLocation, endLocation, ECC_Visibility, param);
 	if (bHit)
 	{
-		//APlayerController* NewController = Cast<APlayerController>(testPawn->GetController());
-		APlayerController* NewController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		//APlayerController* NewController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		APlayerController* NewController = UGameplayStatics::GetPlayerController(GetWorld(), 0);	
 		if (NewController)
 		{
 			NewController->Possess(testPawn);
@@ -146,12 +152,5 @@ void AOSY_TESTCharacter::ChangePosessInput()
 	}
 }
 
-void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
-{
-	if (NewPawn)
-	{
-		
-	}
-}
 
 

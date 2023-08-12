@@ -36,7 +36,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* springArmComp;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* playerCam;
 
 	
@@ -100,11 +100,10 @@ public:	//EnhanecedInput
 	FInputBindingDelegate onInputBindingDelegate;
 
 // LineTrace-----------------------------
-	void LineTraceFire();
+	UFUNCTION(BlueprintCallable)
+	void Build();
 // Posses
 	UFUNCTION()
 	void ChangePosessInput();
-
-	UFUNCTION(BlueprintCallable)
-	void ChangePosses(ACharacter* NewPawn);
+//
 };
