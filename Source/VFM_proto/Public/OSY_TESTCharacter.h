@@ -39,6 +39,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* playerCam;
 
+	
+
 public://플레이어 입력에 관한 부분
 	// 기존 입력 방식
 	float speed=500;
@@ -68,6 +70,8 @@ public:	//EnhanecedInput
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Fly")
 	int JumpCount;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
+	class UBoxComponent* compBox;
 
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
@@ -77,24 +81,30 @@ public:	//EnhanecedInput
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 		class UInputAction* ia_Jump;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_Posses;
 	
 
-	
 
+	//메타휴면 C++로
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
+	class USceneComponent* compRoot;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
+	class USkeletalMeshComponent *compBody;
 
-	
-	
-	
-	
-
-	
-
-// 컴포넌트 쪼개기----------------------------------
-// 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component")
-// 	class UPlayerBaserComponent* playerMove;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
+	class ACharacter* testPawn;
 
 // delegate
 	FInputBindingDelegate onInputBindingDelegate;
 
+// LineTrace-----------------------------
+	void LineTraceFire();
+// Posses
+	UFUNCTION()
+	void ChangePosessInput();
+
+	UFUNCTION(BlueprintCallable)
+	void ChangePosses(ACharacter* NewPawn);
 };

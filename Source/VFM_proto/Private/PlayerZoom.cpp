@@ -6,6 +6,15 @@
 #include "OSY_TESTCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 
+UPlayerZoom::UPlayerZoom()
+{
+	ConstructorHelpers::FObjectFinder<UInputAction> tempZoom(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Zoom.IA_OSY_Zoom'"));
+	if (tempZoom.Succeeded())
+	{
+		ia_Zoom = tempZoom.Object;
+	}
+}
+
 void UPlayerZoom::BeginPlay()
 {
 	Super::BeginPlay();

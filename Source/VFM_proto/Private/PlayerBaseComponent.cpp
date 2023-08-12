@@ -23,6 +23,8 @@ void UPlayerBaseComponent::InitializeComponent()
 
 	//바인딩처리
 	me->onInputBindingDelegate.AddUObject(this, &UPlayerBaseComponent::SetupInputBinding);
+
+
 }
 
 // Called when the game starts
