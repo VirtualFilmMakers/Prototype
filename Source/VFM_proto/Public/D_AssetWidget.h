@@ -14,21 +14,4 @@ class VFM_PROTO_API UD_AssetWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-public:
-	UPROPERTY(Category = AssetDataSets, EditAnywhere, BlueprintReadWrite)
-	TMap<FString, TSubclassOf<AActor>> actorDataMap;
-
-	UPROPERTY(Category = AssetDataSets, EditAnywhere, BlueprintReadWrite)
-	TMap<FString, TSubclassOf<AActor>> buildingDataMap;
-
-	UPROPERTY(Category = AssetDataSets, EditAnywhere, BlueprintReadWrite)
-	TMap<FString, TSubclassOf<AActor>> propsDataMap;
-
-	UPROPERTY(Category = AssetDataSets, EditAnywhere, BlueprintReadWrite)
-	TMap<FString, TSubclassOf<class AD_CameraBase>> cameraDataMap;
-
-	UPROPERTY(Category = AssetDataSets, EditAnywhere, BlueprintReadWrite)
-	TMap<FString, TSubclassOf<class AD_LightBase>> lightDataMap;
-
-
 };
