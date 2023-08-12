@@ -13,5 +13,79 @@ UCLASS()
 class VFM_PROTO_API UAnimLibrary : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+
+	TArray<AActor*> FoundActors; //월드상에 배치된 모든 액터 정보를 저장할 배열
+	UPROPERTY()
+	int32 selectedAnim=0;
+	UPROPERTY()
+	AActor* goalHuman;
+	UPROPERTY()
+	UAnimSequence* AnimationToPlay;
+	UPROPERTY()
+	float animPlayTime=1;
+	
+
+
+	UPROPERTY()
+	class USkeletalMeshComponent* goalHumanBody;
+	
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
+	class UTextBlock* text_sitOnGround;
+
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_sitOnGround;
+
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_sitOnChair;
+	
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_standingTalk;
+
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_standingClap;
+
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_idle;
+
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_walking;
+
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_back;
+
+	
+
+	/*---Ordinary Func-----*/
+	UFUNCTION()
+	int32 GetAnimInfo();
+	UFUNCTION()
+	void SetAnimPlayTime(float val);
+	
+	/*---Bind Func-----*/
+	UFUNCTION()
+	void OnClicksitOnGround();
+
+	UFUNCTION()
+	void OnClicksitOnChair();
+
+	UFUNCTION()
+	void OnClickstandingTalk();
+
+	UFUNCTION()
+	void OnClickstandingClap();
+
+	UFUNCTION()
+	void OnClickidle();
+
+	UFUNCTION()
+	void OnClickwalking();
+
+	UFUNCTION()
+	void OnClickback();
+
+protected:
+	virtual void NativeConstruct() override;
 	
 };
