@@ -18,17 +18,17 @@ void AD_LightBase::BeginPlay()
 	Super::BeginPlay();
 	
      
-    if (LightWidgetSource)
-    {
-        // Create an instance of the provided UMG widget class
-        WidgetInstance = CreateWidget<UUserWidget>(GetWorld(), LightWidgetSource);
-        if (WidgetInstance)
-        {
-            WidgetInstance->AddToViewport(); // Add the widget to the viewport
-        }
-    }
+    //if (LightWidgetSource)
+    //{
+    //    // Create an instance of the provided UMG widget class
+    //    WidgetInstance = CreateWidget<UUserWidget>(GetWorld(), LightWidgetSource);
+    //    if (WidgetInstance)
+    //    {
+    //        WidgetInstance->AddToViewport(); // Add the widget to the viewport
+    //    }
+    //}
    
-    WidgetInstance->SetPositionInViewport(FVector2D(1600,50));
+    //WidgetInstance->SetPositionInViewport(FVector2D(1600,50));
 }
 
 // Called every frame
