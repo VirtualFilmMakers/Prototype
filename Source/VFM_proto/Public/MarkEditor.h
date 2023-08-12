@@ -54,7 +54,7 @@ public:
 	/*----------*/
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UMarkEditor> MarkEditorClass; //MarkEditor class를 받아오기 위한 변수
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = AnimLib)
 	TSubclassOf<class UAnimLibrary> AnimLibClass;
 
 	UPROPERTY()

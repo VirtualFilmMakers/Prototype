@@ -26,6 +26,9 @@ public:
 	UPROPERTY()
 	float animPlayTime=1;
 	
+	UPROPERTY()
+	APlayerController* pc;
+	
 
 
 	UPROPERTY()
