@@ -72,6 +72,7 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+<<<<<<< HEAD
 
 #MetaHumanFiles
 Content/MetaHumans/*
@@ -80,3 +81,5 @@ Content/MetaHumans/*
 Content/MetaHumans/LHJ/*
 Content/MetaHumans/OSY/*
 Content/MetaHumans/DKW/*
+=======
+>>>>>>> parent of 3371de9 (DragDrop Function / Ehanced Input for AssetController / LightController)
