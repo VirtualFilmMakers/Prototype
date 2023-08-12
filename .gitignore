@@ -72,3 +72,11 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+#MetaHumanFiles
+Content/MetaHumans/*
+
+#if Don't ignore Content/MetaHuman/*
+Content/MetaHumans/LHJ/*
+Content/MetaHumans/OSY/*
+Content/MetaHumans/DKW/*
