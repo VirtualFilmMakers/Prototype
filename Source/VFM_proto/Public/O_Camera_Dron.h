@@ -29,5 +29,25 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* d4_Drone1;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* d4_Object001;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* d4_Object002;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* d4_Object003;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* d4_Object004;
+
+	
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
+	class UInputMappingContext* DronInputMapping;
+
 	
 };
