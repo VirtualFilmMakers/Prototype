@@ -26,6 +26,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -38,6 +40,9 @@ public:
 	// 기본 카메라
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* CameraBase_CamComp;
+
+	
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float CameraBase_MinZoomLength = 0.f;

@@ -17,6 +17,7 @@ class VFM_PROTO_API AO_Camera_Tripod : public AO_CameraBase
 public:
 	// Sets default values for this character's properties
 	AO_Camera_Tripod();
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,9 +32,14 @@ public:
 
 
 
+
 	// 카메라 상단
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	class USceneComponent* compTirpodUp;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* ACamera;
+	
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	class UStaticMeshComponent* Tripod2_Cylinder_002;

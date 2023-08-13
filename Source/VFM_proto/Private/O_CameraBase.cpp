@@ -19,6 +19,7 @@ AO_CameraBase::AO_CameraBase()
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = true;
 	CameraBase_SpringArmComp->CameraLagSpeed = 2.0f;
 	CameraBase_SpringArmComp->CameraRotationLagSpeed = 2.0f;
+	CameraBase_SpringArmComp->TargetArmLength=400;
 
 	//기본 카메라 할당
 	CameraBase_CamComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraBase_CamComp"));

@@ -29,7 +29,7 @@ public:
 	float CamMinZoomLength=0.f;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
-	float CamMaxZoomLength=1000.f;
+	float CamMaxZoomLength=380.f;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	float CamDefaultArmLength=600.f;
