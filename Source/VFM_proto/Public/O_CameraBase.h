@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "O_CameraBase.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FCameraInputBindingDelegate, class UInputComponent*);
+
+
 UCLASS()
 class VFM_PROTO_API AO_CameraBase : public ACharacter
 {
@@ -25,5 +28,30 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	FCameraInputBindingDelegate onCameraInputBindingDelegate;
+
+	// 기본 스프링암
+	UPROPERTY(EditAnywhere)
+	class USpringArmComponent* CameraBase_SpringArmComp;
+
+	// 기본 카메라
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class UCameraComponent* CameraBase_CamComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_MinZoomLength = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_MaxZoomLength = 1000.f;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_DefaultArmLength = 600.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_ZoomStep = 10.f;
+
+
 
 };

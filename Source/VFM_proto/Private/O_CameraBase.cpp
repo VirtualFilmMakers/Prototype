@@ -2,6 +2,9 @@
 
 
 #include "O_CameraBase.h"
+#include "Camera/CameraComponent.h"
+#include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 AO_CameraBase::AO_CameraBase()
@@ -9,12 +12,27 @@ AO_CameraBase::AO_CameraBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// 기본 스프링암 할당
+	CameraBase_SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBase_SpringArmComp"));
+	CameraBase_SpringArmComp->SetupAttachment(RootComponent);
+	CameraBase_SpringArmComp->bEnableCameraLag = true;
+	CameraBase_SpringArmComp->bEnableCameraRotationLag = true;
+	CameraBase_SpringArmComp->CameraLagSpeed = 2.0f;
+	CameraBase_SpringArmComp->CameraRotationLagSpeed = 2.0f;
+
+	//기본 카메라 할당
+	CameraBase_CamComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraBase_CamComp"));
+	CameraBase_CamComp->SetupAttachment(CameraBase_SpringArmComp);
+	CameraBase_CamComp->FieldOfView = 30.60f;
+
 }
 
 // Called when the game starts or when spawned
 void AO_CameraBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
 	
 }
 
@@ -30,5 +48,6 @@ void AO_CameraBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	onCameraInputBindingDelegate.Broadcast(PlayerInputComponent);
 }
 
