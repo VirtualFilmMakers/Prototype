@@ -2,6 +2,7 @@
 
 
 #include "MHActorA.h"
+#include "D_ControllableAsset.h"
 
 // Sets default values
 AMHActorA::AMHActorA()
@@ -25,10 +26,4 @@ void AMHActorA::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void AMHActorA::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 

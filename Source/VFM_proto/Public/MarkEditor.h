@@ -68,7 +68,9 @@ public:
 	UFUNCTION()
 	void OnSliderMoved(float value);
 
+
 protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
+	
 };
