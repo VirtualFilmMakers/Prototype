@@ -12,12 +12,23 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Tripod 세부설정
-	//me->CameraBase_DefaultArmLength=0.0f;
+	CameraBase_SpringArmComp->bEnableCameraLag= false;
+	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
+	CameraBase_SpringArmComp->SetRelativeLocation(FVector(416,0,115));
 
 	//compTirpodUp-----------------------
 	compTirpodUp= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodUp"));
 	compTirpodUp->SetupAttachment(RootComponent);
 
+	//ACamera-----------------------
+	ACamera= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ACamera"));
+	ACamera->SetupAttachment(compTirpodUp);
+	ACamera->SetRelativeLocation(FVector(0,0,105));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> tempACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
+	if (tempACamera.Succeeded())
+	{
+		ACamera->SetStaticMesh(tempACamera.Object);
+	}
 	//Tripod2_Cylinder_002-----------------------
 	Tripod2_Cylinder_002= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod2_Cylinder_002"));
 	Tripod2_Cylinder_002->SetupAttachment(compTirpodUp);
