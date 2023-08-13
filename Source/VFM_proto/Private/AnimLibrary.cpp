@@ -21,6 +21,7 @@ void UAnimLibrary::NativeConstruct()
 	btn_back->OnClicked.AddDynamic(this, &UAnimLibrary::OnClickback);
 
 
+	pc = GetWorld()->GetFirstPlayerController();
 	UE_LOG(LogTemp, Warning, TEXT("Anim lib indoor!"));
 	//월드상에 배치된 메타휴먼의 정보(acoter임)를 가져온다.
 	//1. 월드 상에 배치된 모든 액터 정보를 배열로 받아온다.
@@ -36,7 +37,7 @@ void UAnimLibrary::NativeConstruct()
     goalHumanBody = goalHuman->FindComponentByClass<USkeletalMeshComponent>();
 // 	if(goalHumanBody!=nullptr)UE_LOG(LogTemp,Warning,TEXT("Find Success !! Human Body"));
 	
-
+	
 }
 
 int32 UAnimLibrary::GetAnimInfo()
