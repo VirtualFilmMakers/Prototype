@@ -29,5 +29,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Dolly_Object001;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Dolly_Object002;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Dolly_Object003;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* ACamera;
+
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
+	class UInputMappingContext* DollyInputMapping;
 	
 };

@@ -29,5 +29,18 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Crane_sub01;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Crane_sub02;
+
+
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
+	class UInputMappingContext* CraneInputMapping;
+
+
+
 	
 };

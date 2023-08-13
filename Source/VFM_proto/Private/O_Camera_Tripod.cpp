@@ -11,6 +11,8 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+
+
 	//Tripod 세부설정
 	CameraBase_SpringArmComp->bEnableCameraLag= false;
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
