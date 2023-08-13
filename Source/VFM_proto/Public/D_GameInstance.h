@@ -19,12 +19,19 @@ protected:
 	
 	UD_GameInstance();
 public:
+
+	// widget source
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<class UD_SideToolWidget> sideToolPanel;
-	
+
 	UPROPERTY()
 	UD_SideToolWidget* sideToolPanelInstance;
 
+	UPROPERTY(BlueprintReadWrite)
+	TSubclassOf<class UD_CamPreviewWidget> camPreviewWidget;
+
+	UPROPERTY()
+	UD_SideToolWidget* camPreviewWidgetInstance;
 
 
 	
@@ -34,6 +41,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CloseSideToolPanel();
+
+
+
 
 
 	

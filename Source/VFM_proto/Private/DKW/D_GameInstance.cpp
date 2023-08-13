@@ -12,16 +12,14 @@ UD_GameInstance::UD_GameInstance()
     if (TempWidget.Succeeded()) {
         sideToolPanel = TempWidget.Class;
     }
+ 
 }
 
 void UD_GameInstance::OpenSideToolPanel()
-{
-    // if there is already side Tool widget
-    // return
-    if (sideToolPanelInstance) return;
-    
+{  
     // if class has found from file path
     // Create Widget and add to viewport
+
     if (sideToolPanel)
     {
         sideToolPanelInstance = CreateWidget<UD_SideToolWidget>(GetWorld(), sideToolPanel);
