@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "InputActionValue.h"
+//#include <GameFramework/Character.h>
 #include "D_AssetControlPlayer.generated.h"
 
 UCLASS()
@@ -87,8 +88,11 @@ public:	//EnhanecedInput
 	class UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
-		class UInputAction* ia_Move;
+	class UInputAction* ia_Move;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
-		class UInputAction* ia_Jump;
+	class UInputAction* ia_Look;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_Jump;
 };

@@ -33,5 +33,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = MySetting)
     class UUserWidget* WidgetInstance;
 
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = MySetting)
+	//class USceneComponent* headJoint;
 
 };
