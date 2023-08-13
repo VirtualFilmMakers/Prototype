@@ -31,7 +31,7 @@ public:
 	TSubclassOf<class UD_CamPreviewWidget> camPreviewWidget;
 
 	UPROPERTY()
-	UD_SideToolWidget* camPreviewWidgetInstance;
+	UD_CamPreviewWidget* camPreviewWidgetInstance;
 
 
 	
@@ -42,6 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CloseSideToolPanel();
 
+	UFUNCTION(BlueprintCallable)
+	void OpenCamPreviewWidget(); 
+
+	UFUNCTION(BlueprintCallable)
+	void CloseCamPreviewWidget();
 
 
 
