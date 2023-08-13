@@ -36,7 +36,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* springArmComp;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* playerCam;
 
 	
