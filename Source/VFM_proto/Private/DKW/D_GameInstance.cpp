@@ -16,17 +16,25 @@ UD_GameInstance::UD_GameInstance()
 
 void UD_GameInstance::OpenSideToolPanel()
 {
+    // if there is already side Tool widget
+    // return
+    if (sideToolPanelInstance) return;
+    
+    // if class has found from file path
+    // Create Widget and add to viewport
     if (sideToolPanel)
     {
-        UD_SideToolWidget* WidgetInstance = CreateWidget<UD_SideToolWidget>(GetWorld(), sideToolPanel);
-        if (WidgetInstance)
+        sideToolPanelInstance = CreateWidget<UD_SideToolWidget>(GetWorld(), sideToolPanel);
+        if (sideToolPanelInstance)
         {
-            WidgetInstance->AddToViewport();
+            sideToolPanelInstance->AddToViewport();
         }
     }
 }
 
 void UD_GameInstance::CloseSideToolPanel()
 {
-
+    if (sideToolPanelInstance) {
+        sideToolPanelInstance->RemoveFromParent();
+    }
 }

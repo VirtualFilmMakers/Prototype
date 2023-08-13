@@ -22,10 +22,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<class UD_SideToolWidget> sideToolPanel;
 	
-	/*UPROPERTY(BlueprintReadWrite)
-	class UD_SideToolWidget* sideToolPanel;*/
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float num;
+	UPROPERTY()
+	UD_SideToolWidget* sideToolPanelInstance;
+
+
 
 	
 	// Function
