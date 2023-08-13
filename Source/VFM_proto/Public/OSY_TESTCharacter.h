@@ -94,7 +94,7 @@ public:	//EnhanecedInput
 	class USkeletalMeshComponent *compBody;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
-	class ACharacter* testPawn;
+	class AO_CameraBase* testPawn;
 
 // delegate
 	FInputBindingDelegate onInputBindingDelegate;
