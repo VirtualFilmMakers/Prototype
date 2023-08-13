@@ -43,8 +43,7 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	springArmComp->CameraLagSpeed=2.0f;
 	springArmComp->CameraRotationLagSpeed=2.0f;
 
-	//	springArmComp->TargetArmLength=
-		//카메라 할당---------------------------------------
+	//카메라 할당---------------------------------------
 	playerCam = CreateDefaultSubobject<UCameraComponent>(TEXT("playerCam"));
 	playerCam->SetupAttachment(springArmComp);
 	playerCam->FieldOfView = 30.60f;

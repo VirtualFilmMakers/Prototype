@@ -13,5 +13,21 @@ UCLASS()
 class VFM_PROTO_API AO_Camera_Crane : public AO_CameraBase
 {
 	GENERATED_BODY()
+
+public:
+	// Sets default values for this character's properties
+	AO_Camera_Crane();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 	
 };
