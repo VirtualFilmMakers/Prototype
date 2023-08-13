@@ -4,6 +4,7 @@
 #include "D_LightBase.h"
 #include "Blueprint/UserWidget.h"
 #include <Components/SceneComponent.h>
+#include "D_ControllableAsset.h"
 
 // Sets default values
 AD_LightBase::AD_LightBase()
@@ -27,4 +28,18 @@ void AD_LightBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+
+void AD_LightBase::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)
+{
+	ID_ControllableAsset::CloseAssetPanel_Implementation(AssetWithControlPanel);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("CloseAssetPanel"));
+}
+
+void AD_LightBase::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
+{
+	ID_ControllableAsset::OpenAssetPanel_Implementation(AssetWithControlPanel);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("OpenAssetPanel"));
+}
+
 
