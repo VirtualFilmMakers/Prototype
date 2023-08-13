@@ -7,7 +7,7 @@
 #include "D_LightBase.generated.h"
 
 UCLASS()
-class VFM_PROTO_API AD_LightBase : public AActor
+class VFM_PROTO_API AD_LightBase : public AActor, public ID_ControllableAsset
 {
 	GENERATED_BODY()
 	
@@ -36,4 +36,13 @@ public:
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = MySetting)
 	//class USceneComponent* headJoint;
 
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interact|FromInteract")
+	virtual void OpenAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
+
+	virtual void CloseAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
+
+	//UFUNCTION(BlueprintNativeEvent)
+	//void OpenPanel();
+	//UFUNCTION(BlueprintNativeEvent)
+	//void ClosePanel();
 };
