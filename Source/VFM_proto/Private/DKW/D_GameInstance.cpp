@@ -4,6 +4,7 @@
 #include "D_GameInstance.h"
 #include "D_SideToolWidget.h"
 #include "D_CamPreviewWidget.h"
+#include <Kismet/GameplayStatics.h>
 
 
 UD_GameInstance::UD_GameInstance()
@@ -61,4 +62,17 @@ void UD_GameInstance::CloseCamPreviewWidget()
     if (camPreviewWidgetInstance) {
         camPreviewWidgetInstance->RemoveFromParent();
     }
+}
+
+void UD_GameInstance::UnPossessFromCamera()
+{
+    APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+    // delete cam widget
+    CloseCamPreviewWidget();
+    // possess to mainPlayer
+    if (mainPlayer) {
+        GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Yellow, "yes");
+        PlayerController->Possess(mainPlayer);
+    }
+   
 }

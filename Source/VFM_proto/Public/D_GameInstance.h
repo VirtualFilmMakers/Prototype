@@ -33,7 +33,8 @@ public:
 	UPROPERTY()
 	UD_CamPreviewWidget* camPreviewWidgetInstance;
 
-
+	UPROPERTY()
+	APawn* mainPlayer;
 	
 	// Function
 	UFUNCTION(BlueprintCallable)
@@ -48,7 +49,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CloseCamPreviewWidget();
 
+	UFUNCTION(BlueprintCallable)
+	void SetMainActor(APawn* actor){mainPlayer = actor;}
 
+	UFUNCTION(BlueprintCallable)
+	void UnPossessFromCamera();
 
 
 	

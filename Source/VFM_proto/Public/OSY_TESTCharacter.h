@@ -33,7 +33,7 @@ public:
 	// 카메라를 배치하고 싶다
 	// 필요속성 : 카메라, 카메라 위치를 잡아줄 스프링암
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USpringArmComponent* springArmComp;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
