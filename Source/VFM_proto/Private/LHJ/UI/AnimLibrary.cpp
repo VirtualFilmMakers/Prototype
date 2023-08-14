@@ -7,6 +7,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimationAsset.h"
 #include "Animation/AnimSequence.h"
+#include "Components/CheckBox.h"
+
 
 void UAnimLibrary::NativeConstruct()
 {
@@ -31,6 +33,7 @@ void UAnimLibrary::NativeConstruct()
 	{
 		if (tmp->GetName().Contains("BP_Cooper"))
 		{
+		UE_LOG(LogTemp,Warning,TEXT("%s"),tmp);
 			goalHuman = tmp;
 		}
 	}
