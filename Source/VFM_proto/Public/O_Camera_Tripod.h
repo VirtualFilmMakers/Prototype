@@ -94,6 +94,17 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	class UStaticMeshComponent* Tripod2_Griffel_008;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Tripod222_Cylinder_002;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Tripod222_Object001;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* Tripod222_Object002;
+
+
+
+
+
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
 	class UInputMappingContext* TripodInputMapping;

@@ -15,6 +15,8 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputMappingContext.h>
+#include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h>
 
 // Sets default values
 AOSY_TESTCharacter::AOSY_TESTCharacter()
@@ -47,6 +49,12 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	playerCam = CreateDefaultSubobject<UCameraComponent>(TEXT("playerCam"));
 	playerCam->SetupAttachment(springArmComp);
 	playerCam->FieldOfView = 30.60f;
+
+	ConstructorHelpers::FObjectFinder<UInputMappingContext>tempInputMapping(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/OSY/Inputs/IMC_OSY_Player.IMC_OSY_Player'"));
+	if(tempInputMapping.Succeeded())
+	{
+		InputMapping=tempInputMapping.Object;
+	}
 
 	
 	
@@ -140,7 +148,7 @@ void AOSY_TESTCharacter::ChangePosessInput()
 		//APlayerController* NewController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 		if (NewController)
 		{
-			NewController->Possess(testPawn);
+			NewController->Possess((APawn*)testPawn);
 		}
 	}
 }

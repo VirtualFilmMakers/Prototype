@@ -11,6 +11,10 @@ AO_Camera_Dron::AO_Camera_Dron()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	CameraBase_SpringArmComp->bEnableCameraLag = false;
+	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
+
+
 
 
 	//d4_Drone1--------------------------------------
