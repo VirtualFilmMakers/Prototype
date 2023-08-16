@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "D:\Unreal Projects\VFM_Proto\Source\VFM_proto\Public\D_ControlPanelInterface.h"
 #include "MarkEditor.generated.h"
 
 
 
 UCLASS()
-class VFM_PROTO_API UMarkEditor : public UUserWidget
+class VFM_PROTO_API UMarkEditor : public UUserWidget, public ID_ControlPanelInterface
 {
 	GENERATED_BODY()
 	

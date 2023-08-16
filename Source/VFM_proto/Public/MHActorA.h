@@ -32,6 +32,9 @@ public:
 	TSubclassOf<class UMarkEditor> MarkEditorClass; //MarkEditor class를 받아오기 위한 변수
 	UPROPERTY()
 	class UMarkEditor* markEditorWidget = nullptr;
+	//플레이어컨트롤러를 받아올 변수 (사용자를 가져올 변수)
+	UPROPERTY()
+	APlayerController* pc = nullptr;
 
 	virtual void OpenAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
 

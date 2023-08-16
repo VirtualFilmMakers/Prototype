@@ -20,6 +20,9 @@ void AMHActorA::BeginPlay()
 	Super::BeginPlay();
 	
 	World = GetWorld();
+	pc = GetWorld()->GetFirstPlayerController();
+
+	if(pc != nullptr) UE_LOG(LogTemp, Warning, TEXT("PC good job"));
 	
 	//TsubclassOf로 가져온 MarkEditor정보를 통해 월드에 위젯을 만들고 해당 위젯을 가르키는 주소를 반환
 	markEditorWidget = CreateWidget<UMarkEditor>(World, MarkEditorClass);
@@ -47,7 +50,6 @@ void AMHActorA::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)
 {
 	ID_ControllableAsset::CloseAssetPanel_Implementation(AssetWithControlPanel);
 	
-	UE_LOG(LogTemp, Warning, TEXT("Cooper Widget Close!"));
 	
 	/*markEditorWidget->SetVisibility(ESlateVisibility::Hidden);*/
 }
@@ -58,5 +60,7 @@ void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
 // 	UE_LOG(LogTemp, Warning, TEXT("Cooper ALIVE!!"));
 	
 	markEditorWidget->SetVisibility(ESlateVisibility::Visible);
-
+	//Hover 되었는지 알 수 있는 함수 부분. Hover되었을때만 실행되는 함수 이기 때문임.
+	//사용자의 휠 값을 받아와야한다.
+	  //사용자를 받아와야한다.
 }
