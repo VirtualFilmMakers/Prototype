@@ -35,6 +35,9 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	float ZoomStep=10.f;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Player")
+	float ZoomValue=0;
 
 	void Zoom(const FInputActionValue& Value);
 };

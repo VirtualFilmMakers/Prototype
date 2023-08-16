@@ -40,7 +40,7 @@ void UPlayerZoom::Zoom(const FInputActionValue& Value)
 {
 	if (me->Controller != nullptr)
 	{	
-		float ZoomValue = Value.Get<float>();
+		ZoomValue = Value.Get<float>();
 		float NewTargetArmLength = me->springArmComp->TargetArmLength + ZoomValue * me->ZoomStep;
 		me->springArmComp->TargetArmLength = FMath::Clamp(NewTargetArmLength, me->MinZoomLength, me->MaxZoomLength);
 	}
