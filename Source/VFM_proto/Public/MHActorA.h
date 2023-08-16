@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "D:\Unreal Projects\VFM_Proto\Source\VFM_proto\Public\D_ControllableAsset.h"
+#include "../../VFM_proto/public/D_ControllableAsset.h"
 #include "MHActorA.generated.h"
 
 UCLASS()
@@ -35,6 +35,8 @@ public:
 	//플레이어컨트롤러를 받아올 변수 (사용자를 가져올 변수)
 	UPROPERTY()
 	APlayerController* pc = nullptr;
+	/*UPROPERTY()*/
+	/*AOSY_TESTCharacter* player = nullptr;*/
 
 	virtual void OpenAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
 

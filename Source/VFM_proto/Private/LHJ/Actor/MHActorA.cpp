@@ -4,6 +4,7 @@
 #include "MHActorA.h"
 #include "D_ControllableAsset.h"
 #include "MarkEditor.h"
+#include "OSY_TESTCharacter.h"
 
 // Sets default values
 AMHActorA::AMHActorA()
@@ -61,7 +62,10 @@ void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
 	
 	markEditorWidget->SetVisibility(ESlateVisibility::Visible);
 	//Hover 되었는지 알 수 있는 함수 부분. Hover되었을때만 실행되는 함수 이기 때문임.
-	//사용자를 받아와야한다.
+	//사용자를 받아와야한다. (컨트롤러 받아와서 케스트)
+	/*player = Cast<AOSY_TESTCharacter>(pc);*/
+	
 	//사용자의 휠 값을 받아와야한다.
-	//Cast<AOSY_TESTCharacter>()
+	
+	
 }
