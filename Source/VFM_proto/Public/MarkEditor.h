@@ -55,10 +55,9 @@ public:
 	class UTextBlock* text_sliderCount;
 
 	/*----------*/
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UMarkEditor> MarkEditorClass; //MarkEditor class를 받아오기 위한 변수
+
 	UPROPERTY(EditAnywhere, Category = AnimLib)
-	TSubclassOf<class UAnimLibrary> AnimLibClass;
+	TSubclassOf<class UAnimLibrary> AnimLibClass; //Anim Library 생성을 위해 정보를 가져올 변수
 
 	UPROPERTY()
 	class UMarkEditor* MarkEditorWidget; //받아온 클래스 정보를 통해 MakrEditorWidget을 만들자. 만든 위젯을 저장할 변수

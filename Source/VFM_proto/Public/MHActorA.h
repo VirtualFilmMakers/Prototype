@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "D:\Unreal Projects\VFM_Proto\Source\VFM_proto\Public\D_ControllableAsset.h"
 #include "MHActorA.generated.h"
 
 UCLASS()
-class VFM_PROTO_API AMHActorA : public APawn
+class VFM_PROTO_API AMHActorA : public APawn, public ID_ControllableAsset
 {
 	GENERATED_BODY()
 
@@ -26,7 +27,15 @@ public:
 	// Called to bind functionality to input
 // 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 public:
+	UWorld* World = nullptr;
+	UPROPERTY(EditAnywhere, Category = "My Settings")
+	TSubclassOf<class UMarkEditor> MarkEditorClass; //MarkEditor class를 받아오기 위한 변수
+	UPROPERTY()
+	class UMarkEditor* markEditorWidget = nullptr;
 
+	virtual void OpenAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
+
+	virtual void CloseAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
 
 
 };
