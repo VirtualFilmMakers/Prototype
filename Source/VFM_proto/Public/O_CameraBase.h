@@ -41,6 +41,9 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* CameraBase_CamComp;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* CameraBase_ACamera;
+
 	
 
 

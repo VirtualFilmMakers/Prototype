@@ -11,35 +11,27 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	//루트 설정
-	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("RootScene"));
-	RootComponent=RootScene;
-	RootScene->SetMobility(EComponentMobility::Movable);
-
+	
+	
 	CameraBase_SpringArmComp->SetupAttachment(RootComponent);
 	CameraBase_SpringArmComp->TargetArmLength=0.f;
 	CameraBase_SpringArmComp->bUsePawnControlRotation=true;
 	CameraBase_SpringArmComp->bEnableCameraLag= false;
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
 	CameraBase_SpringArmComp->SetRelativeLocation(FVector(-2,0,79));
-	CameraBase_CamComp->SetRelativeLocation(FVector(41,0,-33));
-	
 
+	
+	
+	
 	//compTirpodUp-----------------------
 	compTirpodUp= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodUp"));
 	compTirpodUp->SetupAttachment(CameraBase_SpringArmComp);
 	compTirpodUp->SetRelativeLocation(FVector(0,0,-188));
 	
+	
+	CameraBase_ACamera->SetupAttachment(compTirpodUp);
+	CameraBase_ACamera->SetRelativeLocation(FVector(7,0,148));
 
-	//ACamera-----------------------
-	ACamera= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ACamera"));
-	ACamera->SetupAttachment(compTirpodUp);
-	ACamera->SetRelativeLocation(FVector(5,0,148));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> tempACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
-	if (tempACamera.Succeeded())
-	{
-		ACamera->SetStaticMesh(tempACamera.Object);
-	}
 
 	
 
@@ -64,7 +56,7 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 	//compTirpodDown-----------------------
 	compTirpodDown= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodDown"));
 	compTirpodDown->SetupAttachment(RootComponent);
-	compTirpodDown->SetMobility(EComponentMobility::Static);
+	compTirpodDown->SetRelativeLocation(FVector(0,0,-80));
 
 	
 

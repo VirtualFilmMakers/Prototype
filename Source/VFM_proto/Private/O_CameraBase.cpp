@@ -26,6 +26,17 @@ AO_CameraBase::AO_CameraBase()
 	CameraBase_CamComp->SetupAttachment(CameraBase_SpringArmComp);
 	CameraBase_CamComp->FieldOfView = 30.60f;
 
+	//ACamera-----------------------
+	CameraBase_ACamera = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CameraBase_ACamera"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> tempCameraBase_ACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
+	if (tempCameraBase_ACamera.Succeeded())
+	{
+		CameraBase_ACamera->SetStaticMesh(tempCameraBase_ACamera.Object);
+	}
+	CameraBase_CamComp->SetupAttachment(CameraBase_ACamera);
+	CameraBase_CamComp->SetRelativeLocation(FVector(41, 0, 4));
+
+
 }
 
 // Called when the game starts or when spawned

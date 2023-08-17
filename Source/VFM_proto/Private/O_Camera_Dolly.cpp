@@ -39,14 +39,14 @@ AO_Camera_Dolly::AO_Camera_Dolly()
 	}
 
 	//ACamera--------------------------------------
-	ACamera = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ACamera"));
-	ACamera->SetupAttachment(RootComponent);
-	ACamera->SetRelativeLocation(FVector(10,0,20));
-	ConstructorHelpers::FObjectFinder<UStaticMesh>tempACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
-	if (tempACamera.Succeeded())
-	{
-		ACamera->SetStaticMesh(tempACamera.Object);
-	}
+// 	ACamera = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ACamera"));
+// 	ACamera->SetupAttachment(RootComponent);
+// 	ACamera->SetRelativeLocation(FVector(10,0,20));
+// 	ConstructorHelpers::FObjectFinder<UStaticMesh>tempACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
+// 	if (tempACamera.Succeeded())
+// 	{
+// 		ACamera->SetStaticMesh(tempACamera.Object);
+// 	}
 }
 
 void AO_Camera_Dolly::BeginPlay()
