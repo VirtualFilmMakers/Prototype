@@ -11,17 +11,18 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-
-
+	
 	//Tripod 세부설정
+	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("RootScene"));
+	RootComponent=RootScene;
 	CameraBase_SpringArmComp->bEnableCameraLag= false;
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
 	CameraBase_SpringArmComp->SetRelativeLocation(FVector(416,0,115));
-
+	
 
 	//compTirpodUp-----------------------
 	compTirpodUp= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodUp"));
-	compTirpodUp->SetupAttachment(RootComponent);
+	//compTirpodUp->SetupAttachment(RootComponent);
 
 	//ACamera-----------------------
 	ACamera= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ACamera"));
@@ -42,7 +43,6 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 		Tripod222_Cylinder_002->SetStaticMesh(tempTripod222_Cylinder_002.Object);
 	}
 
-
 	//Tripod222_Object001-----------------------------
 	Tripod222_Object001 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod222_Object001"));
 	Tripod222_Object001->SetupAttachment(compTirpodUp);
@@ -51,12 +51,11 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 	{
 		Tripod222_Object001->SetStaticMesh(tempTripod222_Object001.Object);
 	}
+	
 
-		//compTirpodDown-----------------------
-		compTirpodDown= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodDown"));
-		compTirpodDown->SetupAttachment(RootComponent);
-	
-	
+	//compTirpodDown-----------------------
+	compTirpodDown= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodDown"));
+
 	//Tripod222_Object002-----------------------------
 	Tripod222_Object002 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod222_Object002"));
 	Tripod222_Object002->SetupAttachment(compTirpodDown);
@@ -65,10 +64,6 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 	{
 		Tripod222_Object002->SetStaticMesh(tempTripod222_Object002.Object);
 	}
-
-
-
-
 
 }
 
@@ -88,6 +83,7 @@ void AO_Camera_Tripod::BeginPlay()
 void AO_Camera_Tripod::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 void AO_Camera_Tripod::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

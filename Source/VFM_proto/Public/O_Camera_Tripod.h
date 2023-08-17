@@ -32,6 +32,8 @@ public:
 
 
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class USceneComponent* RootScene;
 
 	// 카메라 상단
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
