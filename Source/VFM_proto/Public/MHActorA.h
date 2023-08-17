@@ -35,8 +35,11 @@ public:
 	//플레이어컨트롤러를 받아올 변수 (사용자를 가져올 변수)
 	UPROPERTY()
 	APlayerController* pc = nullptr;
-	/*UPROPERTY()*/
-	/*AOSY_TESTCharacter* player = nullptr;*/
+	UPROPERTY()
+	class AOSY_TESTCharacter* player = nullptr;
+	UPROPERTY()
+	float MouseWheelValue = 0;
+	
 
 	virtual void OpenAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
 

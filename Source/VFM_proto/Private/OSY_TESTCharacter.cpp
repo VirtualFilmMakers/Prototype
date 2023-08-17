@@ -71,6 +71,8 @@ void AOSY_TESTCharacter::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(InputMapping, 0);
+
+
 		}
 	}
 
@@ -160,5 +162,3 @@ void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
 		
 	}
 }
-
-

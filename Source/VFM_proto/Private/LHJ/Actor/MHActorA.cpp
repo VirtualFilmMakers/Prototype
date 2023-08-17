@@ -5,6 +5,9 @@
 #include "D_ControllableAsset.h"
 #include "MarkEditor.h"
 #include "OSY_TESTCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "PlayerZoom.h"
+#include "GameFramework/PlayerInput.h"
 
 // Sets default values
 AMHActorA::AMHActorA()
@@ -37,6 +40,13 @@ void AMHActorA::BeginPlay()
 			//pc->SetInputMode(FInputModeGameAndUI());
 	} //화면에 띄워놓기
 
+	player = Cast<AOSY_TESTCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TESTCharacter::StaticClass()));
+
+	if (player != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("hello player!"));
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("player Load fail.."));
 	
 }
 
@@ -44,7 +54,11 @@ void AMHActorA::BeginPlay()
 void AMHActorA::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	MouseWheelValue = player->GetComponentByClass<UPlayerZoom>()->GetZoomValue();
+	UE_LOG(LogTemp,Warning,TEXT("%f"),MouseWheelValue);
+	if(MouseWheelValue!=0.0f){
+	this->SetActorRotation(FRotator(0.0f,this->GetActorRotation().Yaw + MouseWheelValue*2.0f,0.0f));
+	}
 }
 
 void AMHActorA::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)
@@ -52,7 +66,7 @@ void AMHActorA::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)
 	ID_ControllableAsset::CloseAssetPanel_Implementation(AssetWithControlPanel);
 	
 	
-	/*markEditorWidget->SetVisibility(ESlateVisibility::Hidden);*/
+	markEditorWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
@@ -61,11 +75,6 @@ void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
 // 	UE_LOG(LogTemp, Warning, TEXT("Cooper ALIVE!!"));
 	
 	markEditorWidget->SetVisibility(ESlateVisibility::Visible);
-	//Hover 되었는지 알 수 있는 함수 부분. Hover되었을때만 실행되는 함수 이기 때문임.
-	//사용자를 받아와야한다. (컨트롤러 받아와서 케스트)
-	/*player = Cast<AOSY_TESTCharacter>(pc);*/
-	
-	//사용자의 휠 값을 받아와야한다.
-	
+
 	
 }

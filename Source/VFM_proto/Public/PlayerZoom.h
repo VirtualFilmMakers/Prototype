@@ -40,4 +40,8 @@ public:
 	float ZoomValue=0;
 
 	void Zoom(const FInputActionValue& Value);
+
+	//LHJ
+	float GetZoomValue();
+	float MouseWheelValue;
 };
