@@ -14,7 +14,7 @@ AO_CameraBase::AO_CameraBase()
 
 	// 기본 스프링암 할당
 	CameraBase_SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBase_SpringArmComp"));
-	CameraBase_SpringArmComp->SetupAttachment(RootComponent);
+	//CameraBase_SpringArmComp->SetupAttachment(RootComponent);
 	CameraBase_SpringArmComp->bEnableCameraLag = true;
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = true;
 	CameraBase_SpringArmComp->CameraLagSpeed = 2.0f;

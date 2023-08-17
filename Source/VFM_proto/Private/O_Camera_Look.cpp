@@ -9,6 +9,7 @@
 
 UO_Camera_Look::UO_Camera_Look()
 {
+	
 	ConstructorHelpers::FObjectFinder<UInputAction> tempCam_Look(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Look.IA_OSY_Look'"));
 	if (tempCam_Look.Succeeded())
 	{

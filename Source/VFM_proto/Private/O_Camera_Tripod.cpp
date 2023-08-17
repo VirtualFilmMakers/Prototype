@@ -11,37 +11,37 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	
-	//Tripod 세부설정
+	//루트 설정
 	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("RootScene"));
 	RootComponent=RootScene;
+	RootScene->SetMobility(EComponentMobility::Movable);
+
+	CameraBase_SpringArmComp->SetupAttachment(RootComponent);
+	CameraBase_SpringArmComp->TargetArmLength=0.f;
+	CameraBase_SpringArmComp->bUsePawnControlRotation=true;
 	CameraBase_SpringArmComp->bEnableCameraLag= false;
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
-	CameraBase_SpringArmComp->SetRelativeLocation(FVector(416,0,115));
+	CameraBase_SpringArmComp->SetRelativeLocation(FVector(-2,0,79));
+	CameraBase_CamComp->SetRelativeLocation(FVector(41,0,-33));
 	
 
 	//compTirpodUp-----------------------
 	compTirpodUp= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodUp"));
-	//compTirpodUp->SetupAttachment(RootComponent);
+	compTirpodUp->SetupAttachment(CameraBase_SpringArmComp);
+	compTirpodUp->SetRelativeLocation(FVector(0,0,-188));
+	
 
 	//ACamera-----------------------
 	ACamera= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ACamera"));
 	ACamera->SetupAttachment(compTirpodUp);
-	ACamera->SetRelativeLocation(FVector(0,0,105));
+	ACamera->SetRelativeLocation(FVector(5,0,148));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
 	if (tempACamera.Succeeded())
 	{
 		ACamera->SetStaticMesh(tempACamera.Object);
 	}
 
-	//Tripod222_Cylinder_002---------------------
-	Tripod222_Cylinder_002 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod222_Cylinder_002"));
-	Tripod222_Cylinder_002->SetupAttachment(compTirpodUp);
-	ConstructorHelpers::FObjectFinder<UStaticMesh> tempTripod222_Cylinder_002(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/Tripod/Tripod222_Cylinder_002.Tripod222_Cylinder_002'"));
-	if (tempTripod222_Cylinder_002.Succeeded())
-	{
-		Tripod222_Cylinder_002->SetStaticMesh(tempTripod222_Cylinder_002.Object);
-	}
+	
 
 	//Tripod222_Object001-----------------------------
 	Tripod222_Object001 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod222_Object001"));
@@ -52,17 +52,29 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 		Tripod222_Object001->SetStaticMesh(tempTripod222_Object001.Object);
 	}
 	
-
-	//compTirpodDown-----------------------
-	compTirpodDown= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodDown"));
-
 	//Tripod222_Object002-----------------------------
 	Tripod222_Object002 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod222_Object002"));
-	Tripod222_Object002->SetupAttachment(compTirpodDown);
+	Tripod222_Object002->SetupAttachment(compTirpodUp);
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempTripod222_Object002(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/Tripod/Tripod222_Object002.Tripod222_Object002'"));
 	if (tempTripod222_Object002.Succeeded())
 	{
 		Tripod222_Object002->SetStaticMesh(tempTripod222_Object002.Object);
+	}
+
+	//compTirpodDown-----------------------
+	compTirpodDown= CreateDefaultSubobject<USceneComponent>(TEXT("compTirpodDown"));
+	compTirpodDown->SetupAttachment(RootComponent);
+	compTirpodDown->SetMobility(EComponentMobility::Static);
+
+	
+
+	//Tripod222_Cylinder_002---------------------
+	Tripod222_Cylinder_002 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tripod222_Cylinder_002"));
+	Tripod222_Cylinder_002->SetupAttachment(compTirpodDown);
+	ConstructorHelpers::FObjectFinder<UStaticMesh> tempTripod222_Cylinder_002(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/Tripod/Tripod222_Cylinder_002.Tripod222_Cylinder_002'"));
+	if (tempTripod222_Cylinder_002.Succeeded())
+	{
+		Tripod222_Cylinder_002->SetStaticMesh(tempTripod222_Cylinder_002.Object);
 	}
 
 }
