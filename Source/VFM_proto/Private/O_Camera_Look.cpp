@@ -4,6 +4,7 @@
 #include "O_Camera_Look.h"
 #include "O_CameraBase.h"
 #include "EnhancedInputComponent.h"
+#include "Components/CapsuleComponent.h"
 //#include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
 
 UO_Camera_Look::UO_Camera_Look()
@@ -51,7 +52,8 @@ void UO_Camera_Look::Cam_Look(const FInputActionValue& Value)
 		}
 		if (CameraLookValue.Y != 0.f)
 		{
-			me->AddControllerPitchInput(CameraLookValue.Y);
+			me->  AddControllerPitchInput(CameraLookValue.Y);
 		}
 	}
+
 }
