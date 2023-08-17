@@ -20,6 +20,12 @@ AO_Camera_Tripod::AO_Camera_Tripod()
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = false;
 	CameraBase_SpringArmComp->SetRelativeLocation(FVector(-2,0,79));
 
+	ConstructorHelpers::FObjectFinder<UStaticMesh> tempCameraBase_ACamera(TEXT("/Script/Engine.StaticMesh'/Game/DKW/Asset/Camera/ACamera/ACamera.ACamera'"));
+	if (tempCameraBase_ACamera.Succeeded())
+	{
+		CameraBase_ACamera->SetStaticMesh(tempCameraBase_ACamera.Object);
+	}
+
 	
 	
 	

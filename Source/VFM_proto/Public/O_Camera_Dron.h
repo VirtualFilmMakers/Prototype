@@ -30,6 +30,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class USceneCaptureComponent2D* compViewCam;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	class UStaticMeshComponent* d4_Drone1;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
