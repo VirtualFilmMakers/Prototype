@@ -23,6 +23,7 @@ void UPlayerZoom::BeginPlay()
 void UPlayerZoom::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	ZoomValue = 0.0f;
 }
 
 void UPlayerZoom::SetupInputBinding(class UInputComponent* PlayerInputComponent)
@@ -45,4 +46,9 @@ void UPlayerZoom::Zoom(const FInputActionValue& Value)
 		me->springArmComp->TargetArmLength = FMath::Clamp(NewTargetArmLength, me->MinZoomLength, me->MaxZoomLength);
 	}
 
+}
+
+float UPlayerZoom::GetZoomValue()
+{
+	return ZoomValue;
 }
