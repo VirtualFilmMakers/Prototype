@@ -17,6 +17,8 @@
 #include "Kismet/GameplayStatics.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputMappingContext.h>
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h>
+#include "GameFramework/PlayerController.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AOSY_TESTCharacter::AOSY_TESTCharacter()
@@ -75,8 +77,8 @@ void AOSY_TESTCharacter::BeginPlay()
 
 		}
 	}
-
-
+	pc = GetWorld()->GetFirstPlayerController();
+	pc->SetShowMouseCursor(true);
 
 }
 
@@ -95,6 +97,8 @@ void AOSY_TESTCharacter::Tick(float DeltaTime)
 void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//LHJ -> 마우스 오른쪽버튼 이벤트 바인딩
+	PlayerInputComponent->BindAction("PlaceMark", IE_Pressed,this, &AOSY_TESTCharacter::RightMouse);
 
 	UEnhancedInputComponent* SYInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	if (SYInput)
@@ -121,6 +125,48 @@ void AOSY_TESTCharacter::jump()
 	Jump();
 }
 
+
+
+//LHJ ->오른쪽 마우스 클릭 시 발동될 이벤트
+void AOSY_TESTCharacter::RightMouse()
+{
+	bool IsHitResult;
+	FHitResult HitResult;
+	FVector2D MouseScreenPos;
+	pc->GetMousePosition(MouseScreenPos.X,MouseScreenPos.Y);
+
+
+	FVector WorldLocation;
+	FVector WorldDirection;
+	if (pc->DeprojectMousePositionToWorld(WorldLocation,WorldDirection))
+	{
+		FVector TraceStart = WorldLocation;
+		FVector TraceEnd = TraceStart + WorldDirection*10000.0f;
+		FCollisionQueryParams param;
+		IsHitResult = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, param);
+		if(IsHitResult)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Ray hit!!"));
+			AddMarkLocation = HitResult.ImpactPoint;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Ray hit fail..."));
+		}
+
+		//LineTrace draw
+		if (true)
+		{
+			FColor DrawColor = IsHitResult ? FColor::Green : FColor::Red;
+			const float DebugLifeTime  = 5.0f;
+			DrawDebugLine(GetWorld(),TraceStart,TraceEnd,DrawColor,false, DebugLifeTime);
+		} //라인트레이스 모습 그려주세용
+		//에디터 안켜졌는데도 쏘는 레이에 맞춰 메타휴먼이 생겨남.
+		//모드 설정이 필요할듯?
+	}
+
+		
+}
 
 
 

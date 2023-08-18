@@ -55,9 +55,12 @@ void AMHActorA::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	MouseWheelValue = player->GetComponentByClass<UPlayerZoom>()->GetZoomValue();
-	UE_LOG(LogTemp,Warning,TEXT("%f"),MouseWheelValue);
+	/*UE_LOG(LogTemp,Warning,TEXT("%f"),MouseWheelValue);*/
+
+	/*!! 플레이어 줌 멈추는 로직 필요!!*/
+
 	if(MouseWheelValue!=0.0f){
-	this->SetActorRotation(FRotator(0.0f,this->GetActorRotation().Yaw + MouseWheelValue*2.0f,0.0f));
+	this->SetActorRotation(FRotator(0.0f,this->GetActorRotation().Yaw + MouseWheelValue*5.0f,0.0f));
 	}
 }
 
@@ -75,6 +78,10 @@ void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
 // 	UE_LOG(LogTemp, Warning, TEXT("Cooper ALIVE!!"));
 	
 	markEditorWidget->SetVisibility(ESlateVisibility::Visible);
-
-	
+	markEditorWidget->SetCurrActor(this); //현재 스폰되어 있는 메타휴먼정보를 MarkEditor에게 넘겨주기 위함.
 }
+
+//Mark Editor에게 나 누구야 알려주기(완)
+//그거 기반으로 스폰하기
+//애니메이션 세이브드 구조체 만들기
+// 

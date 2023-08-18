@@ -49,6 +49,15 @@ public://플레이어 입력에 관한 부분
 	void Vertical(float value);
 	void jump();
 	
+	
+	//LHJ -> 마우스 오른쪽버튼 이벤트 
+	UFUNCTION()
+	void RightMouse();
+
+	//LHJ 
+	UPROPERTY()
+	FVector AddMarkLocation;
+	
 	//기존 카메라 움직임 방식
 
 	void CameraZoom(float value);
@@ -95,6 +104,10 @@ public:	//EnhanecedInput
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="MySettings")
 	class AO_CameraBase* testPawn;
+
+	//LHJ->오른쪽 마우스 클릭시 실행할 이벤트를 위해 필요한 변수
+	class APlayerController* pc ;
+	
 
 // delegate
 	FInputBindingDelegate onInputBindingDelegate;
