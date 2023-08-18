@@ -7,6 +7,10 @@
 #include "Blueprint/UserWidget.h"
 #include "AnimLibrary.h"
 #include "Components/Slider.h"
+#include "MHActorA.h"
+#include "SpawnActor.h"
+#include "OSY_TESTCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 
 void UMarkEditor::NativeConstruct()
@@ -17,8 +21,11 @@ void UMarkEditor::NativeConstruct()
 	World = GetWorld();
 	btn_animSelection->OnClicked.AddDynamic(this, &UMarkEditor::OnClickAnimLib);
 	slider_holdTime->OnValueChanged.AddDynamic(this, &UMarkEditor::OnSliderMoved);
+	btn_addMark->OnClicked.AddDynamic(this, &UMarkEditor::OnClickAddMark);
 
 	pc = GetWorld()->GetFirstPlayerController();
+	
+	player = Cast<AOSY_TESTCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TESTCharacter::StaticClass()));
 	//if(pc) UE_LOG(LogTemp,Warning,TEXT("PC good job!!!!!!!!")); //플레이어 컨트롤러 받아오기
 	//
 	//
@@ -37,6 +44,10 @@ void UMarkEditor::NativeConstruct()
 }
 
 
+void UMarkEditor::SetCurrActor(AMHActorA* temp)
+{
+	CurrActor = temp;
+}
 
 //btn_animSelection->OnClicked.AddDynamic(this, &UMarkEditor::OnClickAnimLib); //버튼이 선택되면 OnClickAnimLib() 실행
 	
@@ -62,17 +73,43 @@ void UMarkEditor::OnClickAnimLib()//Mark Editor에서  Anim lib 버튼을 선택하면
 	}
 }
 
+//ADD MARK
+void UMarkEditor::OnClickAddMark()
+{
+/*해당 Mark의 현재 animation과 
+위치, 방향을 저장해야하는 부분
+*/
+
+	/*UE_LOG(LogTemp, Warning, TEXT("add mark"));*/
+	if(SpawnActor)
+	GetWorld()->SpawnActor<ASpawnActor>(SpawnActor, CurrActor->GetActorLocation(), CurrActor->GetActorRotation()); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
+	/*player->SetActorLocation(player->AddMarkLocation);*/
+
+	//플레이어의 마우스 우클릭을 받는다. why? mark를 찍을 위치값이 필요하기 때문
+	
+	//우클릭을 하면 mark위치가 해당 위치로 옮겨간다.
+
+
+	
+}
+
+//MARK Editor's Anim player Time Slider
 void UMarkEditor::OnSliderMoved(float value)
 {
 	text_sliderCount->SetText(FText::AsNumber((int32)value));
 	
 }
 
+
+
+//TICK -> Animation Selection Input 받아와서 text 변경
 void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	//Super::NativeTick(MyGeometry, InDeltaTime);
 	if(AnimLibWidget!=nullptr)
 	InputAnimState = AnimLibWidget->GetAnimInfo();
+
+	CurrActor->SetActorLocation(player->AddMarkLocation);
 
 	switch (InputAnimState)
 	{
@@ -92,7 +129,7 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	case 4:
 		text_animName->SetText(FText::FromString("Standing Clap"));
 		break;
-
+		
 	case 5:
 		text_animName->SetText(FText::FromString("Idle"));
 		break;
@@ -105,10 +142,3 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		break;
 	}
 }
-/*할 것 : 
-* 플레이어 컨트롤러에서 마우스 휠 이벤트 받아오기
-* 휠의 움직임을 float값으로 받아오기
-* 월드에 배치된 메타휴먼 받아오기
-* 메타휴먼 yaw 값 바꾸기 (float값 받아온 것으로)
-* 
-*/
