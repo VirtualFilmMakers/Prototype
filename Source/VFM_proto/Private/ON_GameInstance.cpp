@@ -26,6 +26,8 @@ void UON_GameInstance::Init()
 
 		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this,&UON_GameInstance::OnFindOtherSessions);
 
+		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this,&UON_GameInstance::OnJoinSelectedSession);
+
 	}
 
 }
@@ -95,23 +97,83 @@ void UON_GameInstance::OnFindOtherSessions(bool bWasSuccessful)
 
 		UE_LOG(LogTemp,Warning,TEXT("Find Sessions: %d"),searchResults.Num());
 
-		for (FOnlineSessionSearchResult result : searchResults)
+		for (int32 i=0; i<searchResults.Num();i++)
 		{
 			FString roomName;
-			result.Session.SessionSettings.Get(FName("ROOM_NAME"),roomName);
+			searchResults[i].Session.SessionSettings.Get(FName("ROOM_NAME"),roomName);
 			FString hostName;
-			result.Session.SessionSettings.Get(FName("HOST_NAME"),hostName);
-			int32 openNumber = result.Session.NumOpenPublicConnections;
-			int32 maxNumber =  result.Session.SessionSettings.NumPublicConnections;
-			int32 pingSpeed = result.PingInMs;
+			searchResults[i].Session.SessionSettings.Get(FName("HOST_NAME"),hostName);
+			int32 openNumber = searchResults[i].Session.NumOpenPublicConnections;
+			int32 maxNumber = searchResults[i].Session.SessionSettings.NumPublicConnections;
+			int32 pingSpeed = searchResults[i].PingInMs;
 
 
 			UE_LOG(LogTemp,Warning,TEXT("Room Name: %s, Host Name: %s, OpenNumber: %d,MaxNumber: %d, Ping Speed: %d "),*roomName,*hostName,openNumber,maxNumber,pingSpeed);
+
+			// 구조체 변수에 찾은 세션 정보를 입력한다
+			FSessionSlotInfo slotInfo;
+			slotInfo.Set(roomName,hostName,FString::Printf(TEXT("(%d/%d)"),maxNumber-openNumber,maxNumber),pingSpeed,i);
+
+			// 세션 정보를 델리게이트로 전파한다
+			onSearchCompleted.Broadcast(slotInfo);
 		}
 	}
 	else
 	{
 		UE_LOG(LogTemp,Warning,TEXT("Session search failed..."));
+	}
+}
+
+void UON_GameInstance::JoinSelectedSession(int32 index)
+{
+	sessionInterface->JoinSession(0,FName(mySessionName),sessionSearch->SearchResults[index]);
+}
+
+void UON_GameInstance::OnJoinSelectedSession(FName sessionName, EOnJoinSessionCompleteResult::Type result)
+{
+	//UE_LOG(LogTemp,Warning,TEXT("%s"), result == EOnJoinSessionCompleteResult::Success ? *FString::Printf(TEXT("Success:%s"), *sessionName.ToString()) : *FString(TEXT("Failed")));
+
+
+	switch (result)
+	{
+	case EOnJoinSessionCompleteResult::Success:
+	{
+
+		UE_LOG(LogTemp, Warning,TEXT("Success:%s"), *sessionName.ToString());
+
+		APlayerController* playercon = GetWorld()->GetFirstPlayerController();
+
+		if (playercon != nullptr)
+		{
+			//join된 세션 호스트의 ServerTravel 된 맵주소를 받아온다
+			FString url;
+			sessionInterface->GetResolvedConnectString(sessionName, url);
+
+			// 주소를 받았다면, 그 주소를 따라서 맵 이동한다.
+			if(!url.IsEmpty())
+			{
+				playercon->ClientTravel(url,ETravelType::TRAVEL_Absolute);
+			}
+		}
+	}
+		break;
+	case EOnJoinSessionCompleteResult::SessionIsFull:
+		UE_LOG(LogTemp, Warning, TEXT("SessionIsFull"));
+		break;
+	case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+		UE_LOG(LogTemp, Warning, TEXT("SessionDoesNotExist"));
+		break;
+	case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+		UE_LOG(LogTemp, Warning, TEXT("CouldNotRetrieveAddress"));
+		break;
+	case EOnJoinSessionCompleteResult::AlreadyInSession:
+		UE_LOG(LogTemp, Warning, TEXT("AlreadyInSession"));
+		break;
+	case EOnJoinSessionCompleteResult::UnknownError:
+		UE_LOG(LogTemp, Warning, TEXT("UnknownError"));
+		break;
+	default:
+		break;
 	}
 }
 

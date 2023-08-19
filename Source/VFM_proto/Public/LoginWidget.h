@@ -6,9 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "LoginWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class VFM_PROTO_API ULoginWidget : public UUserWidget
 {
@@ -61,12 +59,13 @@ public:
 	// Canvas_Find-------------------------
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
-	class UScrollBox* sb_CreateCancelSession;
+	class UScrollBox* sb_RoomListBox;
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
 	class UButton* btn_FindSession;
 
-
+	UPROPERTY(EditAnywhere,Category= "MySettigs")
+	TSubclassOf<class USessionInfoWidget> sessionInfoWidget;
 
 	UFUNCTION()
 	void OnClickCreateButton();
@@ -78,8 +77,16 @@ public:
 
 	UFUNCTION()
 	void OnClickedSwitchFindSession();
+
+	UFUNCTION()
+	void AddRoomSlot(struct FSessionSlotInfo slotInfo);
+
+	
 	
 private:
+
+	UPROPERTY()
+	class USessionInfoWidget* sessionSlot;
 
 	void SwitchCanvas(int32 index);
 };
