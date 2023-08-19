@@ -58,7 +58,7 @@ void UON_GameInstance::OnCreatedMySession(FName sessionName, bool bWasSuccessful
 {
 	if (bWasSuccessful)
 	{
-		bool Result = GetWorld()->ServerTravel("/Game/OSY/Net/ON_CreateMap?Listen",true);
+		bool Result = GetWorld()->ServerTravel("/Game/OSY/Network/ON_CreateMap?Listen",true);
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result:%s"), Result ? *FString("Success") : *FString("Failed"));
 	}
 }
