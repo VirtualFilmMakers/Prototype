@@ -54,7 +54,10 @@ public:
 	class UButton* btn_CreateSession;
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
-	class UButton* btn_CreateCancelSession;
+	class UButton* btn_BackFromCreate;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UButton* btn_BackFromFind;
 
 	// Canvas_Find-------------------------
 
@@ -81,12 +84,17 @@ public:
 	UFUNCTION()
 	void AddRoomSlot(struct FSessionSlotInfo slotInfo);
 
+	UFUNCTION()
+	void ChangeButtonActivation(bool bIsActivation);
 	
 	
 private:
 
 	UPROPERTY()
 	class USessionInfoWidget* sessionSlot;
+
+	UFUNCTION()
+	void BackToFirstCanvas();
 
 	void SwitchCanvas(int32 index);
 };

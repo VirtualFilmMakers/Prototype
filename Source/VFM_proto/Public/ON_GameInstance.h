@@ -26,6 +26,7 @@ public:
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam (FSearchSignature,FSessionSlotInfo,sessionInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam (FFindButtonSignature,bool,bIsActivation);
 
 
 UCLASS()
@@ -46,6 +47,8 @@ public:
 	IOnlineSessionPtr sessionInterface;
 	TSharedPtr<FOnlineSessionSearch> sessionSearch;
 	FSearchSignature onSearchCompleted;
+	FFindButtonSignature onFindButtonActivation;
+
 
 	void CreateMySession(FText roomName);
 	void OnCreatedMySession(FName sessionName,bool bWasSuccessful);

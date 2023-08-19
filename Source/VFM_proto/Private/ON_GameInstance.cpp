@@ -84,8 +84,9 @@ void UON_GameInstance::FindOtherSession()
 	//3. 세션의 검색량을 설정한다.
 	sessionSearch->MaxSearchResults = 10;
 	 
-	
 	sessionInterface->FindSessions(0,sessionSearch.ToSharedRef());
+
+	onFindButtonActivation.Broadcast(false);
 }
 
 void UON_GameInstance::OnFindOtherSessions(bool bWasSuccessful)
@@ -117,6 +118,8 @@ void UON_GameInstance::OnFindOtherSessions(bool bWasSuccessful)
 			// 세션 정보를 델리게이트로 전파한다
 			onSearchCompleted.Broadcast(slotInfo);
 		}
+		onFindButtonActivation.Broadcast(true);
+
 	}
 	else
 	{

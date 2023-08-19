@@ -19,10 +19,13 @@ void ULoginWidget::NativeConstruct()
 	btn_switchCreateSession->OnClicked.AddDynamic(this,&ULoginWidget::OnClickedSwitchCreateSession);
 	btn_switchFindSession->OnClicked.AddDynamic(this,&ULoginWidget::OnClickedSwitchFindSession);
 	btn_FindSession->OnClicked.AddDynamic(this,&ULoginWidget::OnClickFindButton);
+	btn_BackFromFind->OnClicked.AddDynamic(this,&ULoginWidget::BackToFirstCanvas);
+	btn_BackFromCreate->OnClicked.AddDynamic(this,&ULoginWidget::BackToFirstCanvas);
 
 	if (ogi != nullptr)
 	{
 		ogi->onSearchCompleted.AddDynamic(this,&ULoginWidget::AddRoomSlot);
+		ogi->onFindButtonActivation.AddDynamic(this,&ULoginWidget::ChangeButtonActivation);
 	}
 	
 }
@@ -53,6 +56,7 @@ void ULoginWidget::OnClickedSwitchFindSession()
 {
 
 	SwitchCanvas(2);
+	OnClickFindButton();
 }
 
 void ULoginWidget::AddRoomSlot(FSessionSlotInfo slotInfo)
@@ -75,6 +79,16 @@ void ULoginWidget::AddRoomSlot(FSessionSlotInfo slotInfo)
 	}
 
 
+}
+
+void ULoginWidget::ChangeButtonActivation(bool bIsActivation)
+{
+	btn_FindSession->SetIsEnabled(bIsActivation);
+}
+
+void ULoginWidget::BackToFirstCanvas()
+{
+	ws_SessionUISwitch->SetActiveWidgetIndex(0);
 }
 
 void ULoginWidget::SwitchCanvas(int32 index)
