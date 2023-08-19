@@ -18,25 +18,68 @@ protected:
 	virtual void NativeConstruct()override;
 
 public:
-	
+	class UON_GameInstance* ogi;
+
+	// Canvas_Main---------------------------
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
-	class UEditableText* edit_roomName;
+	class UWidgetSwitcher* ws_SessionUISwitch;
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
 	class UTextBlock* text_programName;
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
-	class UButton* btn_CreateSession;
+	class UButton* btn_switchCreateSession;
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
-	class UButton* btn_OpenSession;
+	class UButton* btn_switchFindSession;
 
 	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
 	class UButton* btn_QuitToDeskTop;
 
-	class UON_GameInstance* ogi;
+	// Canvas_Create---------------------------
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UEditableText* edit_roomName;
+	
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UEditableText* edit_roomExplanation;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UEditableText* edit_roomMax;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UTextBlock* text_CreateNewProject;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UTextBlock* text_TeamInfomation;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UButton* btn_CreateSession;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UButton* btn_CreateCancelSession;
+
+	// Canvas_Find-------------------------
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UScrollBox* sb_CreateCancelSession;
+
+	UPROPERTY(VisibleAnywhere,meta=(BindWidget),Category= "MySettigs")
+	class UButton* btn_FindSession;
+
+
 
 	UFUNCTION()
 	void OnClickCreateButton();
+	UFUNCTION()
+	void OnClickFindButton();
+
+	UFUNCTION()
+	void OnClickedSwitchCreateSession();
+
+	UFUNCTION()
+	void OnClickedSwitchFindSession();
 	
+private:
+
+	void SwitchCanvas(int32 index);
 };

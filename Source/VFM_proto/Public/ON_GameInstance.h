@@ -26,9 +26,11 @@ public:
 	FString mySessionName;
 
 	IOnlineSessionPtr sessionInterface;
+	TSharedPtr<FOnlineSessionSearch> sessionSearch;
 
 	void CreateMySession(FText roomName);
-
 	void OnCreatedMySession(FName sessionName,bool bWasSuccessful);
+	void FindOtherSession();
+	void OnFindOtherSessions(bool bWasSuccessful);
 	
 };
