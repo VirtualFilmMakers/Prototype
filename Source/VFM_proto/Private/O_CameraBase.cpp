@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 // Sets default values
 AO_CameraBase::AO_CameraBase()
@@ -14,7 +15,7 @@ AO_CameraBase::AO_CameraBase()
 
 	// 기본 스프링암 할당
 	CameraBase_SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBase_SpringArmComp"));
-	CameraBase_SpringArmComp->SetupAttachment(RootComponent);
+	//CameraBase_SpringArmComp->SetupAttachment(RootComponent);
 	CameraBase_SpringArmComp->bEnableCameraLag = true;
 	CameraBase_SpringArmComp->bEnableCameraRotationLag = true;
 	CameraBase_SpringArmComp->CameraLagSpeed = 2.0f;
@@ -25,6 +26,13 @@ AO_CameraBase::AO_CameraBase()
 	CameraBase_CamComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraBase_CamComp"));
 	CameraBase_CamComp->SetupAttachment(CameraBase_SpringArmComp);
 	CameraBase_CamComp->FieldOfView = 30.60f;
+
+	//ACamera-----------------------
+	CameraBase_ACamera = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CameraBase_ACamera"));
+	
+	CameraBase_CamComp->SetupAttachment(CameraBase_ACamera);
+	CameraBase_CamComp->SetRelativeLocation(FVector(41, 0, 4));
+
 
 }
 

@@ -3,12 +3,14 @@
 
 #include "OSY_PlayerAnimInstance.h"
 #include "OSY_TESTCharacter.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 
 
 void UOSY_PlayerAnimInstance::NativeInitializeAnimation()
 {
-	
+	Super::NativeInitializeAnimation();
+
 }
 
 void UOSY_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

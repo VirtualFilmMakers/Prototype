@@ -19,6 +19,9 @@
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h>
 #include "GameFramework/PlayerController.h"
 #include "DrawDebugHelpers.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
+#include "O_CameraBase.h"
+
 
 // Sets default values
 AOSY_TESTCharacter::AOSY_TESTCharacter()
@@ -27,16 +30,6 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	
-	
-	//나의 메시를 루트로 세팅한다
-	// 겟 캡슐을 메시에 상속한다
-	 
-// 	mesh 데이터 할당
- 	//	ConstructorHelpers::FObjectFinder<USkeletalMesh>tempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/OSY/Model/BasicCharacter.BasicCharacter'"));
-// 		if (tempMesh.Succeeded())
-// 		{
-// 			GetMesh()->SetSkeletalMesh(tempMesh.Object);
-// 		}
 	//스프링암 할당---------------------------------------
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComp"));
 	springArmComp->SetupAttachment(RootComponent);
@@ -58,8 +51,8 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 		InputMapping=tempInputMapping.Object;
 	}
 
-	
-	
+	//리플리케이트 항시 켜놓는 기능
+	bReplicates= true;
 
 }
 
@@ -80,15 +73,21 @@ void AOSY_TESTCharacter::BeginPlay()
 	pc = GetWorld()->GetFirstPlayerController();
 	pc->SetShowMouseCursor(true);
 
+	//-----------------------------
+	myLocalRole=GetLocalRole();
+	myRemoteRole=GetRemoteRole();
+
 }
 
 // Called every frame
-void AOSY_TESTCharacter::Tick(float DeltaTime)
+void AOSY_TESTCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	
 	LineTraceFire();
+	// 디버깅용 로그 출력
+	PrintLog();
 	
 
 }
@@ -104,7 +103,7 @@ void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (SYInput)
 	{
 		SYInput->BindAction(ia_Jump, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::jump);
-		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePosessInput);
+		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePossessInput);
 	}
 
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
@@ -181,24 +180,72 @@ void AOSY_TESTCharacter::LineTraceFire()
 	
 }
 
-void AOSY_TESTCharacter::ChangePosessInput()
+void AOSY_TESTCharacter::ChangePossessInput()
 {
-	FVector startLocation = playerCam->GetComponentLocation();
-	FVector endLocation = startLocation + playerCam->GetForwardVector() * 5000;
-	FHitResult hitInfo;
-	FCollisionQueryParams param;
-	param.AddIgnoredActor(this);
-	bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startLocation, endLocation, ECC_Visibility, param);
-	if (bHit)
+	
+	ServerChangePossessInput();
+}
+
+void AOSY_TESTCharacter::ServerChangePossessInput_Implementation()
+{
+	MulticastChangePossessInput();
+	
+}
+
+void AOSY_TESTCharacter::MulticastChangePossessInput_Implementation()
+{
+	FVector OWorldLocation;
+	FVector OWorldDirection;
+	FVector2D ScreenPosition;
+	pc->GetMousePosition(ScreenPosition.X,ScreenPosition.Y);
+	if (pc->DeprojectScreenPositionToWorld(ScreenPosition.X, ScreenPosition.Y, OWorldLocation, OWorldDirection))
 	{
-		//APlayerController* NewController = Cast<APlayerController>(testPawn->GetController());
-		APlayerController* NewController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		//APlayerController* NewController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		if (NewController)
+		FVector startLocation=OWorldLocation;
+		FVector endLocation=OWorldLocation+OWorldDirection*10000;
+
+		FHitResult hitResult;
+		FCollisionQueryParams CollisionParam;
+		bool bisHit= GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECC_Visibility, CollisionParam);
+		if (bisHit)
 		{
-			NewController->Possess((APawn*)testPawn);
+			APlayerController* NewController = GetWorld()->GetFirstPlayerController();
+			if (NewController)
+			{
+				testPawn = Cast<AO_CameraBase>(hitResult.GetActor());
+				if (testPawn)
+				{
+					NewController->Possess(testPawn);
+				}
+			}
 		}
 	}
+
+
+
+
+// 	FVector startLocation = playerCam->GetComponentLocation();
+// 	FVector endLocation = startLocation + playerCam->GetForwardVector() * 10000;
+// 	FHitResult hitResult;
+// 	FCollisionQueryParams CollisionParam;
+// 	bool bHit = GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECC_Visibility,CollisionParam);
+// 	DrawDebugLine(GetWorld(),startLocation,endLocation,FColor::Red,false,5.f,0,1.f);
+// 
+// 	if (bHit)
+// 	{
+// 		FString HitObjectName = hitResult.GetActor() ? hitResult.GetActor()->GetName() : FString(TEXT("None"));
+// 		UE_LOG(LogTemp, Warning, TEXT("Hit object: %s"), *HitObjectName);
+// 
+// 		APlayerController* NewController = GetWorld()->GetFirstPlayerController();
+// 		if (NewController)
+// 		{
+// 			APawn* PawnToPossess = Cast<APawn>(testPawn);
+// 			if (PawnToPossess)
+// 			{
+// 				NewController->Possess(PawnToPossess);
+// 			}
+// 		}
+// 	}
+
 }
 
 void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
@@ -207,4 +254,19 @@ void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
 	{
 		
 	}
+}
+
+// 각종 정보를 화면에 출력하는 함수
+void AOSY_TESTCharacter::PrintLog()
+{
+	const FString localRoleString= UEnum::GetValueAsString<ENetRole>(myLocalRole);
+	const FString remoteRoleString= UEnum::GetValueAsString<ENetRole>(myRemoteRole);
+	const FString ownerString = GetOwner() != nullptr ? GetOwner()->GetName() : FString("No Owner");
+	const FString connectionString = GetNetConnection() != nullptr ? FString("Valid Connection") : FString("Invalid Connection");
+
+	const FString printString = FString::Printf(TEXT("Local Role: %s\n Remote Role: %s\n Owner Name: %s\n Net Connection :%s"),*localRoleString,*remoteRoleString,*ownerString,*connectionString);
+
+	DrawDebugString(GetWorld(),GetActorLocation(),printString,nullptr,FColor::White,0,true);
+
+
 }

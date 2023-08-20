@@ -6,6 +6,8 @@
 #include "EnhancedInputComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 UO_Camera_Zoom::UO_Camera_Zoom()
 {
@@ -40,7 +42,8 @@ void UO_Camera_Zoom::Cam_Zoom(const FInputActionValue& Value)
 	if (me->Controller != nullptr)
 	{
 		float ZoomValue = Value.Get<float>();
-		float NewTargetArmLength = me->CameraBase_SpringArmComp->TargetArmLength + ZoomValue * me->CameraBase_ZoomStep;
-		me->CameraBase_SpringArmComp->TargetArmLength = FMath::Clamp(NewTargetArmLength, me->CameraBase_MinZoomLength, me->CameraBase_MaxZoomLength);
+		float NewFOV=me->CameraBase_CamComp->FieldOfView+ZoomValue*me->CameraBase_ZoomStep;
+		me->CameraBase_CamComp->FieldOfView= FMath::Clamp(NewFOV,me->CameraBase_MinFOV,me->CameraBase_MaxFOV);
+
 	}
 }

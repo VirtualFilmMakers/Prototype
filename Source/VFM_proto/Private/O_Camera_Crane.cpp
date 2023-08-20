@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 AO_Camera_Crane::AO_Camera_Crane()
 {

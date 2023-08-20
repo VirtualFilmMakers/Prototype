@@ -41,21 +41,29 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* CameraBase_CamComp;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
+	class UStaticMeshComponent* CameraBase_ACamera;
+
 	
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float CameraBase_MinZoomLength = 0.f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float CameraBase_MaxZoomLength = 1000.f;
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	float CameraBase_DefaultArmLength = 600.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_ZoomStep = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	float CameraBase_ZoomStep = 10.f;
+	float CameraBase_MinFOV = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_MaxFOV = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float CameraBase_DefaultFOV = 30.60f;
+
+
 
 
 

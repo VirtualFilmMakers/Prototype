@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "NetworkReplayStreaming.h"
 #include "D_GameInstance.generated.h"
 
 /**
@@ -56,5 +57,22 @@ public:
 	void UnPossessFromCamera();
 
 
+	// record System
+	virtual void Init() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Replays")
+	FString RecordingName;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Replays")
+	FString FriendlyRecordingName;
+
+	UFUNCTION(BlueprintCallable, Category = "Replays")
+	void StartRecording();
+
+	UFUNCTION(BlueprintCallable, Category = "Replays")
+	void StopRecording();
+
+	UFUNCTION(BlueprintCallable, Category = "Replays")
+	void StartReplay();
 	
 };
