@@ -23,8 +23,35 @@ UD_GameInstance::UD_GameInstance()
  
 }
 
+void UD_GameInstance::Init()
+{
+    Super::Init();
+    RecordingName = "MyReplay";
+    FriendlyRecordingName = "My Replay";
+}
+
+void UD_GameInstance::StartRecording()
+{
+    StartRecordingReplay(RecordingName, FriendlyRecordingName);
+    UE_LOG(LogTemp, Warning, TEXT("Start Record!"));
+}
+
+void UD_GameInstance::StopRecording()
+{
+    StopRecordingReplay();
+    UE_LOG(LogTemp, Warning, TEXT("Stop Record!"));
+}
+
+void UD_GameInstance::StartReplay()
+{
+    PlayReplay(RecordingName, GetWorld());
+    UE_LOG(LogTemp, Warning, TEXT("Play Record!"));
+}
+
+#pragma region Panel
+
 void UD_GameInstance::OpenSideToolPanel()
-{  
+{
     // if class has found from file path
     // Create Widget and add to viewport
 
@@ -64,6 +91,11 @@ void UD_GameInstance::CloseCamPreviewWidget()
     }
 }
 
+
+#pragma endregion
+
+#pragma region PossessCamera
+
 void UD_GameInstance::UnPossessFromCamera()
 {
     APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
@@ -74,5 +106,10 @@ void UD_GameInstance::UnPossessFromCamera()
         GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Yellow, "yes");
         PlayerController->Possess(mainPlayer);
     }
-   
+
 }
+
+
+
+#pragma endregion
+
