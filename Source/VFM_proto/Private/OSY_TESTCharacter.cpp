@@ -20,6 +20,7 @@
 #include "GameFramework/PlayerController.h"
 #include "DrawDebugHelpers.h"
 #include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
+#include "O_CameraBase.h"
 
 
 // Sets default values
@@ -188,27 +189,63 @@ void AOSY_TESTCharacter::ChangePossessInput()
 void AOSY_TESTCharacter::ServerChangePossessInput_Implementation()
 {
 	MulticastChangePossessInput();
+	
 }
 
 void AOSY_TESTCharacter::MulticastChangePossessInput_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Here"));
-	FVector startLocation = playerCam->GetComponentLocation();
-	FVector endLocation = startLocation + playerCam->GetForwardVector() * 5000;
-	FHitResult hitInfo;
-	FCollisionQueryParams param;
-	param.AddIgnoredActor(this);
-	bool bHit = GetWorld()->LineTraceSingleByChannel(hitInfo, startLocation, endLocation, ECC_Visibility, param);
-	if (bHit)
+	FVector OWorldLocation;
+	FVector OWorldDirection;
+	FVector2D ScreenPosition;
+	pc->GetMousePosition(ScreenPosition.X,ScreenPosition.Y);
+	if (pc->DeprojectScreenPositionToWorld(ScreenPosition.X, ScreenPosition.Y, OWorldLocation, OWorldDirection))
 	{
-		//APlayerController* NewController = Cast<APlayerController>(testPawn->GetController());
-		APlayerController* NewController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		//APlayerController* NewController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		if (NewController)
+		FVector startLocation=OWorldLocation;
+		FVector endLocation=OWorldLocation+OWorldDirection*10000;
+
+		FHitResult hitResult;
+		FCollisionQueryParams CollisionParam;
+		bool bisHit= GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECC_Visibility, CollisionParam);
+		if (bisHit)
 		{
-			NewController->Possess((APawn*)testPawn);
+			APlayerController* NewController = GetWorld()->GetFirstPlayerController();
+			if (NewController)
+			{
+				testPawn = Cast<AO_CameraBase>(hitResult.GetActor());
+				if (testPawn)
+				{
+					NewController->Possess(testPawn);
+				}
+			}
 		}
 	}
+
+
+
+
+// 	FVector startLocation = playerCam->GetComponentLocation();
+// 	FVector endLocation = startLocation + playerCam->GetForwardVector() * 10000;
+// 	FHitResult hitResult;
+// 	FCollisionQueryParams CollisionParam;
+// 	bool bHit = GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECC_Visibility,CollisionParam);
+// 	DrawDebugLine(GetWorld(),startLocation,endLocation,FColor::Red,false,5.f,0,1.f);
+// 
+// 	if (bHit)
+// 	{
+// 		FString HitObjectName = hitResult.GetActor() ? hitResult.GetActor()->GetName() : FString(TEXT("None"));
+// 		UE_LOG(LogTemp, Warning, TEXT("Hit object: %s"), *HitObjectName);
+// 
+// 		APlayerController* NewController = GetWorld()->GetFirstPlayerController();
+// 		if (NewController)
+// 		{
+// 			APawn* PawnToPossess = Cast<APawn>(testPawn);
+// 			if (PawnToPossess)
+// 			{
+// 				NewController->Possess(PawnToPossess);
+// 			}
+// 		}
+// 	}
+
 }
 
 void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)

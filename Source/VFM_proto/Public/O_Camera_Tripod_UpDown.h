@@ -38,6 +38,11 @@ public:
 
 	void Cam_Up(const FInputActionValue& Value);
 
+	UFUNCTION(Server,Reliable)
+	void ServerCam_UP(const FInputActionValue& Value);
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastCam_UP(const FInputActionValue& Value);
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputAction* ia_Cam_Turn;
 
