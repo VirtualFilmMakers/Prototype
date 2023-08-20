@@ -30,7 +30,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam (FFindButtonSignature,bool,bIsActiva
 
 
 UCLASS()
-class VFM_PROTO_API UON_GameInstance : public UGameInstance
+class VFM_PROTO_API UON_GameInstance : public UD_GameInstance
 {
 	GENERATED_BODY()
 	
