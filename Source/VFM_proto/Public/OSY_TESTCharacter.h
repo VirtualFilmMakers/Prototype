@@ -117,10 +117,17 @@ public:	//EnhanecedInput
 	void LineTraceFire();
 // Posses
 	UFUNCTION()
-	void ChangePosessInput();
+	void ChangePossessInput();
+
+	UFUNCTION(Server,Reliable)
+	void ServerChangePossessInput();
+
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastChangePossessInput();
 
 	UFUNCTION(BlueprintCallable)
 	void ChangePosses(ACharacter* NewPawn);
+
 
 private:
 

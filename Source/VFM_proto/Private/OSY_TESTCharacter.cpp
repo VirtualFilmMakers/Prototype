@@ -102,7 +102,7 @@ void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (SYInput)
 	{
 		SYInput->BindAction(ia_Jump, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::jump);
-		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePosessInput);
+		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePossessInput);
 	}
 
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
@@ -179,8 +179,20 @@ void AOSY_TESTCharacter::LineTraceFire()
 	
 }
 
-void AOSY_TESTCharacter::ChangePosessInput()
+void AOSY_TESTCharacter::ChangePossessInput()
 {
+	
+	ServerChangePossessInput();
+}
+
+void AOSY_TESTCharacter::ServerChangePossessInput_Implementation()
+{
+	MulticastChangePossessInput();
+}
+
+void AOSY_TESTCharacter::MulticastChangePossessInput_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Here"));
 	FVector startLocation = playerCam->GetComponentLocation();
 	FVector endLocation = startLocation + playerCam->GetForwardVector() * 5000;
 	FHitResult hitInfo;
