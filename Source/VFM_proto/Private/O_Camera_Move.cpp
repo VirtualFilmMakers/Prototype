@@ -5,6 +5,7 @@
 #include "O_CameraBase.h"
 #include "EnhancedInputComponent.h"
 #include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 UO_Camera_Move::UO_Camera_Move()
 {

@@ -5,6 +5,7 @@
 #include "O_CameraBase.h"
 #include "EnhancedInputComponent.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 
 UO_Camera_Fly::UO_Camera_Fly()
@@ -26,11 +27,7 @@ void UO_Camera_Fly::BeginPlay()
 	Super::BeginPlay();
 
 	me = Cast<AO_CameraBase>(GetOwner());
-// 	if (me)
-// 	{
-// 		bodyMesh = Cast<USkeletalMeshComponent>(me->GetDefaultSubobjectByName(TEXT("Body")));
-// 
-// 	}
+
 }
 void UO_Camera_Fly::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -52,6 +49,18 @@ void UO_Camera_Fly::SetupInputBinding(class UInputComponent* CamInputComponent)
 
 void UO_Camera_Fly::Cam_Down(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Here"));
+	ServerCam_Down();
+}
+
+
+void UO_Camera_Fly::ServerCam_Down_Implementation()
+{
+	MulticastCam_Down();
+}
+
+void UO_Camera_Fly::MulticastCam_Down_Implementation()
+{
 	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
@@ -64,5 +73,15 @@ void UO_Camera_Fly::Cam_Fly(const FInputActionValue& Value)
 	{
 		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
 	}
+}
+
+void UO_Camera_Fly::ServerCam_Fly_Implementation()
+{
+
+}
+
+void UO_Camera_Fly::MulticastCam_Fly_Implementation()
+{
+
 }
 

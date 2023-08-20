@@ -31,9 +31,18 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class USkeletalMeshComponent* bodyMesh;
 
-	void Cam_Down(const FInputActionValue& Value);
 
-	//void Down(const FInputActionValue& Value);
+	void Cam_Down(const FInputActionValue& Value);
 	void Cam_Fly(const FInputActionValue& Value);
+
+	//Server
+	UFUNCTION(Server,Reliable)
+	void ServerCam_Down();
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastCam_Down();
+	UFUNCTION(Server,Reliable)
+	void ServerCam_Fly();
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastCam_Fly();
 	
 };

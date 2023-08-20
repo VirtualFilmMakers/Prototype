@@ -7,9 +7,11 @@
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "O_Camera_Tripod.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 
 UO_Camera_Tripod_UpDown::UO_Camera_Tripod_UpDown()
 {
+
 	ConstructorHelpers::FObjectFinder<UInputAction> tempCameraUp(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Fly.IA_OSY_Fly'"));
 	if (tempCameraUp.Succeeded())
 	{
@@ -46,13 +48,23 @@ void UO_Camera_Tripod_UpDown::SetupInputBinding(class UInputComponent* CamInputC
 
 void UO_Camera_Tripod_UpDown::Cam_Up(const FInputActionValue& Value)
 {
-	float TripodUpValue= Value.Get<float>()/2;
+	ServerCam_UP(Value);
+}
+
+void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(const FInputActionValue& Value)
+{
+	MulticastCam_UP(Value);
+}
+
+void UO_Camera_Tripod_UpDown::MulticastCam_UP_Implementation(const FInputActionValue& Value)
+{
+	float TripodUpValue = Value.Get<float>() / 2;
 	if (TripodUpValue != 0.f)
 	{
-		FVector NewTirpodLocation= me->CameraBase_SpringArmComp->GetRelativeLocation();
-		NewTirpodLocation.Z+=TripodUpValue;
+		FVector NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
+		NewTirpodLocation.Z += TripodUpValue;
 
-		const float MinCameraHeight = 79.f; 
+		const float MinCameraHeight = 79.f;
 		const float MaxCameraHeight = 141.f;
 		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
 
