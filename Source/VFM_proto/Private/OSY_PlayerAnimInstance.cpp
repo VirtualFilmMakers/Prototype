@@ -8,7 +8,8 @@
 
 void UOSY_PlayerAnimInstance::NativeInitializeAnimation()
 {
-	
+	Super::NativeInitializeAnimation();
+
 }
 
 void UOSY_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

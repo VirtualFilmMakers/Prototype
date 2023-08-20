@@ -32,4 +32,8 @@ public:
 	float speed = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=MySettings)
 	float direction = 0;
+
+
+private:
+
 };

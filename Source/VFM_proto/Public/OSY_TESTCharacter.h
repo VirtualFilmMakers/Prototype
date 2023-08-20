@@ -25,13 +25,14 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	// 카메라를 배치하고 싶다
 	// 필요속성 : 카메라, 카메라 위치를 잡아줄 스프링암
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USpringArmComponent* springArmComp;
@@ -120,4 +121,12 @@ public:	//EnhanecedInput
 
 	UFUNCTION(BlueprintCallable)
 	void ChangePosses(ACharacter* NewPawn);
+
+private:
+
+	enum ENetRole myLocalRole;
+	enum ENetRole myRemoteRole;
+
+
+	void PrintLog();
 };

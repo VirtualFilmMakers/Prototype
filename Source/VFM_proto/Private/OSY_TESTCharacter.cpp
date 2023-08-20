@@ -19,6 +19,8 @@
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputAction.h>
 #include "GameFramework/PlayerController.h"
 #include "DrawDebugHelpers.h"
+#include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
+
 
 // Sets default values
 AOSY_TESTCharacter::AOSY_TESTCharacter()
@@ -27,16 +29,6 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	
-	
-	//나의 메시를 루트로 세팅한다
-	// 겟 캡슐을 메시에 상속한다
-	 
-// 	mesh 데이터 할당
- 	//	ConstructorHelpers::FObjectFinder<USkeletalMesh>tempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/OSY/Model/BasicCharacter.BasicCharacter'"));
-// 		if (tempMesh.Succeeded())
-// 		{
-// 			GetMesh()->SetSkeletalMesh(tempMesh.Object);
-// 		}
 	//스프링암 할당---------------------------------------
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComp"));
 	springArmComp->SetupAttachment(RootComponent);
@@ -58,8 +50,8 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 		InputMapping=tempInputMapping.Object;
 	}
 
-	
-	
+	//리플리케이트 항시 켜놓는 기능
+	bReplicates= true;
 
 }
 
@@ -80,15 +72,21 @@ void AOSY_TESTCharacter::BeginPlay()
 	pc = GetWorld()->GetFirstPlayerController();
 	pc->SetShowMouseCursor(true);
 
+	//-----------------------------
+	myLocalRole=GetLocalRole();
+	myRemoteRole=GetRemoteRole();
+
 }
 
 // Called every frame
-void AOSY_TESTCharacter::Tick(float DeltaTime)
+void AOSY_TESTCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 
 	
 	LineTraceFire();
+	// 디버깅용 로그 출력
+	PrintLog();
 	
 
 }
@@ -207,4 +205,19 @@ void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
 	{
 		
 	}
+}
+
+// 각종 정보를 화면에 출력하는 함수
+void AOSY_TESTCharacter::PrintLog()
+{
+	const FString localRoleString= UEnum::GetValueAsString<ENetRole>(myLocalRole);
+	const FString remoteRoleString= UEnum::GetValueAsString<ENetRole>(myRemoteRole);
+	const FString ownerString = GetOwner() != nullptr ? GetOwner()->GetName() : FString("No Owner");
+	const FString connectionString = GetNetConnection() != nullptr ? FString("Valid Connection") : FString("Invalid Connection");
+
+	const FString printString = FString::Printf(TEXT("Local Role: %s\n Remote Role: %s\n Owner Name: %s\n Net Connection :%s"),*localRoleString,*remoteRoleString,*ownerString,*connectionString);
+
+	DrawDebugString(GetWorld(),GetActorLocation(),printString,nullptr,FColor::White,0,true);
+
+
 }
