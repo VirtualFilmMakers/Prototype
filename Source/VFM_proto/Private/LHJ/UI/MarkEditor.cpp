@@ -129,7 +129,8 @@ void UMarkEditor::OnClickAfterMark()
 	//1번 조건을 통과한다면..
 	{
 		CurrMark += 1;
-		UE_LOG(LogTemp, Warning, TEXT("After Button Success!! = CurrPointer : %d, Total Mark Num : %d, ThisMarkAnim : %d"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex);
+		UE_LOG(LogTemp, Warning, TEXT("After Button Success!! = CurrPointer : %d, Total Mark Num : %d, ThisMarkAnim : %d, Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex,AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
+		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(CurrMark),false);
 	}
 }
@@ -148,7 +149,8 @@ void UMarkEditor::OnClickBeforeMark()
 	else
 	{
 		CurrMark -= 1;
-		UE_LOG(LogTemp, Warning, TEXT("Before Button Success!! = CurrPointer : %d, Total Mark Num : %d,ThisMarkAnim : %d"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex);
+		UE_LOG(LogTemp, Warning, TEXT("Before Button Success!! = CurrPointer : %d, Total Mark Num : %d,ThisMarkAnim : %d ,Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex, AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
+		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(CurrMark),false);
 	}
 
