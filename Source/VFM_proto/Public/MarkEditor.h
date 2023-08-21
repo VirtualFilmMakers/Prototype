@@ -133,6 +133,9 @@ public:
 
 	UFUNCTION()
 	void OnClickBeforeMark();
+
+	UFUNCTION()
+	void OnClickEntirePlay();
 	
 // 	UFUNCTION()
 // 	void ME_MouseRight(void);

@@ -25,6 +25,7 @@ void UMarkEditor::NativeConstruct()
 	btn_addMark->OnClicked.AddDynamic(this, &UMarkEditor::OnClickAddMark);
 	btn_after->OnClicked.AddDynamic(this, &UMarkEditor::OnClickAfterMark);
 	btn_before->OnClicked.AddDynamic(this, &UMarkEditor::OnClickBeforeMark);
+	btn_markStart->OnClicked.AddDynamic(this, &UMarkEditor::OnClickEntirePlay);
 
 
 
@@ -157,6 +158,19 @@ void UMarkEditor::OnClickBeforeMark()
 }
 
 
+
+void UMarkEditor::OnClickEntirePlay()
+{
+	for (int i = 0; i < MarkNumber; i++)
+	{
+		CurrActor->SetActorLocation(AnimSavedArray[i].ActorLocation);
+		
+		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(i), false);
+		UE_LOG(LogTemp, Warning, TEXT("Play Animation # %d"), i);
+		
+
+	}
+}
 
 // void UMarkEditor::ME_MouseRight(void)
 // {
