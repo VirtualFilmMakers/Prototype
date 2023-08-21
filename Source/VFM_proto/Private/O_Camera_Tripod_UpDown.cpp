@@ -48,10 +48,10 @@ void UO_Camera_Tripod_UpDown::SetupInputBinding(class UInputComponent* CamInputC
 
 void UO_Camera_Tripod_UpDown::Cam_Up(const FInputActionValue& Value)
 {
-	float TripodUpValue = Value.Get<float>() / 2;
+	TripodUpValue = Value.Get<float>() / 2;
 	if (TripodUpValue != 0.f)
 	{
-		FVector NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
+		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
 		NewTirpodLocation.Z += TripodUpValue;
 
 		const float MinCameraHeight = 79.f;
@@ -65,10 +65,10 @@ void UO_Camera_Tripod_UpDown::Cam_Up(const FInputActionValue& Value)
 
 void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(const FInputActionValue& Value)
 {
-	float TripodUpValue = Value.Get<float>() / 2;
+	TripodUpValue = Value.Get<float>() / 2;
 	if (TripodUpValue != 0.f)
 	{
-		FVector NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
+		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
 		NewTirpodLocation.Z += TripodUpValue;
 
 		const float MinCameraHeight = 79.f;
@@ -82,10 +82,10 @@ void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(const FInputActionValu
 
 void UO_Camera_Tripod_UpDown::MulticastCam_UP_Implementation(const FInputActionValue& Value)
 {
-	float TripodUpValue = Value.Get<float>() / 2;
+	TripodUpValue = Value.Get<float>() / 2;
 	if (TripodUpValue != 0.f)
 	{
-		FVector NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
+		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
 		NewTirpodLocation.Z += TripodUpValue;
 
 		const float MinCameraHeight = 79.f;

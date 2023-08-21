@@ -49,5 +49,10 @@ public:
 	void Cam_Turn(const FInputActionValue& Value);
 
 
+	float TripodUpValue;
+
+	FVector NewTirpodLocation;
+
+
 	
 };
