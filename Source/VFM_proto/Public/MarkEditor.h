@@ -49,6 +49,7 @@ public:
 	int32 CurrMark = 0; //Mark Pointer
 	UPROPERTY()
 	USkeletalMeshComponent* CurrActorSkeletal;
+	float currTime = 0 ;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

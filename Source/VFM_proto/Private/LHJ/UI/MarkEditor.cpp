@@ -133,6 +133,8 @@ void UMarkEditor::OnClickAfterMark()
 		UE_LOG(LogTemp, Warning, TEXT("After Button Success!! = CurrPointer : %d, Total Mark Num : %d, ThisMarkAnim : %d, Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex,AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
 		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(CurrMark),false);
+		
+		UE_LOG(LogTemp, Warning, TEXT("%f"), AnimLibWidget->GetAnimSequence(CurrMark)->GetPlayLength());
 	}
 }
 
@@ -153,24 +155,32 @@ void UMarkEditor::OnClickBeforeMark()
 		UE_LOG(LogTemp, Warning, TEXT("Before Button Success!! = CurrPointer : %d, Total Mark Num : %d,ThisMarkAnim : %d ,Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex, AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
 		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(CurrMark),false);
+		UE_LOG(LogTemp, Warning, TEXT("%f"),AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex)->GetPlayLength());
 	}
 
 }
 
 
-
+//전체 플로우
 void UMarkEditor::OnClickEntirePlay()
 {
-	for (int i = 0; i < MarkNumber; i++)
-	{
-		CurrActor->SetActorLocation(AnimSavedArray[i].ActorLocation);
-		
-		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(i), false);
-		UE_LOG(LogTemp, Warning, TEXT("Play Animation # %d"), i);
-		
+//시간이 간다.
+// 애님 타임보다 타이머 시간이 커지면 다음 애님으로 넘김, 타이머 초기화
+// 단, 애님 타임을 조회하는 idx 애님 종류 배열길이보다 작아야함 
+//아니라면 애님 플레이
 
-	}
+//GetWorld()->DeltaTimeSeconds
+// 	for(int i=0; i<MarkNumber;i++)
+// 	{
+// 		float AnimPlayTime = 0;
+// 		AnimPlayTime = AnimLibWidget->GetAnimSequence(AnimSavedArray[i].Animindex)
+// 		CurrActor->SetActorLocation(AnimSavedArray[i].ActorLocation);
+// 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[i].Animindex), false);
+
+		
 }
+	
+
 
 // void UMarkEditor::ME_MouseRight(void)
 // {
