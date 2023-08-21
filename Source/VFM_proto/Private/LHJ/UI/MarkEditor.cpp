@@ -52,7 +52,7 @@ void UMarkEditor::NativeConstruct()
 	////	MarkEditorWidget->AddToViewport();
 	////} 
 	
-	
+/*	player->InputComponent->BindAction*//*("PlaceMark",IE_Pressed,this,&UMarkEditor::ME_MouseRight);*/
 }
 
 
@@ -158,6 +158,11 @@ void UMarkEditor::OnClickBeforeMark()
 
 
 
+// void UMarkEditor::ME_MouseRight(void)
+// {
+// 	UE_LOG(LogTemp,Warning,TEXT("Practice?? REALLY??"));
+// }
+
 //TICK -> Animation Selection Input 받아와서 text 변경
 void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
@@ -165,8 +170,14 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	if(AnimLibWidget!=nullptr)
 	InputAnimState = AnimLibWidget->GetAnimInfo();
 
-	CurrActor->SetActorLocation(player->AddMarkLocation);
+	//여기서 어떤 조건을 넣어줘야할까?
+	//ray로 인한 플레이어 위치는 player->AddMarkLocation에서 받아온다.
+	// <- ->로 인한 플레이어 위치는 테이블에서 읽어온다.
+	//그것을 틱으로 항상 조절 해준다.
 
+
+	CurrActor->SetActorLocation(player->AddMarkLocation);
+	
 	switch (InputAnimState)
 	{
 	case 1:

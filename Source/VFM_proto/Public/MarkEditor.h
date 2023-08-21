@@ -58,7 +58,10 @@ public:
 	bool isCreated = false;
 	
 	UPROPERTY()
-	class AMHActorA* CurrActor; //현재 액터
+	class AMHActorA* CurrActor; //현재 actor
+
+	UPROPERTY()
+	class AMHActorA* CurrActor; //현재 액터 위치(틱에서 계속 설정될 예정)
 
 //애니메이션 라이브러리 켜기 위한 버튼
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
@@ -132,6 +135,8 @@ public:
 	UFUNCTION()
 	void OnClickBeforeMark();
 	
+// 	UFUNCTION()
+// 	void ME_MouseRight(void);
 
 protected:
 	virtual void NativeConstruct() override;
