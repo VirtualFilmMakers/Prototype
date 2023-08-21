@@ -163,8 +163,8 @@ void AOSY_TESTCharacter::RightMouse()
 		//에디터 안켜졌는데도 쏘는 레이에 맞춰 메타휴먼이 생겨남.
 		//모드 설정이 필요할듯?
 	}
-
-		
+	if(CurrActor!=nullptr)
+		CurrActor->SetActorLocation(AddMarkLocation);
 }
 
 

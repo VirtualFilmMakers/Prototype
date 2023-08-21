@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "D_GameInstance.h"
 #include "ON_GameInstance.generated.h"
+
 
 USTRUCT(BlueprintType)
 struct FSessionSlotInfo

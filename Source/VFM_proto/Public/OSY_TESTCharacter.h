@@ -108,6 +108,9 @@ public:	//EnhanecedInput
 
 	//LHJ->오른쪽 마우스 클릭시 실행할 이벤트를 위해 필요한 변수
 	class APlayerController* pc ;
+
+	//LHJ->현재 호버 되어 있는 메타휴먼을 저장할 변수
+	class AActor* CurrActor;
 	
 
 // delegate

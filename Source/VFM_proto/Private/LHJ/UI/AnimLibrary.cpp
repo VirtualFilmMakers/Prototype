@@ -38,6 +38,26 @@ void UAnimLibrary::NativeConstruct()
 		}
 	}
     goalHumanBody = goalHuman->FindComponentByClass<USkeletalMeshComponent>();
+
+	// Make Animation Library play
+	AnimationToPlay[1] = Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Sitting_Idle_Anim.MH_MA_Sitting_Idle_Anim'")));
+	
+	AnimationToPlay[2] = Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Sitting_Anim.MH_MA_Sitting_Anim'")));
+	
+	AnimationToPlay[3] = Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Standing_Arguing.MH_MA_Standing_Arguing'")));
+
+	AnimationToPlay[4] = Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Standing_Clap.MH_MA_Standing_Clap'")));
+
+	AnimationToPlay[5] = Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_Standing_W_Briefcase_Idle.MH_Standing_W_Briefcase_Idle'")));
+
+	AnimationToPlay[6] = Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Walking_Anim1.MH_MA_Walking_Anim1'")));
+
 // 	if(goalHumanBody!=nullptr)UE_LOG(LogTemp,Warning,TEXT("Find Success !! Human Body"));
 	
 	
@@ -53,22 +73,22 @@ void UAnimLibrary::SetAnimPlayTime(float val)
 	animPlayTime = val;
 }
 
+UAnimSequence* UAnimLibrary::GetAnimSequence(int idx)
+{
+	return AnimationToPlay[idx];
+}
+
 void UAnimLibrary::OnClicksitOnGround()
 {
 	
 	// 	//눌린 버튼에 해당하는 MarkEditor 이미지와 텍스트를 업데이트한다.
  	selectedAnim = 1;
 	//UAnimInstance* ai = goalHumanBody->GetAnimInstance();
-	AnimationToPlay = nullptr;
-	AnimationToPlay = Cast<UAnimSequence>(
-		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Sitting_Idle_Anim.MH_MA_Sitting_Idle_Anim'")));
-	if (AnimationToPlay != nullptr)
+	if (AnimationToPlay[1] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
-	
-
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay, false);
+		goalHumanBody->PlayAnimation(AnimationToPlay[1], false);
 		//goalHumanBody->SetPlayRate(animPlayTime); 
 	}
 	else
@@ -78,15 +98,11 @@ void UAnimLibrary::OnClicksitOnGround()
 void UAnimLibrary::OnClicksitOnChair()
 {
 	selectedAnim = 2;
-	AnimationToPlay = nullptr;
-	AnimationToPlay = Cast<UAnimSequence>(
-		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Sitting_Anim.MH_MA_Sitting_Anim'")));
-	if (AnimationToPlay != nullptr)
+	
+	if (AnimationToPlay[2] != nullptr)
 	{
-		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
-		
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay, false);
+		goalHumanBody->PlayAnimation(AnimationToPlay[2], false);
 	}
 	else
 		return;
@@ -95,15 +111,12 @@ void UAnimLibrary::OnClicksitOnChair()
 void UAnimLibrary::OnClickstandingTalk()
 {
 	selectedAnim = 3;
-	AnimationToPlay = nullptr;
-	AnimationToPlay = Cast<UAnimSequence>(
-		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Standing_Arguing.MH_MA_Standing_Arguing'")));
-	if (AnimationToPlay != nullptr)
+	if (AnimationToPlay[3] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
 		
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay, false);
+		goalHumanBody->PlayAnimation(AnimationToPlay[3], false);
 	}
 	else
 		return;
@@ -112,15 +125,13 @@ void UAnimLibrary::OnClickstandingTalk()
 void UAnimLibrary::OnClickstandingClap()
 {
 	selectedAnim = 4;
-	AnimationToPlay = nullptr;
-	AnimationToPlay = Cast<UAnimSequence>(
-		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Standing_Clap.MH_MA_Standing_Clap'")));
-	if (AnimationToPlay != nullptr)
+	
+	if (AnimationToPlay[4] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
 
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay, false);
+		goalHumanBody->PlayAnimation(AnimationToPlay[4], false);
 	}
 	else
 		return;
@@ -129,15 +140,13 @@ void UAnimLibrary::OnClickstandingClap()
 void UAnimLibrary::OnClickidle()
 {
 	selectedAnim = 5;
-	AnimationToPlay = nullptr;
-	AnimationToPlay = Cast<UAnimSequence>(
-		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_Standing_W_Briefcase_Idle.MH_Standing_W_Briefcase_Idle'")));
-	if (AnimationToPlay != nullptr)
+	
+	if (AnimationToPlay[5] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
 
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay, false);
+		goalHumanBody->PlayAnimation(AnimationToPlay[5], false);
 	}
 	else
 		return;
@@ -146,15 +155,13 @@ void UAnimLibrary::OnClickidle()
 void UAnimLibrary::OnClickwalking()
 {
 	selectedAnim = 6;
-	AnimationToPlay = nullptr;
-	AnimationToPlay = Cast<UAnimSequence>(
-		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Walking_Anim1.MH_MA_Walking_Anim1'")));
-	if (AnimationToPlay != nullptr)
+	
+	if (AnimationToPlay[6] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
 
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay, false);
+		goalHumanBody->PlayAnimation(AnimationToPlay[6], false);
 	}
 	else
 		return;
