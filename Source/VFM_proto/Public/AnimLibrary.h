@@ -19,21 +19,24 @@ public:
 	TArray<AActor*> FoundActors; //월드상에 배치된 모든 액터 정보를 저장할 배열
 	UPROPERTY()
 	int32 selectedAnim=0;
+	
 	UPROPERTY()
 	AActor* goalHuman;
+	
 	UPROPERTY()
-	UAnimSequence* AnimationToPlay;
+	UAnimSequence* AnimationToPlay[10];
+	
 	UPROPERTY()
 	float animPlayTime=1;
 	
 	UPROPERTY()
 	APlayerController* pc;
-	
-
-
+		
 	UPROPERTY()
 	class USkeletalMeshComponent* goalHumanBody;
 	
+	
+	/*--------Bind Property-------*/
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
 	class UTextBlock* text_sitOnGround;
 
@@ -65,6 +68,9 @@ public:
 	int32 GetAnimInfo();
 	UFUNCTION()
 	void SetAnimPlayTime(float val);
+	UFUNCTION()
+	UAnimSequence* GetAnimSequence(int idx);
+
 	
 	/*---Bind Func-----*/
 	UFUNCTION()

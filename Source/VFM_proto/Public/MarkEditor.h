@@ -5,8 +5,30 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "../../VFM_proto/Public/D_ControlPanelInterface.h"
+#include "Engine/DataTable.h"
 #include "MarkEditor.generated.h"
 
+
+USTRUCT(BlueprintType)
+struct FAnimSavedStruct : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 Animindex; //지정된 애니메이션의 인덱스 값
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FVector ActorLocation; // 현재 액터의 위치
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FRotator ActorRotation; //현재 액터의 로테이션 값
+
+	
+// 	
+// 	UPROPERTY()
+// 	FVector 
+};
 
 
 UCLASS()
@@ -21,6 +43,13 @@ public:
 	APlayerController* pc = nullptr;
 	UPROPERTY()
 	class AOSY_TESTCharacter* player =nullptr;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 MarkNumber = 0; //총 Mark 개수
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 CurrMark = 0; //Mark Pointer
+	UPROPERTY()
+	USkeletalMeshComponent* CurrActorSkeletal;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 InputAnimState = 0;
@@ -29,24 +58,32 @@ public:
 	bool isCreated = false;
 	
 	UPROPERTY()
-	class AMHActorA* CurrActor; //현재 액터
+	class AMHActorA* CurrActor; //현재 actor
+
+	UPROPERTY()
+	class AMHActorA* CurrActor; //현재 액터 위치(틱에서 계속 설정될 예정)
 
 //애니메이션 라이브러리 켜기 위한 버튼
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_animSelection;
 
+	//Mark 추가버튼
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_addMark;
 	
+	// 다음 Mark
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_after;
 
+	//이전 Mark
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_before;
 
+	//전체 Mark 순회
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_markStart;
 	
+	//
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
 	class UCheckBox* box_isLoop;
 	
@@ -74,6 +111,11 @@ public:
 	class UAnimLibrary* AnimLibWidget; //받아온 클래스 정보를 통해 AnimWidget을 만들자. 만든 위젯을 저장할 변수
 
 
+	/*------------*/
+	UPROPERTY()
+	TArray<FAnimSavedStruct> AnimSavedArray;
+	//현재 Mark의 animation index, location, dirction을 저장할 구조체 배열
+
 
 	UFUNCTION()
 	void SetCurrActor(AMHActorA* temp);
@@ -87,7 +129,14 @@ public:
 	UFUNCTION()
 	void OnSliderMoved(float value);
 
+	UFUNCTION()
+	void OnClickAfterMark();
+
+	UFUNCTION()
+	void OnClickBeforeMark();
 	
+// 	UFUNCTION()
+// 	void ME_MouseRight(void);
 
 protected:
 	virtual void NativeConstruct() override;
