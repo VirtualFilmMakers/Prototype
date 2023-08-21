@@ -123,7 +123,7 @@ public:	//EnhanecedInput
 	void ChangePossessInput();
 
 	UFUNCTION(Server,Reliable)
-	void ServerChangePossessInput();
+	void ServerChangePossessInput(const FVector& wLocation, const FVector& wDirection);
 
 	UFUNCTION(NetMulticast,Reliable)
 	void MulticastChangePossessInput();
@@ -131,8 +131,9 @@ public:	//EnhanecedInput
 	UFUNCTION(BlueprintCallable)
 	void ChangePosses(ACharacter* NewPawn);
 
+	UPROPERTY(Replicated)
+	APlayerController* NewController;
 
-private:
 
 	enum ENetRole myLocalRole;
 	enum ENetRole myRemoteRole;
