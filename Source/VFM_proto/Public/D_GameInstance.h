@@ -7,9 +7,45 @@
 #include "NetworkReplayStreaming.h"
 #include "D_GameInstance.generated.h"
 
-/**
- * 
- */
+
+USTRUCT(BlueprintType)  
+struct FS_ReplayInfo  
+{  
+	GENERATED_USTRUCT_BODY()  
+    
+	UPROPERTY(BlueprintReadOnly)  
+		FString ReplayName;  
+    
+	UPROPERTY(BlueprintReadOnly)  
+		FString FriendlyName;  
+    
+	UPROPERTY(BlueprintReadOnly)  
+		FDateTime Timestamp;  
+    
+	UPROPERTY(BlueprintReadOnly)  
+		int32 LengthInMS;  
+    
+	UPROPERTY(BlueprintReadOnly)  
+		bool bIsValid;  
+    
+	FS_ReplayInfo(FString NewName, FString NewFriendlyName, FDateTime NewTimestamp, int32 NewLengthInMS)  
+	{  
+		ReplayName = NewName;  
+		FriendlyName = NewFriendlyName;  
+		Timestamp = NewTimestamp;  
+		LengthInMS = NewLengthInMS;  
+		bIsValid = true;  
+	}  
+
+	FS_ReplayInfo()  
+	{  
+		ReplayName = "Replay";  
+		FriendlyName = "Replay";  
+		Timestamp = FDateTime::MinValue();  
+		LengthInMS = 0;  
+		bIsValid = false;  
+	}  
+};
 
 UCLASS()
 class VFM_PROTO_API UD_GameInstance : public UGameInstance
@@ -19,7 +55,10 @@ class VFM_PROTO_API UD_GameInstance : public UGameInstance
 protected:
 	
 	UD_GameInstance();
+	//virtual void Init();
+
 public:
+	virtual void Init() override;
 
 	// widget source
 	UPROPERTY(BlueprintReadWrite)
@@ -57,22 +96,45 @@ public:
 	void UnPossessFromCamera();
 
 
-	// record System
-	virtual void Init() override;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Replays")
-	FString RecordingName;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Replays")
-	FString FriendlyRecordingName;
-
+public:
+	// Basic Replay Functions
 	UFUNCTION(BlueprintCallable, Category = "Replays")
-	void StartRecording();
+	void StartRecording(FString ReplayName, FString FriendlyName);
 
 	UFUNCTION(BlueprintCallable, Category = "Replays")
 	void StopRecording();
 
 	UFUNCTION(BlueprintCallable, Category = "Replays")
-	void StartReplay();
+	void StartReplay(FString ReplayName);
+
 	
+	// Advanced Functions
+	UFUNCTION(BlueprintCallable, Category = "Replays")
+	void FindReplays();
+
+	/** Apply a new custom name to the replay (for UI only) */  
+    UFUNCTION(BlueprintCallable, Category = "Replays")  
+    void RenameReplay(const FString &ReplayName, const FString &NewFriendlyReplayName);   
+  
+	/** Delete a previously recorded replay */
+    UFUNCTION(BlueprintCallable, Category = "Replays")
+	void DeleteReplay(const FString &ReplayName);
+
+	
+private:
+	// for FindReplays()   
+	TSharedPtr<INetworkReplayStreamer> EnumerateStreamsPtr;
+	FOnEnumerateStreamsComplete OnEnumerateStreamsCompleteDelegate;
+
+	void OnEnumerateStreamsComplete(const TArray<FNetworkReplayStreamInfo>& StreamInfos);
+
+	// for DeleteReplays(..)  
+	FOnDeleteFinishedStreamComplete OnDeleteFinishedStreamCompleteDelegate;
+
+	void OnDeleteFinishedStreamComplete(const bool bDeleteSucceeded);
+
+protected:  
+	//UFUNCTION(BlueprintImplementableEvent, Category = "Replays")  
+	UFUNCTION(Category = "Replays")  
+	void OnFindReplaysComplete(const TArray<FS_ReplayInfo> &AllReplays);
 };
