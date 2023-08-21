@@ -22,6 +22,7 @@ UO_Camera_Tripod_UpDown::UO_Camera_Tripod_UpDown()
 	{
 		ia_Cam_Turn = tempCam_Turn.Object;
 	}
+	
 }
 
 void UO_Camera_Tripod_UpDown::BeginPlay()
@@ -48,18 +49,18 @@ void UO_Camera_Tripod_UpDown::SetupInputBinding(class UInputComponent* CamInputC
 
 void UO_Camera_Tripod_UpDown::Cam_Up(const FInputActionValue& Value)
 {
-	TripodUpValue = Value.Get<float>() / 2;
-	if (TripodUpValue != 0.f)
-	{
-		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
-		NewTirpodLocation.Z += TripodUpValue;
-
-		const float MinCameraHeight = 79.f;
-		const float MaxCameraHeight = 141.f;
-		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
-
-		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
-	}
+// 	TripodUpValue = Value.Get<float>() / 2;
+// 	if (TripodUpValue != 0.f)
+// 	{
+// 		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
+// 		NewTirpodLocation.Z += TripodUpValue;
+// 
+// 		const float MinCameraHeight = 79.f;
+// 		const float MaxCameraHeight = 141.f;
+// 		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
+// 
+// 		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
+// 	}
 	ServerCam_UP(Value);
 }
 
@@ -106,4 +107,12 @@ void UO_Camera_Tripod_UpDown::Cam_Turn(const FInputActionValue& Value)
 		NewTripodRotation.Pitch +=TripodTurnValue.Y;
 		me->CameraBase_ACamera->SetRelativeRotation(NewTripodRotation);
 	}
+}
+
+void UO_Camera_Tripod_UpDown::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UO_Camera_Tripod_UpDown, NewTirpodLocation);
+
 }

@@ -51,7 +51,10 @@ public:
 
 	float TripodUpValue;
 
+	UPROPERTY(Replicated)
 	FVector NewTirpodLocation;
+
+	
 
 
 	
