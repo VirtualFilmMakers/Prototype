@@ -176,7 +176,7 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	//그것을 틱으로 항상 조절 해준다.
 
 
-	CurrActor->SetActorLocation(player->AddMarkLocation);
+	//CurrActor->SetActorLocation(player->AddMarkLocation);
 	
 	switch (InputAnimState)
 	{

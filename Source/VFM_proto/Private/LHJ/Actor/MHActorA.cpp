@@ -48,6 +48,7 @@ void AMHActorA::BeginPlay()
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("player Load fail.."));
 	
+	player->CurrActor = this; //현재 호버되어 있는 메타휴먼은 저에요...!
 }
 
 // Called every frame

@@ -40,6 +40,8 @@ public:
 	UPROPERTY()
 	float MouseWheelValue = 0;
 	
+	UPROPERTY()
+	FVector CurrActorLocation;
 
 	virtual void OpenAssetPanel_Implementation(AActor* AssetWithControlPanel) override;
 
