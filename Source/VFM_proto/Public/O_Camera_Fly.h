@@ -32,17 +32,18 @@ public:
 	class USkeletalMeshComponent* bodyMesh;
 
 
-	void Cam_Down(const FInputActionValue& Value);
-	void Cam_Fly(const FInputActionValue& Value);
-
 	//Server
+	void Cam_Down(const FInputActionValue& Value);
 	UFUNCTION(Server,Reliable)
-	void ServerCam_Down();
+	void ServerCam_Down(const FInputActionValue& Value);
 	UFUNCTION(NetMulticast,Reliable)
-	void MulticastCam_Down();
+	void MulticastCam_Down(const FInputActionValue& Value);
+
+	void Cam_Fly(const FInputActionValue& Value);
 	UFUNCTION(Server,Reliable)
-	void ServerCam_Fly();
+	void ServerCam_Fly(const FInputActionValue& Value);
 	UFUNCTION(NetMulticast,Reliable)
-	void MulticastCam_Fly();
+	void MulticastCam_Fly(const FInputActionValue& Value);
+
 	
 };

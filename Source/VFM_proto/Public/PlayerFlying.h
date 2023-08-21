@@ -33,7 +33,17 @@ public:
 	class USkeletalMeshComponent* bodyMesh;
 
 	void Down(const FInputActionValue& Value);
+	UFUNCTION(Server,Reliable)
+	void ServerDown(const FInputActionValue& Value);
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastDown(const FInputActionValue& Value);
+
+
 	void Fly(const FInputActionValue& Value);
+	UFUNCTION(Server,Reliable)
+	void ServerFly(const FInputActionValue& Value);
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastFly(const FInputActionValue& Value);
 	
 	
 };

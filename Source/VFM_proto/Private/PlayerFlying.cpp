@@ -67,6 +67,46 @@ void UPlayerFlying::Fly(const FInputActionValue& Value)
 	{
 		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
 	}
+	ServerFly(Value);
+}
+
+void UPlayerFlying::ServerFly_Implementation(const FInputActionValue& Value)
+{
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+	if (bodyMesh == nullptr)
+	{
+		return;
+	}
+	UOSY_PlayerAnimInstance* anim = Cast<UOSY_PlayerAnimInstance>(bodyMesh->GetAnimInstance());
+	if (anim)
+	{
+		anim->bInAir = true;
+	}
+	float UpValue = Value.Get<float>() / 4;
+	if (UpValue != 0.f)
+	{
+		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
+	}
+	MulticastFly(Value);
+}
+
+void UPlayerFlying::MulticastFly_Implementation(const FInputActionValue& Value)
+{
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+	if (bodyMesh == nullptr)
+	{
+		return;
+	}
+	UOSY_PlayerAnimInstance* anim = Cast<UOSY_PlayerAnimInstance>(bodyMesh->GetAnimInstance());
+	if (anim)
+	{
+		anim->bInAir = true;
+	}
+	float UpValue = Value.Get<float>() / 4;
+	if (UpValue != 0.f)
+	{
+		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
+	}
 }
 
 void UPlayerFlying::Down(const FInputActionValue& Value)
@@ -81,5 +121,34 @@ void UPlayerFlying::Down(const FInputActionValue& Value)
 	{
 		anim->bInAir = false;
 	}
+	ServerDown(Value);
+}
 
+void UPlayerFlying::ServerDown_Implementation(const FInputActionValue& Value)
+{
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	if (bodyMesh == nullptr)
+	{
+		return;
+	}
+	UOSY_PlayerAnimInstance* anim = Cast<UOSY_PlayerAnimInstance>(bodyMesh->GetAnimInstance());
+	if (anim)
+	{
+		anim->bInAir = false;
+	}
+	MulticastDown(Value);
+}
+
+void UPlayerFlying::MulticastDown_Implementation(const FInputActionValue& Value)
+{
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	if (bodyMesh == nullptr)
+	{
+		return;
+	}
+	UOSY_PlayerAnimInstance* anim = Cast<UOSY_PlayerAnimInstance>(bodyMesh->GetAnimInstance());
+	if (anim)
+	{
+		anim->bInAir = false;
+	}
 }

@@ -49,17 +49,17 @@ void UO_Camera_Fly::SetupInputBinding(class UInputComponent* CamInputComponent)
 
 void UO_Camera_Fly::Cam_Down(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Here"));
-	ServerCam_Down();
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	ServerCam_Down(Value);
 }
 
-
-void UO_Camera_Fly::ServerCam_Down_Implementation()
+void UO_Camera_Fly::ServerCam_Down_Implementation(const FInputActionValue& Value)
 {
-	MulticastCam_Down();
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	MulticastCam_Down(Value);
 }
 
-void UO_Camera_Fly::MulticastCam_Down_Implementation()
+void UO_Camera_Fly::MulticastCam_Down_Implementation(const FInputActionValue& Value)
 {
 	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
@@ -73,15 +73,27 @@ void UO_Camera_Fly::Cam_Fly(const FInputActionValue& Value)
 	{
 		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
 	}
+	ServerCam_Fly(Value);
 }
 
-void UO_Camera_Fly::ServerCam_Fly_Implementation()
+void UO_Camera_Fly::ServerCam_Fly_Implementation(const FInputActionValue& Value)
 {
-
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+	float UpValue = Value.Get<float>() / 4;
+	if (UpValue != 0.f)
+	{
+		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
+	}
+	MulticastCam_Fly(Value);
 }
 
-void UO_Camera_Fly::MulticastCam_Fly_Implementation()
+void UO_Camera_Fly::MulticastCam_Fly_Implementation(const FInputActionValue& Value)
 {
-
+	me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+	float UpValue = Value.Get<float>() / 4;
+	if (UpValue != 0.f)
+	{
+		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
+	}
 }
 
