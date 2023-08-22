@@ -14,6 +14,8 @@ class VFM_PROTO_API UPlayerZoom : public UPlayerBaseComponent
 {
 	GENERATED_BODY()
 
+	UPlayerZoom();
+
 public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -33,6 +35,13 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Camera")
 	float ZoomStep=10.f;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Player")
+	float ZoomValue=0;
 
 	void Zoom(const FInputActionValue& Value);
+
+	//LHJ
+	float GetZoomValue();
+	float MouseWheelValue;
 };

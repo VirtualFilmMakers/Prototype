@@ -36,6 +36,9 @@ protected:
 	UPROPERTY()
 	UCharacterMovementComponent* moveComp;
 
+
+
+
 public:
 
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) {}

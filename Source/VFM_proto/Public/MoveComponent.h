@@ -15,12 +15,8 @@ class VFM_PROTO_API UMoveComponent : public UPlayerBaseComponent
 	GENERATED_BODY()
 
 public:
-	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
 
-	void Move(const FInputActionValue& Value);
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
-	class UInputAction* ia_Move;	
+
+	
 	
 };

@@ -14,4 +14,15 @@ class VFM_PROTO_API UBlockingActorControls : public UUserWidget
 {
 	GENERATED_BODY()
 	
+
+public:
+	UPROPERTY(BlueprintReadWrite, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_addMark;
+
+
+	UFUNCTION()
+	void OnClickAddMark(); // MarkEditor에서 animlib 메뉴를 선택했을때 실행할 함수
+protected:
+	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 };

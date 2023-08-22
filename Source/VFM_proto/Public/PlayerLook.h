@@ -14,6 +14,8 @@ class VFM_PROTO_API UPlayerLook : public UPlayerBaseComponent
 {
 	GENERATED_BODY()
 
+	UPlayerLook();
+
 public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

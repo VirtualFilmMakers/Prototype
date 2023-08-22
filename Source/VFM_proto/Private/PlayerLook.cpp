@@ -4,6 +4,15 @@
 #include "PlayerLook.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
 
+UPlayerLook::UPlayerLook()
+{
+	ConstructorHelpers::FObjectFinder<UInputAction> tempLook(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Look.IA_OSY_Look'"));
+	if (tempLook.Succeeded())
+	{
+		ia_Look = tempLook.Object;
+	}
+}
+
 void UPlayerLook::BeginPlay()
 {
 	Super::BeginPlay();

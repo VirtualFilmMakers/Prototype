@@ -14,7 +14,11 @@ class VFM_PROTO_API UPlayerFlying : public UPlayerBaseComponent
 {
 	GENERATED_BODY()
 
+	UPlayerFlying();
+
 public:
+
+	
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
@@ -25,8 +29,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputAction* ia_Down;
 
+	UPROPERTY(VisibleAnywhere)
+	class USkeletalMeshComponent* bodyMesh;
+
 	void Down(const FInputActionValue& Value);
+	UFUNCTION(Server,Reliable)
+	void ServerDown(const FInputActionValue& Value);
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastDown(const FInputActionValue& Value);
+
+
 	void Fly(const FInputActionValue& Value);
+	UFUNCTION(Server,Reliable)
+	void ServerFly(const FInputActionValue& Value);
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastFly(const FInputActionValue& Value);
 	
 	
 };

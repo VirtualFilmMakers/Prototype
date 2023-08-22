@@ -2,44 +2,23 @@
 
 
 #include "MoveComponent.h"
-#include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
 
-void UMoveComponent::BeginPlay()
-{
-	Super::BeginPlay();
-}
+// 
+// 
+// UMoveComponent::UMoveComponent()
+// {
+// 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+// 	// off to improve performance if you don't need them.
+// 	PrimaryComponentTick.bCanEverTick = true;
+// 
+// 	//bWantsInitializeComponent = true;
+// 
+// 	ia_Move=CreateDefaultSubobject<UInputAction>(TEXT("ia_Move"));
+// 	ConstructorHelpers::FObjectFinder<UInputAction> tempMove(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Move.IA_OSY_Move'"));
+// 	if (tempMove.Succeeded())
+// 	{
+// 		ia_Move=tempMove.Object;
+// 	}
+// 	
+// }
 
-void UMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
-void UMoveComponent::SetupInputBinding(class UInputComponent* PlayerInputComponent)
-{
-	UEnhancedInputComponent* MoveInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
-	if (MoveInput)
-	{
-		MoveInput->BindAction(ia_Move, ETriggerEvent::Triggered, this, &UMoveComponent::Move);
-	}
-
-}
-
-void UMoveComponent::Move(const FInputActionValue& Value)
-{
-	// 만약 컨트롤러가 정상적으로 있다면
-	if (me->Controller != nullptr)
-	{
-		FVector2D MoveValue = Value.Get<FVector2D>();
-
-		if (MoveValue.X != 0.f)
-		{
-			me->AddMovementInput(me->GetActorRightVector(), MoveValue.X);
-
-		}
-		if (MoveValue.Y != 0.f)
-		{
-			me->AddMovementInput(me->GetActorForwardVector(), MoveValue.Y);
-		}
-
-	}
-}
