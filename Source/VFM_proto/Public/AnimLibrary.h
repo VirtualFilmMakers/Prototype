@@ -18,7 +18,7 @@ public:
 
 	TArray<AActor*> FoundActors; //월드상에 배치된 모든 액터 정보를 저장할 배열
 	UPROPERTY()
-	int32 selectedAnim=0;
+	int32 selectedAnim=5;
 	
 	UPROPERTY()
 	AActor* goalHuman;

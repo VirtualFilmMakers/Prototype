@@ -49,6 +49,12 @@ public:
 	int32 CurrMark = 0; //Mark Pointer
 	UPROPERTY()
 	USkeletalMeshComponent* CurrActorSkeletal;
+	float currTime = 0 ;
+	float delTime=0;
+	bool TimeOut;
+	bool TimerOn = false;
+	bool EntireMode = false;
+	
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -139,6 +145,10 @@ public:
 	
 // 	UFUNCTION()
 // 	void ME_MouseRight(void);
+
+UAnimSequence* WalkAnim=
+	Cast<UAnimSequence>(
+		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Walking_Anim1.MH_MA_Walking_Anim1'")));
 
 protected:
 	virtual void NativeConstruct() override;

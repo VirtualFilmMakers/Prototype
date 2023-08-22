@@ -132,7 +132,9 @@ void UMarkEditor::OnClickAfterMark()
 		CurrMark += 1;
 		UE_LOG(LogTemp, Warning, TEXT("After Button Success!! = CurrPointer : %d, Total Mark Num : %d, ThisMarkAnim : %d, Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex,AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
 		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
-		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(CurrMark),false);
+		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);
+		
+		/*UE_LOG(LogTemp, Warning, TEXT("%f"), AnimLibWidget->GetAnimSequence(CurrMark)->GetPlayLength());*/
 	}
 }
 
@@ -152,25 +154,86 @@ void UMarkEditor::OnClickBeforeMark()
 		CurrMark -= 1;
 		UE_LOG(LogTemp, Warning, TEXT("Before Button Success!! = CurrPointer : %d, Total Mark Num : %d,ThisMarkAnim : %d ,Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex, AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
 		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
-		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(CurrMark),false);
+		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);
+		/*UE_LOG(LogTemp, Warning, TEXT("%f"),AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex)->GetPlayLength());*/
 	}
 
 }
 
 
-
+//전체 플로우
 void UMarkEditor::OnClickEntirePlay()
 {
-	for (int i = 0; i < MarkNumber; i++)
-	{
-		CurrActor->SetActorLocation(AnimSavedArray[i].ActorLocation);
-		
-		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(i), false);
-		UE_LOG(LogTemp, Warning, TEXT("Play Animation # %d"), i);
-		
+	EntireMode = true;
+// 	currTime = 0;
+// 	CurrActor->SetActorLocation(AnimSavedArray[0].ActorLocation);
+// 	//다음 마크까지 걸어가고 싶다.
+// 	//다음 마크 위치
+// 	FVector P0 ;
+// 	FVector goal = AnimSavedArray[1].ActorLocation;
+// 	FVector dir = goal - P0;
+// 	//dir.Normalize();
+// 	/*CurrActor->SetActorLocation(P0 + 100 * delTime * dir);*/
+// 	
+// 		//걸어가고 싶다.->애님플레이 + 속도&방향
+// 
+// 	for (int i = 0; i < 100; i++)
+// 	{
+// 		if (TimeOut)
+// 		{
+// 			P0 = CurrActor->GetActorLocation();
+// 			UE_LOG(LogTemp,Warning,TEXT("Move!"));
+// 			CurrActor->SetActorLocation(P0+dir*50*delTime);
+// 		}
+// 		else
+// 		{
+// 			UE_LOG(LogTemp, Warning, TEXT("Not Move!"));
+// 		}
+// 	}
+// 	for (int i = 0; i < 10; i++)
+// 	{
+// 		UE_LOG(LogTemp,Warning,TEXT("%f"),GetWorld()->GetDeltaSeconds()*100);
+// 	}
+//시간이 간다.
+// 애님 타임보다 타이머 시간이 커지면 다음 애님으로 넘김, 타이머 초기화
+// 단, 애님 타임을 조회하는 idx 애님 종류 배열길이보다 작아야함 
+//아니라면 애님 플레이
+// 	for(int i=1; i<MarkNumber;i++)
+// 	{ 
+// 		FVector Target = AnimSavedArray[i].ActorLocation;
+// 		FVector dir = Target - CurrActor->GetActorLocation(); //타겟 - me
+// 		FVector P0 = CurrActor->GetActorLocation();
+// 		FVector VT = 500*GetWorld()->DeltaTimeSeconds*dir;
+// 		FVector P = P0+VT;
+// 		while (CurrActor->GetActorLocation() != Target)
+// 		{
+// 			CurrActor->SetActorLocation(P);
+// 		}
+// 		/*UE_LOG(LogTemp,Warning,TEXT("Anim# %d"),i+1);*/
+// 
+// 		
+// 	}
 
-	}
+// 		while (currTime < 100.0f) //각 애니메이션 플레이타임 가져와서 타이머처럼 사용
+// 		{
+// 			currTime += GetWorld()->GetRealTimeSeconds();
+// 			/*UE_LOG(LogTemp, Warning, TEXT("%f"), currTime);*/
+// 		}
+// 		currTime=0;
+// 		UE_LOG(LogTemp, Warning, TEXT("Time out! #%d"), i);
+	
+//GetWorld()->DeltaTimeSeconds
+// 	for(int i=0; i<MarkNumber;i++)
+// 	{
+// 		float AnimPlayTime = 0;
+// 		AnimPlayTime = AnimLibWidget->GetAnimSequence(AnimSavedArray[i].Animindex)
+// 		CurrActor->SetActorLocation(AnimSavedArray[i].ActorLocation);
+// 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[i].Animindex), false);
+
+		
 }
+	
+
 
 // void UMarkEditor::ME_MouseRight(void)
 // {
@@ -188,7 +251,27 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	//ray로 인한 플레이어 위치는 player->AddMarkLocation에서 받아온다.
 	// <- ->로 인한 플레이어 위치는 테이블에서 읽어온다.
 	//그것을 틱으로 항상 조절 해준다.
-
+	
+	delTime = InDeltaTime;
+	TimeOut = false;
+// 	if (currTime >= 0.1)
+// 	{
+// 		UE_LOG(LogTemp,Warning,TEXT("Time out!!!"));
+// 		currTime=0.0f;
+// 		TimeOut = true;
+// 	}
+	if (EntireMode)
+	{
+		if(currTime==0)CurrActorSkeletal->PlayAnimation(WalkAnim, true);
+		currTime+=InDeltaTime;
+		CurrActor->SetActorLocation(CurrActor->GetActorLocation() + CurrActor->GetActorForwardVector() * delTime * 200);
+		
+		if (currTime > WalkAnim->GetPlayLength())
+		{
+			/*UE_LOG(LogTemp,Warning,TEXT("move Time!"));*/
+			currTime = 0.0f;
+		}
+	}
 
 	//CurrActor->SetActorLocation(player->AddMarkLocation);
 	
@@ -419,6 +502,42 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		}
 
 	default:
+		{
+		text_animName->SetText(FText::FromString("Idle"));
+
+		FAnimSavedStruct newStruct;
+		newStruct.ActorLocation = CurrActor->GetActorLocation();
+		newStruct.ActorRotation = CurrActor->GetActorRotation();
+		newStruct.Animindex = 5;
+
+		// 인덱스가 유효한 범위 내에 있는지 확인
+		if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+		{
+			// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+
+
+							// 해당 인덱스의 구조체 요소를 참조
+			FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+
+			// 해당 인덱스의 구조체 요소에 값을 할당
+			AccessedStruct.ActorLocation = newStruct.ActorLocation;
+			AccessedStruct.ActorRotation = newStruct.ActorRotation;
+			AccessedStruct.Animindex = newStruct.Animindex;
+			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+		}
+		else//인덱스가 유효하지 않다면...
+		{
+			if (MarkNumber < AnimSavedArray.Num())
+			{
+				AnimSavedArray.Add(newStruct);
+				UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+			}
+			else
+				UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+		}
+
 		break;
+		
+		}
 	}
 }
