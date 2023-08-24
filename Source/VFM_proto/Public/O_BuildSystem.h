@@ -6,6 +6,11 @@
 #include "PlayerBaseComponent.h"
 #include "O_BuildSystem.generated.h"
 
+enum EBlockType
+{
+	Block1,
+	Block2,
+};
 /**
  * 
  */

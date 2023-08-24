@@ -32,8 +32,10 @@ AO_CameraBase::AO_CameraBase()
 	
 	CameraBase_CamComp->SetupAttachment(CameraBase_ACamera);
 	CameraBase_CamComp->SetRelativeLocation(FVector(41, 0, 4));
+	CameraBase_SpringArmComp->SetIsReplicated(true);
 
-
+	bReplicates = true;
+	SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned

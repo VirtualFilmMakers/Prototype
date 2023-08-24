@@ -39,7 +39,7 @@ public:
 	void Cam_Up(const FInputActionValue& Value);
 
 	UFUNCTION(Server,Reliable)
-	void ServerCam_UP(const FInputActionValue& Value);
+	void ServerCam_UP(float Value);
 	UFUNCTION(NetMulticast,Reliable)
 	void MulticastCam_UP(const FInputActionValue& Value);
 
@@ -49,8 +49,9 @@ public:
 	void Cam_Turn(const FInputActionValue& Value);
 
 
-	float TripodUpValue;
 
+	UPROPERTY(Replicated)
+	float TripodUpValue;
 	UPROPERTY(Replicated)
 	FVector NewTirpodLocation;
 

@@ -22,7 +22,7 @@ UO_Camera_Tripod_UpDown::UO_Camera_Tripod_UpDown()
 	{
 		ia_Cam_Turn = tempCam_Turn.Object;
 	}
-	
+	SetIsReplicated(true);
 }
 
 void UO_Camera_Tripod_UpDown::BeginPlay()
@@ -33,6 +33,8 @@ void UO_Camera_Tripod_UpDown::BeginPlay()
 
 void UO_Camera_Tripod_UpDown::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 
 }
 
@@ -61,12 +63,28 @@ void UO_Camera_Tripod_UpDown::Cam_Up(const FInputActionValue& Value)
 // 
 // 		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
 // 	}
-	ServerCam_UP(Value);
+	TripodUpValue = Value.Get<float>() / 2;
+	ServerCam_UP(Value.Get<float>());
+	UE_LOG(LogTemp, Warning, TEXT("Value : %f, NetMode :%d"), TripodUpValue, GetNetMode());
+	MulticastCam_UP(Value);
 }
 
-void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(const FInputActionValue& Value)
+void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(float Value)
 {
-	TripodUpValue = Value.Get<float>() / 2;
+// 	TripodUpValue = Value.Get<float>() / 2;
+// 	if (TripodUpValue != 0.f)
+// 	{
+// 		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
+// 		NewTirpodLocation.Z += TripodUpValue;
+// 
+// 		const float MinCameraHeight = 79.f;
+// 		const float MaxCameraHeight = 141.f;
+// 		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
+// 
+// 		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
+// 	}
+	//MulticastCam_UP(Value);
+	TripodUpValue = Value;
 	if (TripodUpValue != 0.f)
 	{
 		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
@@ -77,24 +95,12 @@ void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(const FInputActionValu
 		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
 
 		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
+		UE_LOG(LogTemp, Warning, TEXT("Huh, NetMode :%d"), GetNetMode() );
 	}
-	MulticastCam_UP(Value);
 }
 
 void UO_Camera_Tripod_UpDown::MulticastCam_UP_Implementation(const FInputActionValue& Value)
 {
-	TripodUpValue = Value.Get<float>() / 2;
-	if (TripodUpValue != 0.f)
-	{
-		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
-		NewTirpodLocation.Z += TripodUpValue;
-
-		const float MinCameraHeight = 79.f;
-		const float MaxCameraHeight = 141.f;
-		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
-
-		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
-	}
 }
 
 void UO_Camera_Tripod_UpDown::Cam_Turn(const FInputActionValue& Value)
