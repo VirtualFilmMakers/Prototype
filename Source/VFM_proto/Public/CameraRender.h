@@ -30,4 +30,6 @@ public:
 
 	//TSubclassOf<class UTextureRenderTarget2D> renderTargetSource;
 
+	void SaveRenderTargetToDisk(UTextureRenderTarget2D* InRenderTarget, FString Filename);
+
 };
