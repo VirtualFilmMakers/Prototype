@@ -22,7 +22,7 @@ UO_Camera_Tripod_UpDown::UO_Camera_Tripod_UpDown()
 	{
 		ia_Cam_Turn = tempCam_Turn.Object;
 	}
-	SetIsReplicated(true);
+	//SetIsReplicated(true);
 }
 
 void UO_Camera_Tripod_UpDown::BeginPlay()
