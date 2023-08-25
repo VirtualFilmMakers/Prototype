@@ -19,6 +19,9 @@ public:
 	// Tick 처럼 매프레임 갱신
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	//뷰 파인더인가 확인하는 불값
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MySettings)
+	bool bHasViewFinder=true;
 
 	//플레이어가 공중에 있는지 체크하는 불값
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MySettings)
@@ -33,7 +36,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=MySettings)
 	float direction = 0;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=MySettings)
+	float deltaRot=0;
 
 private:
+
+	UPROPERTY()
+	class AOSY_TESTCharacter* player;
+
+	UPROPERTY()
+	class UCharacterMovementComponent* movementComp;
+
+	float CalculateDir(FVector velocity,FRotator rot);
 
 };

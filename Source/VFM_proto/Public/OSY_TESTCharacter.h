@@ -140,4 +140,11 @@ public:	//EnhanecedInput
 
 
 	void PrintLog();
+
+// 뷰파인터 모드
+	UPROPERTY(EditAnywhere,Category= "MySettings")
+	class UStaticMeshComponent* compViewFinder;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USkeletalMeshComponent* myBodyMesh;
 };

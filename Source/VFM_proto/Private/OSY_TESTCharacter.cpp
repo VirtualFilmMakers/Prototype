@@ -29,6 +29,8 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bUseControllerRotationYaw=true;
+	GetCharacterMovement()->bOrientRotationToMovement= false;
 
 	//스프링암 할당---------------------------------------
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComp"));
@@ -53,6 +55,23 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 
 	//리플리케이트 항시 켜놓는 기능
 	bReplicates = true;
+
+	//뷰파인더
+	compViewFinder = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("compViewFinder"));
+	if (myBodyMesh != nullptr)
+	{
+		FName SocketName = FName("ViewFinderSocket");;
+		compViewFinder->AttachToComponent(myBodyMesh, FAttachmentTransformRules::SnapToTargetIncludingScale,FName("ViewFinderSocket"));
+			
+	}
+	//compViewFinder-> SetupAttachment(GetDefaultSubobjectByName("Body"));
+	compViewFinder->SetRelativeLocation(FVector(43,23,74));
+	compViewFinder->SetRelativeScale3D(FVector(0.5f));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>tempViewFinder(TEXT("/Script/Engine.StaticMesh'/Game/OSY/Material/Viewfinder.Viewfinder'"));
+	if (tempViewFinder.Succeeded())
+	{
+		compViewFinder->SetStaticMesh(tempViewFinder.Object);
+	}
 
 }
 
@@ -89,7 +108,11 @@ void AOSY_TESTCharacter::Tick(float DeltaSeconds)
 	// 디버깅용 로그 출력
 	PrintLog();
 
-
+// 	if (myBodyMesh != nullptr)
+// 	{
+// 		AActor* weapon;
+// 		weapon->AttachToComponent(myBodyMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("Hand"));
+// 	}
 }
 
 // Called to bind functionality to input

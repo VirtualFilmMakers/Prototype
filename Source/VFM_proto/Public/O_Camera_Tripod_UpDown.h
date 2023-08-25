@@ -40,13 +40,14 @@ public:
 
 	UFUNCTION(Server,Reliable)
 	void ServerCam_UP(float Value);
-	UFUNCTION(NetMulticast,Reliable)
-	void MulticastCam_UP(const FInputActionValue& Value);
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputAction* ia_Cam_Turn;
 
 	void Cam_Turn(const FInputActionValue& Value);
+	UFUNCTION(Server,Reliable)
+	void ServerCam_Turn(const FInputActionValue& Value);
 
 
 
@@ -54,6 +55,11 @@ public:
 	float TripodUpValue;
 	UPROPERTY(Replicated)
 	FVector NewTirpodLocation;
+
+	UPROPERTY(Replicated)
+	FVector2D TripodTurnValue;
+	UPROPERTY(Replicated)
+	FRotator NewTripodRotation;
 
 	
 

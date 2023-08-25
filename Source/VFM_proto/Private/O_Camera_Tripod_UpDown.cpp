@@ -51,39 +51,16 @@ void UO_Camera_Tripod_UpDown::SetupInputBinding(class UInputComponent* CamInputC
 
 void UO_Camera_Tripod_UpDown::Cam_Up(const FInputActionValue& Value)
 {
-// 	TripodUpValue = Value.Get<float>() / 2;
-// 	if (TripodUpValue != 0.f)
-// 	{
-// 		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
-// 		NewTirpodLocation.Z += TripodUpValue;
-// 
-// 		const float MinCameraHeight = 79.f;
-// 		const float MaxCameraHeight = 141.f;
-// 		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
-// 
-// 		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
-// 	}
+
 	TripodUpValue = Value.Get<float>() / 2;
 	ServerCam_UP(Value.Get<float>());
 	UE_LOG(LogTemp, Warning, TEXT("Value : %f, NetMode :%d"), TripodUpValue, GetNetMode());
-	MulticastCam_UP(Value);
+	
 }
 
 void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(float Value)
 {
-// 	TripodUpValue = Value.Get<float>() / 2;
-// 	if (TripodUpValue != 0.f)
-// 	{
-// 		NewTirpodLocation = me->CameraBase_SpringArmComp->GetRelativeLocation();
-// 		NewTirpodLocation.Z += TripodUpValue;
-// 
-// 		const float MinCameraHeight = 79.f;
-// 		const float MaxCameraHeight = 141.f;
-// 		NewTirpodLocation.Z = FMath::Clamp(NewTirpodLocation.Z, MinCameraHeight, MaxCameraHeight);
-// 
-// 		me->CameraBase_SpringArmComp->SetRelativeLocation(NewTirpodLocation);
-// 	}
-	//MulticastCam_UP(Value);
+
 	TripodUpValue = Value;
 	if (TripodUpValue != 0.f)
 	{
@@ -99,20 +76,31 @@ void UO_Camera_Tripod_UpDown::ServerCam_UP_Implementation(float Value)
 	}
 }
 
-void UO_Camera_Tripod_UpDown::MulticastCam_UP_Implementation(const FInputActionValue& Value)
-{
-}
-
 void UO_Camera_Tripod_UpDown::Cam_Turn(const FInputActionValue& Value)
 {
-	FVector2D TripodTurnValue= Value.Get<FVector2D>();
+	TripodTurnValue= Value.Get<FVector2D>();
 	if (TripodTurnValue.X != 0.f || TripodTurnValue.Y != 0.f)
 	{
-		FRotator NewTripodRotation= me->CameraBase_ACamera->GetRelativeRotation();
+		NewTripodRotation= me->CameraBase_ACamera->GetRelativeRotation();
 		NewTripodRotation.Yaw +=TripodTurnValue.X;
 		NewTripodRotation.Pitch +=TripodTurnValue.Y;
 		me->CameraBase_ACamera->SetRelativeRotation(NewTripodRotation);
 	}
+	ServerCam_Turn(TripodTurnValue);
+}
+
+void UO_Camera_Tripod_UpDown::ServerCam_Turn_Implementation(const FInputActionValue& Value)
+{
+	
+	TripodTurnValue = Value.Get<FVector2D>();
+	if (TripodTurnValue.X != 0.f || TripodTurnValue.Y != 0.f)
+	{
+		NewTripodRotation = me->CameraBase_ACamera->GetRelativeRotation();
+		NewTripodRotation.Yaw += TripodTurnValue.X;
+		NewTripodRotation.Pitch += TripodTurnValue.Y;
+		me->CameraBase_ACamera->SetRelativeRotation(NewTripodRotation);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("ValueX : %f,,ValueX : %f, NetMode :%d"), TripodTurnValue.X, TripodTurnValue.Y, GetNetMode());
 }
 
 void UO_Camera_Tripod_UpDown::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -120,5 +108,6 @@ void UO_Camera_Tripod_UpDown::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UO_Camera_Tripod_UpDown, NewTirpodLocation);
+	DOREPLIFETIME(UO_Camera_Tripod_UpDown, NewTripodRotation);
 
 }

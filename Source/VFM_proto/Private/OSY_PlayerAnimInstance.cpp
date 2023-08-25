@@ -4,6 +4,7 @@
 #include "OSY_PlayerAnimInstance.h"
 #include "OSY_TESTCharacter.h"
 #include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 
@@ -11,26 +12,46 @@ void UOSY_PlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 
+	player= Cast<AOSY_TESTCharacter>(GetOwningActor());
+	if (player != nullptr)
+	{
+
+		movementComp= player->GetCharacterMovement();
+	}
 }
 
 void UOSY_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	auto ownerPawn=TryGetPawnOwner();
-	auto player= Cast<AOSY_TESTCharacter>(ownerPawn);
-
-	if (player != nullptr)
+	if (movementComp != nullptr)
 	{
-		// 3. forward vector 가 필요하다.
-		FVector forward = player->GetActorForwardVector();
-		// 4. 속도가 필요하다.
-		FVector velocity = player->GetVelocity();
-		// 5. 나를 소유하고 있는 TPSPlayer 의 속도와 forward 내적값을 할당하고싶다.
-		speed = FVector::DotProduct(forward, velocity);
+		speed = movementComp->Velocity.Size2D();
+		direction = CalculateDir(movementComp->Velocity,player->GetActorRotation());
 
-		// direction 값을 할당하고 싶다.
-		FVector right = player->GetActorRightVector();
-		direction = FVector::DotProduct(right, velocity);
+		FRotator delta = (player->GetActorRotation()-player->GetBaseAimRotation()).GetNormalized();
+		deltaRot= delta.Pitch;
 	}
+
+}
+
+float UOSY_PlayerAnimInstance::CalculateDir(FVector velocity, FRotator rot)
+{
+	if (velocity.IsNearlyZero())
+	{
+		return 0.0f;
+	}
+
+	FVector forwardVector = FRotationMatrix(rot).GetUnitAxis(EAxis::X);
+	FVector rightVector = FRotationMatrix(rot).GetUnitAxis(EAxis::Y);
+	FVector speedVector=velocity.GetSafeNormal2D();
+
+	float angle = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(forwardVector,speedVector)));
+	float rightDot = FVector::DotProduct(rightVector,speedVector);
+	if (rightDot < 0)
+	{
+		angle*=-1.0f;
+	}
+
+	return angle;
 }
