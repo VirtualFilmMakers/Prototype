@@ -66,7 +66,8 @@ void UON_GameInstance::OnCreatedMySession(FName sessionName, bool bWasSuccessful
 {
 	if (bWasSuccessful)
 	{
-		bool Result = GetWorld()->ServerTravel("/Game/QA_Map/Alpa_Main?Listen",true);
+		bool Result = GetWorld()->ServerTravel("/Game/PJH/LaLa2?Listen",true);
+		// Script / Engine.World'/Game/PJH/LaLa2.LaLa2'
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result:%s"), Result ? *FString("Success") : *FString("Failed"));
 	}
 }
