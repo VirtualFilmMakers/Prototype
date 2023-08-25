@@ -125,6 +125,11 @@ public:	//EnhanecedInput
 	UFUNCTION(Server,Reliable)
 	void ServerChangePossessInput(const FVector& wLocation, const FVector& wDirection);
 
+	UFUNCTION()
+	void Unposses();
+
+	UFUNCTION(Server,Reliable)
+	void ServerUnposses();
 
 // 	UFUNCTION()
 // 	void UnPossess();

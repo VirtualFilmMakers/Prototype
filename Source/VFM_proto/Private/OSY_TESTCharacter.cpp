@@ -21,6 +21,7 @@
 #include "DrawDebugHelpers.h"
 #include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
 #include "O_CameraBase.h"
+#include "O_PlayerController.h"
 
 
 // Sets default values
@@ -229,15 +230,16 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 	if (bisHit)
 	{
 		// 서버에다가 포제스 요청을 한다
-		NewController = GetController<APlayerController>();
-		if (NewController != nullptr)
+		auto mypc = GetController<AO_PlayerController>();
+		if (mypc != nullptr)
 		{
 			testPawn = Cast<AO_CameraBase>(hitResult.GetActor());
 			UE_LOG(LogTemp, Warning, TEXT("test pawn : %s"), testPawn != nullptr ? *testPawn->GetName() : *FString("Null"));
 			if (testPawn)
 			{
-				NewController->UnPossess();
-				NewController->Possess(testPawn);
+				mypc->lastPlayer = Cast<AOSY_TESTCharacter>(mypc->GetPawn());
+				mypc->UnPossess();
+				mypc->Possess(testPawn);
 			}
 
 		}
@@ -245,7 +247,20 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 }
 
 
+void AOSY_TESTCharacter::Unposses()
+{
+	AO_PlayerController* mypc = Cast<AO_PlayerController>(GetController());
+	if (mypc != nullptr && mypc->lastPlayer != nullptr)
+	{
+		mypc->UnPossess();
+		mypc->Possess(mypc->lastPlayer);
+	}
+}
 
+void AOSY_TESTCharacter::ServerUnposses_Implementation()
+{
+
+}
 
 // 각종 정보를 화면에 출력하는 함수
 void AOSY_TESTCharacter::PrintLog()
