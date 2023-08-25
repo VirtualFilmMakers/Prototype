@@ -35,6 +35,8 @@ public:
 	UPROPERTY()
 	class USkeletalMeshComponent* goalHumanBody;
 	
+	UPROPERTY(BlueprintReadWrite)
+	bool onAnimLibrary = false;
 	
 	/*--------Bind Property-------*/
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)

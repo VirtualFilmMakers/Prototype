@@ -11,6 +11,8 @@
 #include "SpawnActor.h"
 #include "OSY_TESTCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/NoExportTypes.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 void UMarkEditor::NativeConstruct()
@@ -26,34 +28,28 @@ void UMarkEditor::NativeConstruct()
 	btn_after->OnClicked.AddDynamic(this, &UMarkEditor::OnClickAfterMark);
 	btn_before->OnClicked.AddDynamic(this, &UMarkEditor::OnClickBeforeMark);
 	btn_markStart->OnClicked.AddDynamic(this, &UMarkEditor::OnClickEntirePlay);
+	
 
-
-
+	//컨트롤러 받아옴
 	pc = GetWorld()->GetFirstPlayerController();
 	
+	//플레이어 캐스트해옴
 	player = Cast<AOSY_TESTCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TESTCharacter::StaticClass()));
+	
+	//각 마크마다의 정보를 저장할 구조체 배열 만듦
+	//비어있는 배열로 사이즈100으로 만들어옴. 
 	AnimSavedArray.Empty(100); //anim saved array size 100 set.
 
+	//구조체 배열에 구조체 넣어주기. 인덱스 오류 방지용으로 인덱스는 idle을 가르키는 5로 채워넣어줌
 	for (int i = 0; i < 100; i++)
 	{
 		FAnimSavedStruct NewStruct;
+		NewStruct.Animindex = 5;
 		AnimSavedArray.Add(NewStruct);
 	}
-	//if(pc) UE_LOG(LogTemp,Warning,TEXT("PC good job!!!!!!!!")); //플레이어 컨트롤러 받아오기
-	//
-	//
-	/*AnimLibClass = UAnimLibrary::StaticClass();*///클래스 객체(설계도) 가져오기
-	//
-	//MarkEditorWidget = CreateWidget<UMarkEditor>(pc,MarkEditorClass);
-//	//가져온 설계도로 위젯 생성
-//
-//	//생성한 위젯을 레벨에 띄운다.
-	////if (MarkEditorWidget) // mark editor가 성공적으로 만들어졌다면
-	////{
-	////	MarkEditorWidget->AddToViewport();
-	////} 
+	// AnimLibrary 위젯을 만들어 놓는다.
+	AnimLibWidget = CreateWidget<UAnimLibrary>(World, AnimLibClass);
 	
-/*	player->InputComponent->BindAction*//*("PlaceMark",IE_Pressed,this,&UMarkEditor::ME_MouseRight);*/
 }
 
 
@@ -71,21 +67,24 @@ void UMarkEditor::SetCurrActor(AMHActorA* temp)
 void UMarkEditor::OnClickAnimLib()//Mark Editor에서  Anim lib 버튼을 선택하면
 {
 	//Anim lib UI를 띄우고 싶다.
-	if(!World) return;
+/*	if (!World) return;*/
 
-	if(isCreated==false){
-	AnimLibWidget = CreateWidget<UAnimLibrary>(World,AnimLibClass);
-	if (AnimLibWidget!=nullptr)
-	{
-		AnimLibWidget->AddToViewport();
-		//pc->SetInputMode(FInputModeGameAndUI());
-	}
-	//enum CurAnimState currAnimState;
+	if (isCreated == false) {
+		
+		if (AnimLibWidget != nullptr)
+		{
+			AnimLibWidget->AddToViewport();
+			pc->SetInputMode(FInputModeGameAndUI());
+		}
+		//AnimLibWidget->SetVisibility(ESlateVisibility::Visible);
+		//enum CurAnimState currAnimState;
+		isCreated = true;
 	}
 	else
 	{
 		AnimLibWidget->SetVisibility(ESlateVisibility::Visible);
 	}
+	
 }
 
 //ADD MARK
@@ -93,9 +92,8 @@ void UMarkEditor::OnClickAddMark()
 {
 /*해당 Mark의 현재 animation과 
 위치, 방향을 저장해야하는 부분
-*/
-	MarkNumber+=1;
-	CurrMark=MarkNumber;
+*/	isAdd=true;
+	
 	/*UE_LOG(LogTemp, Warning, TEXT("add mark"));*/
 	if(SpawnActor)
 	GetWorld()->SpawnActor<ASpawnActor>(SpawnActor, CurrActor->GetActorLocation(), CurrActor->GetActorRotation()); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
@@ -105,14 +103,46 @@ void UMarkEditor::OnClickAddMark()
 	
 	//우클릭을 하면 mark위치가 해당 위치로 옮겨간다.
 
-
+	//
+	FAnimSavedStruct newStruct;
+	newStruct.ActorLocation = CurrActor->GetActorLocation();
+	newStruct.ActorRotation = CurrActor->GetActorRotation();
+	newStruct.Animindex = InputAnimState;
+	newStruct.playTime = SliderPlayTime;
 	
+	// 인덱스가 유효한 범위 내에 있는지 확인
+	if (MarkNumber>= 0 && MarkNumber < AnimSavedArray.Num())
+	{
+		FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+		// 해당 인덱스의 구조체 요소에 값을 할당
+		AccessedStruct.ActorLocation = newStruct.ActorLocation;
+		AccessedStruct.ActorRotation = newStruct.ActorRotation;
+		AccessedStruct.Animindex = newStruct.Animindex;
+		AccessedStruct.playTime = newStruct.playTime;
+	}
+	else //인덱스가 범위 밖에 있을때
+	{
+		if (MarkNumber < AnimSavedArray.Num()) 	
+		{ 
+			AnimSavedArray.Add(newStruct);
+				// 						UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("AnimSave array Index error"));
+			return;
+		}
+
+	}
+	MarkNumber += 1;
+	CurrMark = MarkNumber;
 }
 
 //MARK Editor's Anim player Time Slider
 void UMarkEditor::OnSliderMoved(float value)
 {
 	text_sliderCount->SetText(FText::AsNumber((float)value));
+	SliderPlayTime = value;
 	
 }
 
@@ -161,79 +191,92 @@ void UMarkEditor::OnClickBeforeMark()
 }
 
 
-//전체 플로우
+//전체 플로우 재생
 void UMarkEditor::OnClickEntirePlay()
 {
-	EntireMode = true;
-// 	currTime = 0;
-// 	CurrActor->SetActorLocation(AnimSavedArray[0].ActorLocation);
-// 	//다음 마크까지 걸어가고 싶다.
-// 	//다음 마크 위치
-// 	FVector P0 ;
-// 	FVector goal = AnimSavedArray[1].ActorLocation;
-// 	FVector dir = goal - P0;
-// 	//dir.Normalize();
-// 	/*CurrActor->SetActorLocation(P0 + 100 * delTime * dir);*/
-// 	
-// 		//걸어가고 싶다.->애님플레이 + 속도&방향
-// 
-// 	for (int i = 0; i < 100; i++)
-// 	{
-// 		if (TimeOut)
-// 		{
-// 			P0 = CurrActor->GetActorLocation();
-// 			UE_LOG(LogTemp,Warning,TEXT("Move!"));
-// 			CurrActor->SetActorLocation(P0+dir*50*delTime);
-// 		}
-// 		else
-// 		{
-// 			UE_LOG(LogTemp, Warning, TEXT("Not Move!"));
-// 		}
-// 	}
-// 	for (int i = 0; i < 10; i++)
-// 	{
-// 		UE_LOG(LogTemp,Warning,TEXT("%f"),GetWorld()->GetDeltaSeconds()*100);
-// 	}
-//시간이 간다.
-// 애님 타임보다 타이머 시간이 커지면 다음 애님으로 넘김, 타이머 초기화
-// 단, 애님 타임을 조회하는 idx 애님 종류 배열길이보다 작아야함 
-//아니라면 애님 플레이
-// 	for(int i=1; i<MarkNumber;i++)
-// 	{ 
-// 		FVector Target = AnimSavedArray[i].ActorLocation;
-// 		FVector dir = Target - CurrActor->GetActorLocation(); //타겟 - me
-// 		FVector P0 = CurrActor->GetActorLocation();
-// 		FVector VT = 500*GetWorld()->DeltaTimeSeconds*dir;
-// 		FVector P = P0+VT;
-// 		while (CurrActor->GetActorLocation() != Target)
-// 		{
-// 			CurrActor->SetActorLocation(P);
-// 		}
-// 		/*UE_LOG(LogTemp,Warning,TEXT("Anim# %d"),i+1);*/
-// 
-// 		
-// 	}
-
-// 		while (currTime < 100.0f) //각 애니메이션 플레이타임 가져와서 타이머처럼 사용
-// 		{
-// 			currTime += GetWorld()->GetRealTimeSeconds();
-// 			/*UE_LOG(LogTemp, Warning, TEXT("%f"), currTime);*/
-// 		}
-// 		currTime=0;
-// 		UE_LOG(LogTemp, Warning, TEXT("Time out! #%d"), i);
 	
-//GetWorld()->DeltaTimeSeconds
-// 	for(int i=0; i<MarkNumber;i++)
+	//맨처음 Mark로 순간이동
+	CurrActor->SetActorLocation(AnimSavedArray[0].ActorLocation);
+	CurrMark = 0;
+	EntireMode = true;
+
+// 	while (currTime < AnimSavedArray[0].playTime)
 // 	{
-// 		float AnimPlayTime = 0;
-// 		AnimPlayTime = AnimLibWidget->GetAnimSequence(AnimSavedArray[i].Animindex)
-// 		CurrActor->SetActorLocation(AnimSavedArray[i].ActorLocation);
-// 		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[i].Animindex), false);
+// 		currTime+=GetWorld()->DeltaRealTimeSeconds;
+// 		UE_LOG(LogTemp, Warning, TEXT("playtime = %f, CurrTime = %f"), AnimSavedArray[0].playTime,currTime);
+// 	}
+	
+	//delTime=0;
+// 	UE_LOG(LogTemp,Warning,TEXT("DelTime = %f"),delTime); 
+// 	UE_LOG(LogTemp, Warning, TEXT("DelTimeSeconds = %f"), GetWorld()->DeltaTimeSeconds);
+// 	if(AnimLibWidget->GetAnimSequence(AnimSavedArray[0].Animindex)->GetPlayLength() >=0)
+// 	{
+// 		UE_LOG(LogTemp,Warning,TEXT("SequenceTime "));}
+// 	else
+// 		UE_LOG(LogTemp, Warning, TEXT("Sequence import error, %d"), AnimSavedArray[0].Animindex);
+// 	while (delTime <= 1)
+// 	{
+// 		UE_LOG(LogTemp, Warning, TEXT("time : %f"),delTime);
+// 		delTime+=
+;
+// 	}
+		
+	//while(다음 Mark까지 distance가 남았을 동안)
+	//{
+	// 걸어야한다.
+	
+// 		DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[1].ActorLocation); //타깃과의 거리 측정
+// 		dir = AnimSavedArray[1].ActorLocation - CurrActor->GetActorLocation();
+// 		dir.Normalize();
+// 		CurrActor->SetActorRotation(dir.Rotation());//액터가 다음 타깃을 향해 걸어가도록 방향설정
+// 		CurrActor->SetActorLocation(CurrActor->GetActorLocation() + dir * GetWorld()->DeltaTimeSeconds * 10);
+	
+	
+	// 1. SetActorLocation (실제 액터 위치 옮겨줘야하고)
+	// 2. 1번에 맞춰 걷는 애니메이션이 재생되어야하며
+	// 3. 걷는 동안 액터의 forward가 걷는 방향을 향해야한다.
+	// 4. 남은 distance를 업데이트 시켜줘야한다.
+	//} 목표에 도달하면 알아서 while break
+	
+	//도달한 이후 코드
+	//해당 마크에 저장된 로테이션에 맞춰 돌아야한다.
+	//1. SetActorRotation (실제 액터의 로테이션을 돌려줘야하고)
+	//2. 서서히 돌아가야하는데 방법을 잘모르겠ㅅ슴
+	//저장된 Rot에 맞췄다면 
+	//해당 마크에 저장된 애니메이션을 플레이한다.
+
+	//다음 타깃까지 걷는것, 그 타깃에 도착했을 때 rot을 맞추고 타깃에 맞는 애님을 출력하는 것이 반복되어야한다.
+
+	
+	
+}
 
 		
-}
+
 	
 
+//Rotation 간의 각도 간격을 계산하는 함수
+float UMarkEditor::CalculateRotationDifference(FRotator CurrRot, FRotator TargetRot)
+{
+	FQuat CurrentQuat = CurrRot.Quaternion();
+	FQuat TargetQuat = TargetRot.Quaternion();
+	float AngleDifference = FMath::RadiansToDegrees(FMath::Acos(FMath::Clamp(CurrentQuat | TargetQuat, -1.f, 1.f))) * 2.f;
+	return AngleDifference;
+}
+
+void UMarkEditor::RotateActorToDirection(FVector TargetDir, float RotSpeed)
+{
+	FVector CurrentForward = CurrActor->GetActorForwardVector();
+	FRotator CurrentRotation = CurrActor->GetActorRotation();
+	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(TargetDir);
+
+	// 현재 방향과 목표 방향 간의 회전 각도 계산
+	float AngleDifference = CalculateRotationDifference(CurrentRotation, TargetRotation);
+
+	// 회전 각도에 따라 액터 회전
+	FRotator NewRotation = UKismetMathLibrary::RInterpTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), RotSpeed);
+	CurrActor->SetActorRotation(NewRotation);
+}
 
 // void UMarkEditor::ME_MouseRight(void)
 // {
@@ -246,108 +289,234 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	//Super::NativeTick(MyGeometry, InDeltaTime);
 	if(AnimLibWidget!=nullptr)
 	InputAnimState = AnimLibWidget->GetAnimInfo();
-
-	//여기서 어떤 조건을 넣어줘야할까?
-	//ray로 인한 플레이어 위치는 player->AddMarkLocation에서 받아온다.
-	// <- ->로 인한 플레이어 위치는 테이블에서 읽어온다.
-	//그것을 틱으로 항상 조절 해준다.
+	//currTime += InDeltaTime;
+	//전체 플레이 순회
 	
-	delTime = InDeltaTime;
-	TimeOut = false;
-// 	if (currTime >= 0.1)
-// 	{
-// 		UE_LOG(LogTemp,Warning,TEXT("Time out!!!"));
-// 		currTime=0.0f;
-// 		TimeOut = true;
-// 	}
-	if (EntireMode)
-	{
-		if(currTime==0)CurrActorSkeletal->PlayAnimation(WalkAnim, true);
-		currTime+=InDeltaTime;
-		CurrActor->SetActorLocation(CurrActor->GetActorLocation() + CurrActor->GetActorForwardVector() * delTime * 200);
-		
-		if (currTime > WalkAnim->GetPlayLength())
+if (EntireMode)
+{
+	//UE_LOG(LogTemp,Warning,TEXT("gogo Entire!"));
+
+	
+	if(DistanceToTarget>10&&!isArrive) //목적지까지 도착하지 못했다면
+	{ 
+		//UE_LOG(LogTemp, Warning, TEXT("gogo Entire!"));
+		FVector P0 = CurrActor->GetActorLocation();
+		FVector VT = 200 * dir * InDeltaTime;
+		FVector P = P0 + VT;
+		CurrActor->SetActorLocation(P);
+		DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[CurrMark + 1].ActorLocation);
+		UE_LOG(LogTemp, Warning, TEXT("dist : %f"),DistanceToTarget);
+		if (currTime == 0) // 타이머가 0초일때 플레이 워킹애님
+			CurrActorSkeletal->PlayAnimation(WalkAnim, false);
+		//워킹 애니메이션 플레이시간이 다 되었다면
+		if (currTime > WalkAnim->GetPlayLength()) 
 		{
 			/*UE_LOG(LogTemp,Warning,TEXT("move Time!"));*/
-			currTime = 0.0f;
+			currTime = 0.0f; //아직 타깃에 도달하지 못했으므로 다시 재생한다.
+		}
+		else  //워킹 애니메이션 플레이시간 도중이라면
+		{
+			currTime += InDeltaTime; //타이머 시간 ++
+	
 		}
 	}
+	else //처음EntireMode 진입 or 목적지까지 도착했다면
+	{
+		isArrive = true;
+		UE_LOG(LogTemp, Warning, TEXT("Mark# %d Access spot success!"),CurrMark);
+		if(delTime == 0)
+		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex),false);
+		if (delTime < AnimSavedArray[CurrMark].playTime)
+		{
+			delTime+=InDeltaTime;
+		}
+		else
+		{
+			//anim play는 이곳에서요!
+		}
 
-	//CurrActor->SetActorLocation(player->AddMarkLocation);
+		if(DistanceToTarget>0)  // 처음 Mode진입한건지 목적지 도착한건지 구분하기 위함
+		{
+			UE_LOG(LogTemp, Warning, TEXT("CurrMark update!"));
+			if(CurrMark+1<MarkNumber) 
+			{
+				CurrMark +=1;
+			}
+			else EntireMode = false;
+		}
+		
+		if (CurrMark + 1 < MarkNumber)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("dir Update!"));
+			dir = AnimSavedArray[CurrMark + 1].ActorLocation - AnimSavedArray[CurrMark].ActorLocation;
+			dir.Normalize();
+			CurrActor->SetActorRotation(dir.Rotation());
+
+			DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[CurrMark + 1].ActorLocation);
+			
+			isArrive = false;
+		}
+		
+	
+	}
+// 		맨처음 Mark 애님을 플레이한다.
+// 				CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[0].Animindex), false);
+// 				UE_LOG(LogTemp, Warning, TEXT("playTime = %f"), AnimSavedArray[0].playTime);
+// 		
+// 				for (int i = 0; i < MarkNumber-1; i++)
+// 				{
+// 				//spotA ,P0
+// 					FVector spotA = AnimSavedArray[i].ActorLocation;
+// 				//spotB
+// 					FVector spotB = AnimSavedArray[i+1].ActorLocation;
+// 		
+// 				//A to B distance
+// 				DistanceToTarget = FVector::Distance(spotA, spotB);
+// 				
+// 				//거리값 확인 로그
+// 				/*UE_LOG(LogTemp,Warning,TEXT("#%d : dist = %f"),i,DistanceToTarget);*/
+// 				
+// 				dir = spotB-spotA;
+// 				dir.Normalize();
+// 				currTime = 0;
+// 					while (DistanceToTarget > 10) 
+// 					{
+// 						
+// 						if (currTime < 1)
+// 						{
+// 							spotA = CurrActor->GetActorLocation();
+// 							FVector VT = dir * 100 * InDeltaTime;
+// 							FVector P = spotA + VT;
+// 							CurrActor->SetActorLocation(P);
+// 							DistanceToTarget = FVector::Distance(spotA, spotB);
+// 						}
+// 						else
+// 						{
+// 							currTime = 0;
+// 						}
+// 					}
+// 				}
+// 				EntireMode = false;
+// 				
+	}
+
 	
 	switch (InputAnimState)
 	{
+
+	case 0:
+	{
+		text_animName->SetText(FText::FromString("Idle"));
+// 		if(isAdd)
+// 		{ 
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 5;
+// 
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// 				// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+// 
+// 
+// 								// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 				/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
+// 		}
+// 		isAdd=false;
+		break;
+
+	}
 	case 1:
 		/*FButtonStyle ButtonStyle = btn_animSelection->WidgetStyle;*/
 		{
 			text_animName->SetText(FText::FromString("Sit On Ground"));
-			//새 구조체 요소 생성
-			FAnimSavedStruct newStruct;
-			newStruct.ActorLocation = CurrActor->GetActorLocation();
-			newStruct.ActorRotation = CurrActor->GetActorRotation();
-			newStruct.Animindex = 1;
-		
-			// 인덱스가 유효한 범위 내에 있는지 확인
-			if (MarkNumber>= 0 && MarkNumber < AnimSavedArray.Num())
-			{
-// 				UE_LOG(LogTemp,Warning,TEXT("correct index"));
-			
-
-				// 해당 인덱스의 구조체 요소를 참조
-				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-	 			// 해당 인덱스의 구조체 요소에 값을 할당
-				AccessedStruct.ActorLocation = newStruct.ActorLocation;
-				AccessedStruct.ActorRotation = newStruct.ActorRotation;
-		 		AccessedStruct.Animindex = newStruct.Animindex;
-			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-															}
-			else //인덱스가 유효하지 않다면...
-			{
-				if(MarkNumber < AnimSavedArray.Num())
-				{ 
-					AnimSavedArray.Add(newStruct);
-					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-				}
-				else
-					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-			}
-	
+// 			if(isAdd)
+// 			{ 
+// 				//새 구조체 요소 생성
+// 				FAnimSavedStruct newStruct;
+// 				newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 				newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 				newStruct.Animindex = 1;
+// 		
+// 				// 인덱스가 유효한 범위 내에 있는지 확인
+// 				if (MarkNumber>= 0 && MarkNumber < AnimSavedArray.Num())
+// 				{
+// 	// 				UE_LOG(LogTemp,Warning,TEXT("correct index"));
+// 			
+// 
+// 					// 해당 인덱스의 구조체 요소를 참조
+// 					FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 	 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 					AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 					AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 		 			AccessedStruct.Animindex = newStruct.Animindex;
+// 				/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 																}
+// 				else //인덱스가 유효하지 않다면...
+// 				{
+// 					if(MarkNumber < AnimSavedArray.Num())
+// 					{ 
+// 						AnimSavedArray.Add(newStruct);
+// 						UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 					}
+// 					else
+// 						UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 				}
+// 			}
 		break;
 		}
 	case 2:
 		{
 			text_animName->SetText(FText::FromString("Sit On Chair"));
-			FAnimSavedStruct newStruct;
-			newStruct.ActorLocation = CurrActor->GetActorLocation();
-			newStruct.ActorRotation = CurrActor->GetActorRotation();
-			newStruct.Animindex = 2;
-			
-			// 인덱스가 유효한 범위 내에 있는지 확인
-			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
-			{
-// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
-
-
-				// 해당 인덱스의 구조체 요소를 참조
-				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-				// 해당 인덱스의 구조체 요소에 값을 할당
-				AccessedStruct.ActorLocation = newStruct.ActorLocation;
-				AccessedStruct.ActorRotation = newStruct.ActorRotation;
-				AccessedStruct.Animindex = newStruct.Animindex;
-				/*UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"),MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-			}
-			else//인덱스가 유효하지 않다면...
-			{
-				if (MarkNumber < AnimSavedArray.Num())
-				{
-					AnimSavedArray.Add(newStruct);
-					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-				}
-				else
-					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-			}
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 2;
+// 			
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// // 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+// 
+// 
+// 				// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 				/*UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"),MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
 			break;
 		}
 	
@@ -355,36 +524,36 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		{
 			text_animName->SetText(FText::FromString("Standing Talk"));
 			
-			FAnimSavedStruct newStruct;
-			newStruct.ActorLocation = CurrActor->GetActorLocation();
-			newStruct.ActorRotation = CurrActor->GetActorRotation();
-			newStruct.Animindex = 3;
-
-			// 인덱스가 유효한 범위 내에 있는지 확인
-			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
-			{
-				/*UE_LOG(LogTemp, Warning, TEXT("correct index"));*/
-
-
-				// 해당 인덱스의 구조체 요소를 참조
-				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-				// 해당 인덱스의 구조체 요소에 값을 할당
-				AccessedStruct.ActorLocation = newStruct.ActorLocation;
-				AccessedStruct.ActorRotation = newStruct.ActorRotation;
-				AccessedStruct.Animindex = newStruct.Animindex;
-			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-			}
-			else//인덱스가 유효하지 않다면...
-			{
-				if (MarkNumber < AnimSavedArray.Num())
-				{
-					AnimSavedArray.Add(newStruct);
-					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-				}
-				else
-					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-			}
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 3;
+// 
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// 				/*UE_LOG(LogTemp, Warning, TEXT("correct index"));*/
+// 
+// 
+// 				// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
 			break;
 		}
 
@@ -392,36 +561,36 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		{
 			text_animName->SetText(FText::FromString("Standing Clap"));
 
-			FAnimSavedStruct newStruct;
-			newStruct.ActorLocation = CurrActor->GetActorLocation();
-			newStruct.ActorRotation = CurrActor->GetActorRotation();
-			newStruct.Animindex = 4;
-
-			// 인덱스가 유효한 범위 내에 있는지 확인
-			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
-			{
-// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
-
-
-				// 해당 인덱스의 구조체 요소를 참조
-				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-				// 해당 인덱스의 구조체 요소에 값을 할당
-				AccessedStruct.ActorLocation = newStruct.ActorLocation;
-				AccessedStruct.ActorRotation = newStruct.ActorRotation;
-				AccessedStruct.Animindex = newStruct.Animindex;
-				/*UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-			}
-			else//인덱스가 유효하지 않다면...
-			{
-				if (MarkNumber < AnimSavedArray.Num())
-				{
-					AnimSavedArray.Add(newStruct);
-					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-				}
-				else
-					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-			}
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 4;
+// 
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// // 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+// 
+// 
+// 				// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 				/*UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
 			break;
 		}
 		
@@ -429,37 +598,37 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		{
 			text_animName->SetText(FText::FromString("Idle"));
 
-			FAnimSavedStruct newStruct;
-			newStruct.ActorLocation = CurrActor->GetActorLocation();
-			newStruct.ActorRotation = CurrActor->GetActorRotation();
-			newStruct.Animindex = 5;
-
-			// 인덱스가 유효한 범위 내에 있는지 확인
-			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
-			{
-// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
-
-
-				// 해당 인덱스의 구조체 요소를 참조
-				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-				// 해당 인덱스의 구조체 요소에 값을 할당
-				AccessedStruct.ActorLocation = newStruct.ActorLocation;
-				AccessedStruct.ActorRotation = newStruct.ActorRotation;
-				AccessedStruct.Animindex = newStruct.Animindex;
-			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-			}
-			else//인덱스가 유효하지 않다면...
-			{
-				if (MarkNumber < AnimSavedArray.Num())
-				{
-					AnimSavedArray.Add(newStruct);
-					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-				}
-				else
-					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-			}
-		
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 5;
+// 
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// // 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+// 
+// 
+// 				// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
+// 		
 			break;
 		}
 	
@@ -467,77 +636,79 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		{
 			text_animName->SetText(FText::FromString("Walk"));
 
-			FAnimSavedStruct newStruct;
-			newStruct.ActorLocation = CurrActor->GetActorLocation();
-			newStruct.ActorRotation = CurrActor->GetActorRotation();
-			newStruct.Animindex = 6;
-
-			// 인덱스가 유효한 범위 내에 있는지 확인
-			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
-			{
-// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
-
-
-				// 해당 인덱스의 구조체 요소를 참조
-				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-				// 해당 인덱스의 구조체 요소에 값을 할당
-				AccessedStruct.ActorLocation = newStruct.ActorLocation;
-				AccessedStruct.ActorRotation = newStruct.ActorRotation;
-				AccessedStruct.Animindex = newStruct.Animindex;
-				/*UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-			}
-			else//인덱스가 유효하지 않다면...
-			{
-				if (MarkNumber < AnimSavedArray.Num())
-				{
-					AnimSavedArray.Add(newStruct);
-					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-				}
-				else
-					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-			}
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 6;
+// 
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// // 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+// 
+// 
+// 				// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 				/*UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
 
 			break;
 		}
 
 	default:
 		{
-		text_animName->SetText(FText::FromString("Idle"));
+			text_animName->SetText(FText::FromString("Idle"));
+// 			if(isAdd)
+// 			{ 
+// 			FAnimSavedStruct newStruct;
+// 			newStruct.ActorLocation = CurrActor->GetActorLocation();
+// 			newStruct.ActorRotation = CurrActor->GetActorRotation();
+// 			newStruct.Animindex = 5;
+// 
+// 			// 인덱스가 유효한 범위 내에 있는지 확인
+// 			if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
+// 			{
+// 				// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
+// 
+// 
+// 								// 해당 인덱스의 구조체 요소를 참조
+// 				FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
+// 
+// 				// 해당 인덱스의 구조체 요소에 값을 할당
+// 				AccessedStruct.ActorLocation = newStruct.ActorLocation;
+// 				AccessedStruct.ActorRotation = newStruct.ActorRotation;
+// 				AccessedStruct.Animindex = newStruct.Animindex;
+// 				/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
+// 			}
+// 			else//인덱스가 유효하지 않다면...
+// 			{
+// 				if (MarkNumber < AnimSavedArray.Num())
+// 				{
+// 					AnimSavedArray.Add(newStruct);
+// 					UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
+// 				}
+// 				else
+// 					UE_LOG(LogTemp, Warning, TEXT("index error!!"));
+// 			}
+// 			}
+			break;
 
-		FAnimSavedStruct newStruct;
-		newStruct.ActorLocation = CurrActor->GetActorLocation();
-		newStruct.ActorRotation = CurrActor->GetActorRotation();
-		newStruct.Animindex = 5;
-
-		// 인덱스가 유효한 범위 내에 있는지 확인
-		if (MarkNumber >= 0 && MarkNumber < AnimSavedArray.Num())
-		{
-			// 				UE_LOG(LogTemp, Warning, TEXT("correct index"));
-
-
-							// 해당 인덱스의 구조체 요소를 참조
-			FAnimSavedStruct& AccessedStruct = AnimSavedArray[MarkNumber];
-
-			// 해당 인덱스의 구조체 요소에 값을 할당
-			AccessedStruct.ActorLocation = newStruct.ActorLocation;
-			AccessedStruct.ActorRotation = newStruct.ActorRotation;
-			AccessedStruct.Animindex = newStruct.Animindex;
-			/*	UE_LOG(LogTemp, Warning, TEXT("Mark# %d : %d"), MarkNumber, AnimSavedArray[MarkNumber].Animindex);*/
-		}
-		else//인덱스가 유효하지 않다면...
-		{
-			if (MarkNumber < AnimSavedArray.Num())
-			{
-				AnimSavedArray.Add(newStruct);
-				UE_LOG(LogTemp, Warning, TEXT("%d"), AnimSavedArray[MarkNumber].Animindex);
-			}
-			else
-				UE_LOG(LogTemp, Warning, TEXT("index error!!"));
-		}
-
-		break;
-		
 		}
 	}
 }
+
