@@ -125,11 +125,11 @@ public:	//EnhanecedInput
 	UFUNCTION(Server,Reliable)
 	void ServerChangePossessInput(const FVector& wLocation, const FVector& wDirection);
 
-	UFUNCTION(NetMulticast,Reliable)
-	void MulticastChangePossessInput();
 
-	UFUNCTION(BlueprintCallable)
-	void ChangePosses(ACharacter* NewPawn);
+// 	UFUNCTION()
+// 	void UnPossess();
+
+	
 
 	UPROPERTY(Replicated)
 	APlayerController* NewController;

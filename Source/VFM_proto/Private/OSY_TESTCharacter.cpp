@@ -244,19 +244,8 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 	}
 }
 
-void AOSY_TESTCharacter::MulticastChangePossessInput_Implementation()
-{
 
 
-}
-
-void AOSY_TESTCharacter::ChangePosses(ACharacter* NewPawn)
-{
-	if (NewPawn)
-	{
-
-	}
-}
 
 // 각종 정보를 화면에 출력하는 함수
 void AOSY_TESTCharacter::PrintLog()
