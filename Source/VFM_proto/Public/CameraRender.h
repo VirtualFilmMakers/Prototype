@@ -22,14 +22,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	 
-	//UPROPERTY()
-	//APlayerCameraManager* CameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
-	//UPROPERTY()
-	//class UTextureRenderTarget2D* RenderTarget;
+	
+	// RenderTarget
+	//UPROPERTY(EditAnywhere)
+	//UTextureRenderTarget2D* renderTex;
 
-	//TSubclassOf<class UTextureRenderTarget2D> renderTargetSource;
+	//// ¿ø¼®½Ü ÄÚµå
+	//UFUNCTION(BlueprintCallable)
+	//void RenderFromRenderTarget(UTextureRenderTarget2D* inRenderTex);
 
-	void SaveRenderTargetToDisk(UTextureRenderTarget2D* InRenderTarget, FString Filename);
+	//
+	//void SaveRenderTargetToDisk(UTextureRenderTarget2D* InRenderTarget, FString Filename);
 
 };

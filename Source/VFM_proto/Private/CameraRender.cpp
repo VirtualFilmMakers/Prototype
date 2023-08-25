@@ -2,8 +2,13 @@
 
 
 #include "CameraRender.h"
-#include <Engine/TextureRenderTarget2D.h>
-#include <HighResScreenshot.h>
+//#include <Engine/TextureRenderTarget2D.h>
+//#include <HighResScreenshot.h>
+//#include <GameFramework/PlayerController.h>
+//#include <Kismet/KismetRenderingLibrary.h>
+//#include <ImageUtils.h>
+//#include <LevelSequence/Public/LevelSequenceActor.h>
+//#include <LevelSequence/Public/LevelSequence.h>
 
 // Sets default values
 ACameraRender::ACameraRender()
@@ -18,6 +23,20 @@ void ACameraRender::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//// 
+	//FString FullPath = FString::Printf(TEXT("%s%s"), *FPaths::ProjectDir(), TEXT("testOutImage.png"));
+	//FArchive* ArWriter = IFileManager::Get().CreateFileWriter(*FullPath); // 경로에 파일을 만든다
+	//FImageUtils::ExportRenderTarget2DAsPNG(renderTex, *ArWriter);
+	
+
+	//class ALevelSequenceActor;
+	//class ULevelSequence;
+
+	//ALevelSequenceActor* testSequence = NewObject<ALevelSequenceActor>(this, ALevelSequenceActor::StaticClass());
+	//ULevelSequence* seq = new ULevelSequence();
+	/*testSequence->*/
+
+	
 }
 
 // Called every frame
@@ -27,29 +46,46 @@ void ACameraRender::Tick(float DeltaTime)
 
 }
 
-void ACameraRender::SaveRenderTargetToDisk(UTextureRenderTarget2D* InRenderTarget, FString Filename)
-{
-    FTextureRenderTargetResource* RTResource = InRenderTarget->GameThread_GetRenderTargetResource();
+//void ACameraRender::RenderFromRenderTarget(UTextureRenderTarget2D* inRenderTex)
+//{
+//	int32 width = inRenderTex->SizeX;
+//	int32 height = inRenderTex->SizeY;
+//
+//	TArray<FColor> imgArr;
+//	UKismetRenderingLibrary::ReadRenderTarget(GetWorld(), inRenderTex, imgArr);
+//
+//	TArray<uint8> imgByte;
+//	FImageUtils::CompressImageArray(width, height, imgArr, imgByte);
+//	FFileHelper::SaveArrayToFile(imgByte, *FString("D:/renderTest"));
+//}
 
-    FReadSurfaceDataFlags ReadPixelFlags(RCM_UNorm);
-    ReadPixelFlags.SetLinearToGamma(true);
+//
+//void ACameraRender::SaveRenderTargetToDisk(UTextureRenderTarget2D* InRenderTarget, FString Filename)
+//{
+//    FTextureRenderTargetResource* RTResource = InRenderTarget->GameThread_GetRenderTargetResource();
+//
+//    FReadSurfaceDataFlags ReadPixelFlags(RCM_UNorm);
+//    ReadPixelFlags.SetLinearToGamma(true);
+//
+//    TArray<FColor> OutBMP;
+//    RTResource->ReadPixels(OutBMP, ReadPixelFlags);
+//
+//    for (FColor& color : OutBMP)
+//    {
+//        color.A = 255;
+//    }
+//
+//
+//    FIntRect SourceRect;
+//
+//    FIntPoint DestSize(InRenderTarget->GetSurfaceWidth(), InRenderTarget->GetSurfaceHeight());
+//
+//
+//    FString ResultPath;
+//    FHighResScreenshotConfig& HighResScreenshotConfig = GetHighResScreenshotConfig();
+//    HighResScreenshotConfig.SaveImage(Filename, OutBMP, DestSize, &ResultPath);
+//   
+//}
 
-    TArray<FColor> OutBMP;
-    RTResource->ReadPixels(OutBMP, ReadPixelFlags);
 
-    for (FColor& color : OutBMP)
-    {
-        color.A = 255;
-    }
-
-
-    FIntRect SourceRect;
-
-    FIntPoint DestSize(InRenderTarget->GetSurfaceWidth(), InRenderTarget->GetSurfaceHeight());
-
-
-    FString ResultPath;
-    FHighResScreenshotConfig& HighResScreenshotConfig = GetHighResScreenshotConfig();
-    HighResScreenshotConfig.SaveImage(Filename, OutBMP, DestSize, &ResultPath);
-}
 
