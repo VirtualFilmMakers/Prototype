@@ -37,7 +37,7 @@ void AMHActorA::BeginPlay()
 		markEditorWidget->AddToViewport();
 		UE_LOG(LogTemp,Warning,TEXT("created successfult Mark Widget!"));
 		markEditorWidget->SetVisibility(ESlateVisibility::Hidden);
-			pc->SetInputMode(FInputModeGameAndUI());
+			//pc->SetInputMode(FInputModeGameAndUI());
 	} //화면에 띄워놓기
 
 	player = Cast<AOSY_TESTCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AOSY_TESTCharacter::StaticClass()));
@@ -48,8 +48,7 @@ void AMHActorA::BeginPlay()
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("player Load fail.."));
 	
-	player->CurrActor = this; //현재 호버되어 있는 메타휴먼은 저에요...! 
-	// @@@@@마우스 호버된 얘로 바꿀 필요가 있다.....
+	player->CurrActor = this; //현재 호버되어 있는 메타휴먼은 저에요...!
 }
 
 // Called every frame
@@ -83,3 +82,7 @@ void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
 	markEditorWidget->SetCurrActor(this); //현재 스폰되어 있는 메타휴먼정보를 MarkEditor에게 넘겨주기 위함.
 }
 
+//Mark Editor에게 나 누구야 알려주기(완)
+//그거 기반으로 스폰하기
+//애니메이션 세이브드 구조체 만들기
+// 

@@ -24,8 +24,6 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	FRotator ActorRotation; //현재 액터의 로테이션 값
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float playTime; //현재 마크에서의 애님의 플레이시간
 	
 // 	
 // 	UPROPERTY()
@@ -53,15 +51,12 @@ public:
 	USkeletalMeshComponent* CurrActorSkeletal;
 	float currTime = 0 ;
 	float delTime=0;
-	FVector dir ;
 	bool TimeOut;
 	bool TimerOn = false;
 	bool EntireMode = false;
-	float DistanceToTarget  = 0.0f;
-	bool isAdd=false;
-	float SliderPlayTime = 1.0f;
-	bool isArrive = false;
 	
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 InputAnimState = 0;
 	UPROPERTY()
@@ -147,18 +142,10 @@ public:
 
 	UFUNCTION()
 	void OnClickEntirePlay();
-
-
 	
 // 	UFUNCTION()
 // 	void ME_MouseRight(void);
-	UFUNCTION()
-	float CalculateRotationDifference(FRotator CurrRot, FRotator TargetRot);
 
-	UFUNCTION()
-		void RotateActorToDirection(FVector TargetDir, float RotSpeed);
-
-public : 
 UAnimSequence* WalkAnim=
 	Cast<UAnimSequence>(
 		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Walking_Anim1.MH_MA_Walking_Anim1'")));

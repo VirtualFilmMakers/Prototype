@@ -40,9 +40,6 @@ void UAnimLibrary::NativeConstruct()
     goalHumanBody = goalHuman->FindComponentByClass<USkeletalMeshComponent>();
 
 	// Make Animation Library play
-// 	AnimationToPlay[0] = Cast<UAnimSequence>(
-// 		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_Standing_W_Briefcase_Idle.MH_Standing_W_Briefcase_Idle'")));
-
 	AnimationToPlay[1] = Cast<UAnimSequence>(
 		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Sitting_Idle_Anim.MH_MA_Sitting_Idle_Anim'")));
 	
@@ -57,13 +54,13 @@ void UAnimLibrary::NativeConstruct()
 
 	AnimationToPlay[5] = Cast<UAnimSequence>(
 		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_Standing_W_Briefcase_Idle.MH_Standing_W_Briefcase_Idle'")));
-    
+    AnimationToPlay[0] = AnimationToPlay[5];
 
 	AnimationToPlay[6] = Cast<UAnimSequence>(
 		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Walking_Anim1.MH_MA_Walking_Anim1'")));
 
 // 	if(goalHumanBody!=nullptr)UE_LOG(LogTemp,Warning,TEXT("Find Success !! Human Body"));
-	UE_LOG(LogTemp,Warning,TEXT("Anim Lib birth!"));
+	
 	
 }
 
@@ -79,8 +76,9 @@ void UAnimLibrary::SetAnimPlayTime(float val)
 
 UAnimSequence* UAnimLibrary::GetAnimSequence(int idx)
 {
-	if(idx==0) idx=5;
-	return AnimationToPlay[idx];
+	if(AnimationToPlay[idx]!=nullptr)
+		return AnimationToPlay[idx];
+	else return AnimationToPlay[5];
 }
 
 void UAnimLibrary::OnClicksitOnGround()
