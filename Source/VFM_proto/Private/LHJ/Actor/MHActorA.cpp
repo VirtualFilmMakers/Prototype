@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerZoom.h"
 #include "GameFramework/PlayerInput.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AMHActorA::AMHActorA()
@@ -49,6 +50,7 @@ void AMHActorA::BeginPlay()
 	else UE_LOG(LogTemp, Warning, TEXT("player Load fail.."));
 	
 	player->CurrActor = this; //현재 호버되어 있는 메타휴먼은 저에요...!
+	bReplicates = true;
 }
 
 // Called every frame
