@@ -93,6 +93,8 @@ public:	//EnhanecedInput
 		class UInputAction* ia_Jump;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputAction* ia_Posses;
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_UnPosses;
 	
 
 
@@ -126,7 +128,7 @@ public:	//EnhanecedInput
 	void ServerChangePossessInput(const FVector& wLocation, const FVector& wDirection);
 
 	UFUNCTION()
-	void Unposses();
+	void DoUnposses();
 
 	UFUNCTION(Server,Reliable)
 	void ServerUnposses();

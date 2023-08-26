@@ -74,6 +74,17 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 		compViewFinder->SetStaticMesh(tempViewFinder.Object);
 	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> tempia_Posses(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Posess.IA_OSY_Posess'"));
+	if (tempia_Posses.Succeeded())
+	{
+		ia_Posses = tempia_Posses.Object;
+	}
+	ConstructorHelpers::FObjectFinder<UInputAction> tempia_UnPosses(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Unpossess.IA_OSY_Unpossess'"));
+	if (tempia_UnPosses.Succeeded())
+	{
+		ia_UnPosses = tempia_UnPosses.Object;
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -128,6 +139,7 @@ void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		SYInput->BindAction(ia_Jump, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::jump);
 		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePossessInput);
+		SYInput->BindAction(ia_UnPosses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::DoUnposses);
 	}
 
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
@@ -247,11 +259,15 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 }
 
 
-void AOSY_TESTCharacter::Unposses()
+void AOSY_TESTCharacter::DoUnposses()
 {
+
+
 	AO_PlayerController* mypc = Cast<AO_PlayerController>(GetController());
+	UE_LOG(LogTemp, Warning, TEXT("DoUnposses")); 
 	if (mypc != nullptr && mypc->lastPlayer != nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("mypc->lastPlayer : %s"), mypc->lastPlayer == nullptr?TEXT("NULL"):TEXT("Valid"));
 		mypc->UnPossess();
 		mypc->Possess(mypc->lastPlayer);
 	}
