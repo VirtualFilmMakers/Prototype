@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "D_ControllableAsset.h"
 #include "D_LightBase.generated.h"
 
 UCLASS()

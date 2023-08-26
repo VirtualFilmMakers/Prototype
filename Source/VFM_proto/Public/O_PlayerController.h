@@ -14,4 +14,7 @@ class VFM_PROTO_API AO_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY()
+	class AOSY_TESTCharacter* lastPlayer; 
 };
