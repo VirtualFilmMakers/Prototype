@@ -54,6 +54,7 @@ void UMarkEditor::NativeConstruct()
 	////} 
 	
 /*	player->InputComponent->BindAction*//*("PlaceMark",IE_Pressed,this,&UMarkEditor::ME_MouseRight);*/
+/*GetOwningPlayer()*/
 }
 
 
