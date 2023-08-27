@@ -28,6 +28,24 @@ public:
 	class UInputAction* ia_Fly;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputAction* ia_Down;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_Normal;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_ViewFinder;
+
+	UFUNCTION()
+	void ToNormal();
+	UFUNCTION(Server,Reliable)
+	void ServerToNormal();
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastToNormal();
+
+	UFUNCTION()
+	void ToViewFinder();
+	UFUNCTION(Server,Reliable)
+	void ServerToViewFinder();
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastToViewFinder();
 
 	UPROPERTY(VisibleAnywhere)
 	class USkeletalMeshComponent* bodyMesh;

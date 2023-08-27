@@ -18,6 +18,16 @@ UPlayerFlying::UPlayerFlying()
 	{
 		ia_Down = tempDown.Object;
 	}
+	ConstructorHelpers::FObjectFinder<UInputAction> tempia_Normal(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_Normal.IA_Normal'"));
+	if (tempia_Normal.Succeeded())
+	{
+		ia_Normal = tempia_Normal.Object;
+	}
+	ConstructorHelpers::FObjectFinder<UInputAction> tempia_ViewFinder(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_ViewFinder.IA_ViewFinder'"));
+	if (tempia_ViewFinder.Succeeded())
+	{
+		ia_ViewFinder = tempia_ViewFinder.Object;
+	}
 }
 
 void UPlayerFlying::BeginPlay()
@@ -45,6 +55,8 @@ void UPlayerFlying::SetupInputBinding(class UInputComponent* PlayerInputComponen
 
 		FlyInput->BindAction(ia_Fly, ETriggerEvent::Triggered, this, &UPlayerFlying::Fly);
 		FlyInput->BindAction(ia_Down, ETriggerEvent::Triggered, this, &UPlayerFlying::Down);
+		FlyInput->BindAction(ia_Normal, ETriggerEvent::Triggered, this, &UPlayerFlying::ToNormal);
+		FlyInput->BindAction(ia_ViewFinder, ETriggerEvent::Triggered, this, &UPlayerFlying::ToViewFinder);
 	}
 
 }
@@ -107,6 +119,47 @@ void UPlayerFlying::MulticastFly_Implementation(const FInputActionValue& Value)
 	{
 		me->AddMovementInput(me->GetActorUpVector(), UpValue, true);
 	}
+}
+
+void UPlayerFlying::ToNormal()
+{
+	
+	ServerToNormal();
+}
+
+void UPlayerFlying::ServerToNormal_Implementation()
+{
+	MulticastToNormal();
+}
+
+void UPlayerFlying::MulticastToNormal_Implementation()
+{
+	UOSY_PlayerAnimInstance* anim = Cast<UOSY_PlayerAnimInstance>(bodyMesh->GetAnimInstance());
+	if (anim)
+	{
+		anim->bHasViewFinder = false;
+	}
+
+}
+
+void UPlayerFlying::ToViewFinder()
+{
+	ServerToViewFinder();
+}
+
+void UPlayerFlying::ServerToViewFinder_Implementation()
+{
+	MulticastToViewFinder();
+}
+
+void UPlayerFlying::MulticastToViewFinder_Implementation()
+{
+	UOSY_PlayerAnimInstance* anim = Cast<UOSY_PlayerAnimInstance>(bodyMesh->GetAnimInstance());
+	if (anim)
+	{
+		anim->bHasViewFinder = true;
+	}
+
 }
 
 void UPlayerFlying::Down(const FInputActionValue& Value)
