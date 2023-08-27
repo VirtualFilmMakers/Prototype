@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "OSY_TESTCharacter.h"
 #include "O_PlayerController.generated.h"
 
 /**
@@ -15,6 +16,8 @@ class VFM_PROTO_API AO_PlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	class AOSY_TESTCharacter* lastPlayer; 
+
+	
 };
