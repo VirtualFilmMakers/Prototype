@@ -11,6 +11,9 @@
 #include "SpawnActor.h"
 #include "OSY_TESTCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/NoExportTypes.h"
+#include "Kismet/KismetMathLibrary.h"
+
 
 
 void UMarkEditor::NativeConstruct()
