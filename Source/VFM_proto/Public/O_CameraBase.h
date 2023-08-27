@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "OSY_TESTCharacter.h"
 #include "O_CameraBase.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FCameraInputBindingDelegate, class UInputComponent*);
@@ -26,6 +27,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
+	AOSY_TESTCharacter* me;
 	
 
 	// Called to bind functionality to input

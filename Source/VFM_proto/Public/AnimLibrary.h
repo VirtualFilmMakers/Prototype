@@ -22,6 +22,9 @@ public:
 	
 	UPROPERTY()
 	AActor* goalHuman;
+
+	UPROPERTY()
+	class AMHActorA* AnimPlayerHuman;
 	
 	UPROPERTY()
 	UAnimSequence* AnimationToPlay[10];

@@ -20,8 +20,8 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	//뷰 파인더인가 확인하는 불값
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MySettings)
-	bool bHasViewFinder=true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Replicated, Category=MySettings)
+	bool bHasViewFinder=false;
 
 	//플레이어가 공중에 있는지 체크하는 불값
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MySettings)
