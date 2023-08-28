@@ -91,8 +91,7 @@ void UMarkEditor::OnClickAddMark()
 */
 /*UE_LOG(LogTemp, Warning, TEXT("add mark"));*/
 	isAdd = true;
-	if (SpawnActor)
-		GetWorld()->SpawnActor<ASpawnActor>(SpawnActor, CurrActor->GetActorLocation(), CurrActor->GetActorRotation()); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
+	SpawnActorHologramServer(); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
 	/*player->SetActorLocation(player->AddMarkLocation);*/
 
 	//플레이어의 마우스 우클릭을 받는다. why? mark를 찍을 위치값이 필요하기 때문
@@ -220,6 +219,23 @@ void UMarkEditor::RotateActorToDirection(FVector TargetDir, float RotSpeed)
 	CurrActor->SetActorRotation(NewRotation);
 }
 
+
+void UMarkEditor::SpawnActorHologramServer_Implementation()
+{
+	SpawnActorHologramMulticast();
+}
+
+bool UMarkEditor::SpawnActorHologramServer_Validate()
+{
+	return true;
+}
+
+void UMarkEditor::SpawnActorHologramMulticast_Implementation()
+{
+	isAdd = true;
+	if (SpawnActor)
+		GetWorld()->SpawnActor<ASpawnActor>(SpawnActor, CurrActor->GetActorLocation(), CurrActor->GetActorRotation()); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
+}
 
 // void UMarkEditor::ME_MouseRight(void)
 // {

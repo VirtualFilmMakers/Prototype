@@ -166,6 +166,19 @@ public:
 	Cast<UAnimSequence>(
 		StaticLoadObject(UAnimSequence::StaticClass(), NULL, TEXT("/Script/Engine.AnimSequence'/Game/LHJ/Anim/MetaHuman/MH_MA_Walking_Anim1.MH_MA_Walking_Anim1'")));
 
+
+public :
+
+/* ALL STOP Anim */
+	UFUNCTION(Reliable, Server, WithValidation)
+	void SpawnActorHologramServer();	
+	void SpawnActorHologramServer_Implementation();
+	bool SpawnActorHologramServer_Validate();
+
+	UFUNCTION(Reliable, NetMulticast)
+	void SpawnActorHologramMulticast();
+	void SpawnActorHologramMulticast_Implementation();
+
 protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
