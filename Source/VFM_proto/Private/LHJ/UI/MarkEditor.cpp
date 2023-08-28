@@ -326,47 +326,9 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 			
 		}
-		//CurrActor->SetActorLocation(player->AddMarkLocation);
-
-		// 				CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[0].Animindex), false);
-		// 				UE_LOG(LogTemp, Warning, TEXT("playTime = %f"), AnimSavedArray[0].playTime);
-		// 		
-		// 				for (int i = 0; i < MarkNumber-1; i++)
-		// 				{
-		// 				//spotA ,P0
-		// 					FVector spotA = AnimSavedArray[i].ActorLocation;
-		// 				//spotB
-		// 					FVector spotB = AnimSavedArray[i+1].ActorLocation;
-		// 		
-		// 				//A to B distance
-		// 				DistanceToTarget = FVector::Distance(spotA, spotB);
-		// 				
-		// 				
-		// 				/*UE_LOG(LogTemp,Warning,TEXT("#%d : dist = %f"),i,DistanceToTarget);*/
-		// 				
-		// 				dir = spotB-spotA;
-		// 				dir.Normalize();
-		// 				currTime = 0;
-		// 					while (DistanceToTarget > 10) 
-		// 					{
-		// 						
-		// 						if (currTime < 1)
-		// 						{
-		// 							spotA = CurrActor->GetActorLocation();
-		// 							FVector VT = dir * 100 * InDeltaTime;
-		// 							FVector P = spotA + VT;
-		// 							CurrActor->SetActorLocation(P);
-		// 							DistanceToTarget = FVector::Distance(spotA, spotB);
-		// 						}
-		// 						else
-		// 						{
-		// 							currTime = 0;
-		// 						}
-		// 					}
-		// 				}
-		// 				EntireMode = false;
-		// 				
+		
 	}
+
 
 	switch (InputAnimState)
 	{
