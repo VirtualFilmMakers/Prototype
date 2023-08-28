@@ -210,7 +210,7 @@ void UMarkEditor::RotateActorToDirection(FVector TargetDir, float RotSpeed)
 {
 	FVector CurrentForward = CurrActor->GetActorForwardVector();
 	FRotator CurrentRotation = CurrActor->GetActorRotation();
-	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(TargetDir);
+	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromXZ(TargetDir, CurrActor->GetActorUpVector());
 
 	// 
 	float AngleDifference = CalculateRotationDifference(CurrentRotation, TargetRotation);
