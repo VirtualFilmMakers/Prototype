@@ -90,10 +90,12 @@ void UMarkEditor::OnClickAddMark()
 위치, 방향을 저장해야하는 부분
 */
 /*UE_LOG(LogTemp, Warning, TEXT("add mark"));*/
-	isAdd = true;
-	SpawnActorHologramServer(); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
+// 	isAdd = true;
+// 	SpawnActorHologramServer(); //가상 캐릭터 스폰(새로운Mark를 위해 본래 자리를 지키는 캐릭터)
 	/*player->SetActorLocation(player->AddMarkLocation);*/
-
+	isAdd = true;
+	if (SpawnActor)
+		GetWorld()->SpawnActor<ASpawnActor>(SpawnActor, CurrActor->GetActorLocation(), CurrActor->GetActorRotation());
 	//플레이어의 마우스 우클릭을 받는다. why? mark를 찍을 위치값이 필요하기 때문
 
 	//우클릭을 하면 mark위치가 해당 위치로 옮겨간다.
