@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerZoom.h"
 #include "GameFramework/PlayerInput.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AMHActorA::AMHActorA()
@@ -49,6 +50,8 @@ void AMHActorA::BeginPlay()
 	else UE_LOG(LogTemp, Warning, TEXT("player Load fail.."));
 	
 	player->CurrActor = this; //현재 호버되어 있는 메타휴먼은 저에요...!
+	bReplicates = true;
+	SetReplicateMovement(true);
 }
 
 // Called every frame
@@ -65,6 +68,137 @@ void AMHActorA::Tick(float DeltaTime)
 	}
 }
 
+// 1번
+void AMHActorA::StartSitOnGroundServer_Implementation()
+{
+	StartSitOnGroundMulticast();
+}
+
+bool AMHActorA::StartSitOnGroundServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::StartSitOnGroundMulticast_Implementation()
+{
+	SitOnGround = true;
+	SitOnChair = false;
+	StandingTalk = false;
+	StandingClap = false;
+	Idle = false;
+	Walking = false;
+}
+
+//2번
+void AMHActorA::StartSitOnChairServer_Implementation()
+{
+	StartSitOnChairMulticast();
+}
+
+bool AMHActorA::StartSitOnChairServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::StartSitOnChairMulticast_Implementation()
+{
+	SitOnGround = false;
+	SitOnChair = true;
+	StandingTalk = false;
+	StandingClap = false;
+	Idle = false;
+	Walking = false;
+}
+
+//3번
+void AMHActorA::StartStandingTalkServer_Implementation()
+{
+	StartStandingTalkMulticast();
+}
+
+bool AMHActorA::StartStandingTalkServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::StartStandingTalkMulticast_Implementation()
+{
+	SitOnGround = false;
+	SitOnChair = false;
+	StandingTalk = true;
+	StandingClap = false;
+	Idle = false;
+	Walking = false;
+}
+
+
+//4번
+void AMHActorA::StartStandingClapServer_Implementation()
+{
+	StartStandingClapMulticast();
+}
+
+bool AMHActorA::StartStandingClapServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::StartStandingClapMulticast_Implementation()
+{
+	SitOnGround = false;
+	SitOnChair = false;
+	StandingTalk = false;
+	StandingClap = true;
+	Idle = false;
+	Walking = false;
+}
+
+//5번
+
+void AMHActorA::StartIdleServer_Implementation()
+{
+	StartIdleMulticast();
+}
+
+bool AMHActorA::StartIdleServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::StartIdleMulticast_Implementation()
+{
+	SitOnGround = false;
+	SitOnChair = false;
+	StandingTalk = false;
+	StandingClap = false;
+	Idle = true;
+	Walking = false;
+}
+
+
+//6번
+void AMHActorA::StartWalkServer_Implementation()
+{
+	StartWalkMulticast();
+}
+
+bool AMHActorA::StartWalkServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::StartWalkMulticast_Implementation()
+{
+	SitOnGround = false;
+	SitOnChair = false;
+	StandingTalk = false;
+	StandingClap = false;
+	Idle = false;
+	Walking = true;
+}
+
+
+/*------------ Asset Panel  ---------------*/
 void AMHActorA::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)
 {
 	ID_ControllableAsset::CloseAssetPanel_Implementation(AssetWithControlPanel);
@@ -81,8 +215,3 @@ void AMHActorA::OpenAssetPanel_Implementation(AActor* AssetWithControlPanel)
 	markEditorWidget->SetVisibility(ESlateVisibility::Visible);
 	markEditorWidget->SetCurrActor(this); //현재 스폰되어 있는 메타휴먼정보를 MarkEditor에게 넘겨주기 위함.
 }
-
-//Mark Editor에게 나 누구야 알려주기(완)
-//그거 기반으로 스폰하기
-//애니메이션 세이브드 구조체 만들기
-// 

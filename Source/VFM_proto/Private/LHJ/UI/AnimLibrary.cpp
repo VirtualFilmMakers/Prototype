@@ -8,6 +8,7 @@
 #include "Animation/AnimationAsset.h"
 #include "Animation/AnimSequence.h"
 #include "Components/CheckBox.h"
+#include "MHActorA.h"
 
 
 void UAnimLibrary::NativeConstruct()
@@ -35,6 +36,7 @@ void UAnimLibrary::NativeConstruct()
 		{
 		UE_LOG(LogTemp,Warning,TEXT("%s"),tmp);
 			goalHuman = tmp;
+			AnimPlayerHuman = Cast<AMHActorA>(goalHuman);
 		}
 	}
     goalHumanBody = goalHuman->FindComponentByClass<USkeletalMeshComponent>();
@@ -89,9 +91,10 @@ void UAnimLibrary::OnClicksitOnGround()
 	//UAnimInstance* ai = goalHumanBody->GetAnimInstance();
 	if (AnimationToPlay[1] != nullptr)
 	{
-		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay[1], false);
+		AnimPlayerHuman->StartSitOnGroundServer();
+
+/*		goalHumanBody->PlayAnimation(AnimationToPlay[1], false);*/
 		//goalHumanBody->SetPlayRate(animPlayTime); 
 	}
 	else
@@ -104,8 +107,11 @@ void UAnimLibrary::OnClicksitOnChair()
 	
 	if (AnimationToPlay[2] != nullptr)
 	{
+
+	AnimPlayerHuman->StartSitOnChairServer();
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay[2], false);
+/*		goalHumanBody->PlayAnimation(AnimationToPlay[2], false);*/
+	
 	}
 	else
 		return;
@@ -117,9 +123,9 @@ void UAnimLibrary::OnClickstandingTalk()
 	if (AnimationToPlay[3] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
-		
+	AnimPlayerHuman->StartStandingTalkServer();
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay[3], false);
+	/*	goalHumanBody->PlayAnimation(AnimationToPlay[3], false);*/
 	}
 	else
 		return;
@@ -132,9 +138,9 @@ void UAnimLibrary::OnClickstandingClap()
 	if (AnimationToPlay[4] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
-
+		AnimPlayerHuman->StartStandingClapServer();
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay[4], false);
+	/*	goalHumanBody->PlayAnimation(AnimationToPlay[4], false);*/
 	}
 	else
 		return;
@@ -147,9 +153,9 @@ void UAnimLibrary::OnClickidle()
 	if (AnimationToPlay[5] != nullptr)
 	{
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
-
+		AnimPlayerHuman->StartIdleServer();
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay[5], false);
+/*		goalHumanBody->PlayAnimation(AnimationToPlay[5], false);*/
 	}
 	else
 		return;
@@ -164,7 +170,8 @@ void UAnimLibrary::OnClickwalking()
 		//UAnimSequence* AnimationToPlay = AnimationAsset.Object;
 
 		// 애니메이션 재생
-		goalHumanBody->PlayAnimation(AnimationToPlay[6], false);
+		AnimPlayerHuman->StartWalkServer();
+		/*goalHumanBody->PlayAnimation(AnimationToPlay[6], false);*/
 	}
 	else
 		return;
