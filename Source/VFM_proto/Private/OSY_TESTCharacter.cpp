@@ -189,7 +189,7 @@ void AOSY_TESTCharacter::RightMouse()
 		{
 			FColor DrawColor = IsHitResult ? FColor::Green : FColor::Red;
 			const float DebugLifeTime = 5.0f;
-			DrawDebugLine(GetWorld(), TraceStart, TraceEnd, DrawColor, false, DebugLifeTime);
+			//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, DrawColor, false, DebugLifeTime);
 		} //라인트레이스 모습 그려주세용
 		//에디터 안켜졌는데도 쏘는 레이에 맞춰 메타휴먼이 생겨남.
 		//모드 설정이 필요할듯?
@@ -241,12 +241,12 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 		if (mypc != nullptr)
 		{
 			testPawn = Cast<AO_CameraBase>(hitResult.GetActor());
-			UE_LOG(LogTemp, Warning, TEXT("test pawn : %s"), testPawn != nullptr ? *testPawn->GetName() : *FString("Null"));
 			if (testPawn)
 			{
 				mypc->lastPlayer = Cast<AOSY_TESTCharacter>(mypc->GetPawn());
 				mypc->UnPossess();
 				mypc->Possess(testPawn);
+			UE_LOG(LogTemp, Warning, TEXT("test pawn : %s, lastPlayer : %s"), testPawn != nullptr ? *testPawn->GetName() : *FString("Null"), *mypc->GetName());
 			}
 
 		}
@@ -254,17 +254,22 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 }
 
 
-void AOSY_TESTCharacter::DoUnposses()
+void AOSY_TESTCharacter::DoUnposses_Implementation()
 {
 	UE_LOG(LogTemp,Warning,TEXT("pppppp"));
 	AO_PlayerController* mypc = Cast<AO_PlayerController>(GetController());
-	if (mypc != nullptr && mypc->lastPlayer != nullptr)
+	if (mypc && mypc->HasAuthority() == false)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("lastPlayer : %s"), mypc->lastPlayer != nullptr ? *mypc->lastPlayer->GetName() : *FString("Null"));
+		return;
+	}
+
+// 	if (mypc != nullptr && mypc->lastPlayer != nullptr)
+// 	{
+		UE_LOG(LogTemp, Warning, TEXT("lastPlayer : %s"), mypc->lastPlayer != nullptr ? *mypc->GetName() : *FString("Null"));
 		mypc->UnPossess();
 		mypc->Possess(mypc->lastPlayer);
-	}
-		ServerDoUnposses();
+// 	}
+// 		ServerDoUnposses();
 	
 }
 
@@ -290,7 +295,7 @@ void AOSY_TESTCharacter::PrintLog()
 
 	const FString printString = FString::Printf(TEXT("Local Role: %s\n Remote Role: %s\n Owner Name: %s\n Net Connection :%s"), *localRoleString, *remoteRoleString, *ownerString, *connectionString);
 
-	DrawDebugString(GetWorld(), GetActorLocation(), printString, nullptr, FColor::White, 0, true);
+	//DrawDebugString(GetWorld(), GetActorLocation(), printString, nullptr, FColor::White, 0, true);
 
 
 }

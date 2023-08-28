@@ -6,21 +6,17 @@
 #include "CameraBaseComponent.h"
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/InputActionValue.h"
 #include "O_Camera_Dron.h"
-#include "O_Camera_Dron_Move.generated.h"
+#include "O_Camera_Possess.generated.h"
 
 /**
  * 
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class VFM_PROTO_API UO_Camera_Dron_Move : public UCameraBaseComponent
+class VFM_PROTO_API UO_Camera_Possess : public UCameraBaseComponent
 {
 	GENERATED_BODY()
-	
-	public:
-	// Sets default values for this character's properties
-		UO_Camera_Dron_Move();
 
-
+	UO_Camera_Possess();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,21 +29,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupInputBinding(class UInputComponent* CamInputComponent) override;
 
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
-	class UInputAction* ia_Cam_DronZoom;
+	class UInputAction* ia_UnPosses;
 
-	void Cam_DronZoom(const FInputActionValue& Value);
+	UFUNCTION(Server,Reliable)
+	void DoUnposses();
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
-	class UInputAction* ia_Cam_DronTurn;
-
-	
-
-	void Cam_DronTrun(const FInputActionValue& Value);
-
-	UPROPERTY()
-	AO_Camera_Dron* DronMe;
-
+	UFUNCTION(Server,Reliable)
+	void ServerDoUnposses();
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastDoUnposses();
 	
 };

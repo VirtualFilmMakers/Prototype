@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
+#include "O_PlayerController.h"
 
 AO_Camera_Dron::AO_Camera_Dron()
 {
@@ -96,4 +97,28 @@ void AO_Camera_Dron::Tick(float DeltaTime)
 void AO_Camera_Dron::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+void AO_Camera_Dron::DoUnposses_Implementation()
+{
+// 	UE_LOG(LogTemp, Warning, TEXT("pppppp"));
+// 	AO_PlayerController* mypc = Cast<AO_PlayerController>(GetController());
+// 
+// 	// 	if (mypc != nullptr && mypc->lastPlayer != nullptr)
+// 	// 	{
+// 	UE_LOG(LogTemp, Warning, TEXT("lastPlayer : %s"), mypc->lastPlayer != nullptr ? *mypc->lastPlayer->GetName() : *FString("Null"));
+// 	mypc->UnPossess();
+// 	mypc->Possess(mypc->lastPlayer);
+// 	// 	}
+// 	// 		ServerDoUnposses();
+
+}
+
+void AO_Camera_Dron::ServerDoUnposses_Implementation()
+{
+
+}
+
+void AO_Camera_Dron::MulticastDoUnposses_Implementation()
+{
+
 }

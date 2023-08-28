@@ -51,6 +51,15 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Enhanced Input")
 	class UInputMappingContext* DronInputMapping;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enhanced Input")
+	class UInputAction* ia_UnPosses;
 
+	UFUNCTION(Server,Reliable)
+	void DoUnposses();
+
+	UFUNCTION(Server,Reliable)
+	void ServerDoUnposses();
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastDoUnposses();
 	
 };
