@@ -14,10 +14,12 @@ UCLASS()
 class VFM_PROTO_API AO_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+
+protected:
+	virtual void BeginPlay() override;
 public:
 	UPROPERTY(Replicated)
 	class AOSY_TESTCharacter* lastPlayer; 
-
 	
 };
