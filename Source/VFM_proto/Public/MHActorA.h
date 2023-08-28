@@ -136,5 +136,22 @@ public:
 	void StartWalkMulticast();
 	void StartWalkMulticast_Implementation();
 
+
+/* ALL STOP Anim */
+	UFUNCTION(Reliable, Server, WithValidation)
+	void AllStopAnimServer();	
+	void AllStopAnimServer_Implementation();
+	bool AllStopAnimServer_Validate();
+
+	UFUNCTION(Reliable, NetMulticast)
+	void AllStopAnimMulticast();
+	void AllStopAnimMulticast_Implementation();
+
+public:
+	UFUNCTION()
+	void IndexPlayAnim(int idx);
+	UFUNCTION()
+	void IndexStopAnim();
+
 };	
 
