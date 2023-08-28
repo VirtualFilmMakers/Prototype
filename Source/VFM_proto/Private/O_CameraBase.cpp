@@ -43,6 +43,7 @@ void AO_CameraBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	me = Cast<AOSY_TESTCharacter>(GetOwner());
 	
 	
 }

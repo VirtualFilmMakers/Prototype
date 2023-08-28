@@ -7,6 +7,8 @@
 #include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Net/UnrealNetwork.h"// 언리얼 네트워크 기능 사용을 위한 헤더
+#include "../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
+#include "O_PlayerController.h"
 
 AO_Camera_Tripod::AO_Camera_Tripod()
 {
@@ -83,13 +85,7 @@ void AO_Camera_Tripod::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(TripodInputMapping, 0);
-		}
-	}
+	
 }
 
 void AO_Camera_Tripod::Tick(float DeltaTime)
@@ -104,3 +100,6 @@ void AO_Camera_Tripod::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	
 }
+
+
+

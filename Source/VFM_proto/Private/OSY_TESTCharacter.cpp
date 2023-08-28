@@ -73,6 +73,16 @@ AOSY_TESTCharacter::AOSY_TESTCharacter()
 	{
 		compViewFinder->SetStaticMesh(tempViewFinder.Object);
 	}
+	ConstructorHelpers::FObjectFinder<UInputAction> tempia_Posses(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_Posess.IA_OSY_Posess'"));
+	if (tempia_Posses.Succeeded())
+	{
+		ia_Posses = tempia_Posses.Object;
+	}
+	ConstructorHelpers::FObjectFinder<UInputAction> tempia_UnPosses(TEXT("/Script/EnhancedInput.InputAction'/Game/OSY/Inputs/IA_OSY_UnPossess.IA_OSY_UnPossess'"));
+	if (tempia_UnPosses.Succeeded())
+	{
+		ia_UnPosses = tempia_UnPosses.Object;
+	}
 
 }
 
@@ -109,11 +119,7 @@ void AOSY_TESTCharacter::Tick(float DeltaSeconds)
 	// 디버깅용 로그 출력
 	PrintLog();
 
-// 	if (myBodyMesh != nullptr)
-// 	{
-// 		AActor* weapon;
-// 		weapon->AttachToComponent(myBodyMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("Hand"));
-// 	}
+
 }
 
 // Called to bind functionality to input
@@ -128,6 +134,7 @@ void AOSY_TESTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		SYInput->BindAction(ia_Jump, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::jump);
 		SYInput->BindAction(ia_Posses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::ChangePossessInput);
+		SYInput->BindAction(ia_UnPosses, ETriggerEvent::Triggered, this, &AOSY_TESTCharacter::DoUnposses);
 	}
 
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
@@ -247,19 +254,30 @@ void AOSY_TESTCharacter::ServerChangePossessInput_Implementation(const FVector& 
 }
 
 
-void AOSY_TESTCharacter::Unposses()
+void AOSY_TESTCharacter::DoUnposses()
 {
+	UE_LOG(LogTemp,Warning,TEXT("pppppp"));
 	AO_PlayerController* mypc = Cast<AO_PlayerController>(GetController());
 	if (mypc != nullptr && mypc->lastPlayer != nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("lastPlayer : %s"), mypc->lastPlayer != nullptr ? *mypc->lastPlayer->GetName() : *FString("Null"));
 		mypc->UnPossess();
 		mypc->Possess(mypc->lastPlayer);
 	}
+		ServerDoUnposses();
+	
 }
 
-void AOSY_TESTCharacter::ServerUnposses_Implementation()
+void AOSY_TESTCharacter::ServerDoUnposses_Implementation()
 {
+	MulticastDoUnposses();
+}
 
+void AOSY_TESTCharacter::MulticastDoUnposses_Implementation()
+{
+	
+	
+	
 }
 
 // 각종 정보를 화면에 출력하는 함수

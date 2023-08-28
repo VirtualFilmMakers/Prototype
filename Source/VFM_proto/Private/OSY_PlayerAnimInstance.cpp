@@ -55,3 +55,11 @@ float UOSY_PlayerAnimInstance::CalculateDir(FVector velocity, FRotator rot)
 
 	return angle;
 }
+
+void UOSY_PlayerAnimInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UOSY_PlayerAnimInstance, bHasViewFinder);
+
+}
