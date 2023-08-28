@@ -136,5 +136,8 @@ public:
 	void StartWalkMulticast();
 	void StartWalkMulticast_Implementation();
 
+	UFUNCTION()
+	void IndexPlayAnim(int idx);
+
 };	
 

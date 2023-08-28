@@ -16,7 +16,8 @@ AMHActorA::AMHActorA()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 // 	UE_LOG(LogTemp, Warning, TEXT("Cooper Created!"));
-
+	bReplicates = true;
+	SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned
@@ -50,8 +51,7 @@ void AMHActorA::BeginPlay()
 	else UE_LOG(LogTemp, Warning, TEXT("player Load fail.."));
 	
 	player->CurrActor = this; //현재 호버되어 있는 메타휴먼은 저에요...!
-	bReplicates = true;
-	SetReplicateMovement(true);
+	
 }
 
 // Called every frame
@@ -197,6 +197,48 @@ void AMHActorA::StartWalkMulticast_Implementation()
 	Walking = true;
 }
 
+
+void AMHActorA::IndexPlayAnim(int idx)
+{
+	switch (idx)
+	{
+		case 1:
+		{
+			StartSitOnGroundServer();
+			break;
+		}
+		case 2:
+		{
+			StartSitOnChairServer();
+			break;
+		}
+		case 3:
+		{
+			StartStandingTalkServer();
+			break;
+		}
+		case 4:
+		{
+			StartStandingClapServer();
+			break;
+		}
+		case 5:
+		{
+			StartIdleServer();
+			break;
+		}
+		case 6:
+		{
+			StartWalkServer();
+			break;
+		}
+		default:
+		{
+			StartIdleServer();
+			break;
+		}
+	}
+}
 
 /*------------ Asset Panel  ---------------*/
 void AMHActorA::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)

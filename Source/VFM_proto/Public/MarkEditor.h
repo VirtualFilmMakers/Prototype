@@ -62,6 +62,7 @@ public:
 	bool isAdd = false;
 	float SliderPlayTime = 1.0f;
 	bool isArrive = false;
+	bool playAnimMode = false;
 	
 
 

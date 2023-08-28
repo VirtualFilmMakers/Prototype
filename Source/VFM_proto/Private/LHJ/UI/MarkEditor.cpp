@@ -157,7 +157,8 @@ void UMarkEditor::OnClickAfterMark()
 		CurrMark += 1;
 		UE_LOG(LogTemp, Warning, TEXT("After Button Success!! = CurrPointer : %d, Total Mark Num : %d, ThisMarkAnim : %d, Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex,AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
 		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
-		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);
+		CurrActor->IndexPlayAnim(AnimSavedArray[CurrMark].Animindex);
+		/*CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);*/
 		
 		/*UE_LOG(LogTemp, Warning, TEXT("%f"), AnimLibWidget->GetAnimSequence(CurrMark)->GetPlayLength());*/
 	}
@@ -179,7 +180,8 @@ void UMarkEditor::OnClickBeforeMark()
 		CurrMark -= 1;
 		UE_LOG(LogTemp, Warning, TEXT("Before Button Success!! = CurrPointer : %d, Total Mark Num : %d,ThisMarkAnim : %d ,Location : x= %f, y=%f, Z=%f"), CurrMark, MarkNumber, AnimSavedArray[CurrMark].Animindex, AnimSavedArray[CurrMark].ActorLocation.X, AnimSavedArray[CurrMark].ActorLocation.Y, AnimSavedArray[CurrMark].ActorLocation.Z);
 		CurrActor->SetActorLocation(AnimSavedArray[CurrMark].ActorLocation);
-		CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);
+		CurrActor->IndexPlayAnim(AnimSavedArray[CurrMark].Animindex);
+		/*CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);*/
 		/*UE_LOG(LogTemp, Warning, TEXT("%f"),AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex)->GetPlayLength());*/
 	}
 
@@ -234,17 +236,20 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	if (EntireMode)
 	{
-		if (DistanceToTarget > 10 && !isArrive)
+		if (DistanceToTarget > 10 && !isArrive && !playAnimMode)
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("gogo Entire!"));
 			FVector P0 = CurrActor->GetActorLocation();
 			FVector VT = 200 * dir * InDeltaTime;
 			FVector P = P0 + VT;
+			
 			CurrActor->SetActorLocation(P);
 			DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[CurrMark + 1].ActorLocation);
 			UE_LOG(LogTemp, Warning, TEXT("dist : %f"), DistanceToTarget);
+			
 			if (currTime == 0)
-				CurrActorSkeletal->PlayAnimation(WalkAnim, false);
+				CurrActor->StartWalkServer();
+				//CurrActorSkeletal->PlayAnimation(WalkAnim, false);
 
 			if (currTime > WalkAnim->GetPlayLength())
 			{
@@ -254,45 +259,50 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			else
 			{
 				currTime += InDeltaTime;
-
 			}
 		}
-		else
+		else // Spot Arrived+
 		{
 			isArrive = true;
+			playAnimMode = true;
 			UE_LOG(LogTemp, Warning, TEXT("Mark# %d Access spot success!"), CurrMark);
-			if (delTime == 0)
-				CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);
+			
+				/*CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);*/
 			if (delTime < AnimSavedArray[CurrMark].playTime)
 			{
+				if (delTime == 0)
+					CurrActor->IndexPlayAnim(AnimSavedArray[CurrMark].Animindex); 
 				delTime += InDeltaTime;
 			}
 			else
 			{
+				delTime = 0;
+				playAnimMode = false;
 
-			}
+				if (DistanceToTarget > 0)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("CurrMark update!"));
+					if (CurrMark + 1 < MarkNumber)
+					{
+						CurrMark += 1;
+					}
+					else EntireMode = false;
+				}
 
-			if (DistanceToTarget > 0)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("CurrMark update!"));
 				if (CurrMark + 1 < MarkNumber)
 				{
-					CurrMark += 1;
+					UE_LOG(LogTemp, Warning, TEXT("dir Update!"));
+					dir = AnimSavedArray[CurrMark + 1].ActorLocation - AnimSavedArray[CurrMark].ActorLocation;
+					dir.Normalize();
+					CurrActor->SetActorRotation(dir.Rotation());
+
+					DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[CurrMark + 1].ActorLocation);
+
+					isArrive = false;
 				}
-				else EntireMode = false;
 			}
 
-			if (CurrMark + 1 < MarkNumber)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("dir Update!"));
-				dir = AnimSavedArray[CurrMark + 1].ActorLocation - AnimSavedArray[CurrMark].ActorLocation;
-				dir.Normalize();
-				CurrActor->SetActorRotation(dir.Rotation());
-
-				DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[CurrMark + 1].ActorLocation);
-
-				isArrive = false;
-			}
+			
 		}
 		//CurrActor->SetActorLocation(player->AddMarkLocation);
 
