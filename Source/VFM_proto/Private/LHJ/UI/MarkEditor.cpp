@@ -234,20 +234,23 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	if (AnimLibWidget != nullptr)
 		InputAnimState = AnimLibWidget->GetAnimInfo();
 
-	if (EntireMode)
+	if (EntireMode) //Entire play btn pressed
 	{
-		if (DistanceToTarget > 10 && !isArrive && !playAnimMode)
+		if (DistanceToTarget > 10 && !isArrive && !playAnimMode) //IF, mark to mark distance remain 10 and not arrived and not playAnimMode..
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("gogo Entire!"));
 			FVector P0 = CurrActor->GetActorLocation();
 			FVector VT = 200 * dir * InDeltaTime;
 			FVector P = P0 + VT;
 			
-			CurrActor->SetActorLocation(P);
+			//Move
+			CurrActor->SetActorLocation(P); 
+			//distance renew
 			DistanceToTarget = FVector::Distance(CurrActor->GetActorLocation(), AnimSavedArray[CurrMark + 1].ActorLocation);
 			UE_LOG(LogTemp, Warning, TEXT("dist : %f"), DistanceToTarget);
 			
-			if (currTime == 0)
+			/* Walking Anim Play */
+			if (currTime == 0) //WalkingAnim Timer On
 				CurrActor->StartWalkServer();
 				//CurrActorSkeletal->PlayAnimation(WalkAnim, false);
 
@@ -261,10 +264,10 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 				currTime += InDeltaTime;
 			}
 		}
-		else // Spot Arrived+
+		else // Mark Arrived
 		{
-			isArrive = true;
-			playAnimMode = true;
+			isArrive = true; // Mark Arrived
+			playAnimMode = true; //Play Anim Mode On!
 			UE_LOG(LogTemp, Warning, TEXT("Mark# %d Access spot success!"), CurrMark);
 			
 				/*CurrActorSkeletal->PlayAnimation(AnimLibWidget->GetAnimSequence(AnimSavedArray[CurrMark].Animindex), false);*/
@@ -277,6 +280,7 @@ void UMarkEditor::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 			else
 			{
 				delTime = 0;
+				CurrActor->IndexStopAnim();
 				playAnimMode = false;
 
 				if (DistanceToTarget > 0)

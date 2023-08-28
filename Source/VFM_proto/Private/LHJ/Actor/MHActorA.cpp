@@ -240,6 +240,32 @@ void AMHActorA::IndexPlayAnim(int idx)
 	}
 }
 
+void AMHActorA::IndexStopAnim()
+{
+	AllStopAnimServer();
+}
+
+void AMHActorA::AllStopAnimServer_Implementation()
+{
+	AllStopAnimMulticast();
+}
+
+bool AMHActorA::AllStopAnimServer_Validate()
+{
+	return true;
+}
+
+void AMHActorA::AllStopAnimMulticast_Implementation()
+{
+	SitOnGround = false;
+	SitOnChair = false;
+	StandingTalk = false;
+	StandingClap = false;
+	Idle = false;
+	Walking = false;
+}
+
+
 /*------------ Asset Panel  ---------------*/
 void AMHActorA::CloseAssetPanel_Implementation(AActor* AssetWithControlPanel)
 {
