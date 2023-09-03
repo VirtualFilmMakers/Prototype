@@ -7,11 +7,11 @@
 void UD_ParLightWidget::NativeConstruct()
 {
 	
-	TArray<UWidget*> tempChildWidget = VB_Parametars->GetAllChildren();
-	for (int i = 0; i < tempChildWidget.Num(); i++){
-		sliderList.Add(Cast<BP_SliderModule>(tempChildWidget[i]));
-
-
-
-	}
+// 	TArray<UWidget*> tempChildWidget = VB_Parametars->GetAllChildren();
+// 	for (int i = 0; i < tempChildWidget.Num(); i++){
+// 		sliderList.Add(Cast<BP_SliderModule>(tempChildWidget[i]));
+// 
+// 
+// 
+// 	}
 }
