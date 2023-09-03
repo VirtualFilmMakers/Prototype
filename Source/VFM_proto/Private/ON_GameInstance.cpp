@@ -66,7 +66,7 @@ void UON_GameInstance::OnCreatedMySession(FName sessionName, bool bWasSuccessful
 {
 	if (bWasSuccessful)
 	{
-		bool Result = GetWorld()->ServerTravel("/Game/PJH/LaLa2?Listen",true);
+		bool Result = GetWorld()->ServerTravel("/Game/QA_Map/Alpa_Main?Listen",true);
 		// Script / Engine.World'/Game/PJH/LaLa2.LaLa2'
 		///Game/QA_Map/Alpa_Main?Listen
 		///Game/PJH/LaLa2?Listen
