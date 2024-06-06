@@ -146,22 +146,18 @@ void UD_GameInstance::OnDeleteFinishedStreamComplete(const bool bDeleteSucceeded
 void UD_GameInstance::OnFindReplaysComplete(const TArray<FS_ReplayInfo>& AllReplays)
 {
     // GetAll widget of class / WID Main Menu
-    // -> On Find Replays
     TArray<UUserWidget*> FoundWidgets;
     TSubclassOf<UUserWidget> WidgetClass;
     UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, FoundWidgets, WidgetClass);
    
-    for (TObjectIterator<UD_RecorderInfoWidget> ObjectItr; ObjectItr; ++ObjectItr)
-    {
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("4444444444444444"));
+    for (TObjectIterator<UD_RecorderInfoWidget> ObjectItr; ObjectItr; ++ObjectItr){
         UD_RecorderInfoWidget* recorderInfoWidget = *ObjectItr;
         if (recorderInfoWidget)
         {
-
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("222222222222222222222222"));
             recorderInfoWidget->OnFindReplays(AllReplays);
         }
     }
+
    /* GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("1111111111111111111111"));
     for (auto Widget : FoundWidgets)
     {

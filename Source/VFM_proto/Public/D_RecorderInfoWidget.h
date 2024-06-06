@@ -15,5 +15,13 @@ class VFM_PROTO_API UD_RecorderInfoWidget : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Replays")
-	void OnFindReplays(const TArray<FS_ReplayInfo>& AllReplays);
+
+
+
 };
+ 
+
+
+
+
+
